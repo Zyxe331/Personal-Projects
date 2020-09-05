@@ -1,0 +1,140 @@
+﻿@charset 'utf-8';
+
+// styles for activity icons next to sections
+#avatar {
+    width: 50vw;
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+#username {
+    color: #494B4B;
+    font-size: 50px;
+    text-align: center;
+    padding:1%;
+    margin: 10px;
+}
+
+#editprofile {
+    color: #AAAAAA;
+    text-align: center;
+    font-size: 12px;
+
+}
+
+.alertON {
+    float: left;
+    position: relative;
+    width: 20px;
+    height: 20px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    background: #81CECF;
+    opacity: 1;
+    zoom: 0.7;
+}
+
+.alertOFF {
+    float: left;
+    position: relative;
+    width: 20px;
+    height: 20px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    background: #FFFFFF;
+    opacity: 0;
+    zoom: 0.7;
+}
+
+//had to use color code because I don't know if theres a way to have --ionic variable colors linked
+ion-toggle {
+    --background: #81CECF;
+    --background-checked: #440A44;
+    --handle-background: #FFFFFF;
+    --handle-background-checked: #FFFFFF;
+}
+
+ion-modal {
+    ion-backdrop {
+        visibility: visible;
+    }
+}
+
+//STUDY MODE ON/OFF overall formatting
+#p01 {
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    text-align: center;
+    z-index: 1;
+}
+
+//changes IDs of STUDY MODE ON/OFF
+#showOFF {
+    color: #81CECF;
+
+}
+
+#showON {
+    color: #440A44;
+}
+
+//toggle styles
+.studyToggle {
+    position: absolute;
+    zoom: 2;
+    bottom: 15px;
+    margin-left: 30%;
+}
+
+@font-face {
+    font-family: 'dingbats';
+    src: url('/assets/fonts/Font Google Color.ttf');
+} 
+.notifications{
+    color:#81CECF;
+}
+.notifications:before, .notifications:after
+{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2.5em;
+  height: 2.5em;
+  padding: 0 .75em;
+  line-height: 2.5em;
+  vertical-align: middle;
+  margin: -1.25em 0 0 -2em;
+  border-radius: .2em;
+  font-family: Arial;
+  font-size: 20px;
+  color:#81CECF;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+}
+
+.notifications:after
+{
+  content: "P";
+  font-family: "dingbats";
+  text-align: right;
+  background: transparent;
+  transform-origin: 70% 1em;
+  animation-name: ring;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes ring
+  {
+    0% { transform: rotate(0deg) }
+    5% { transform: rotate(45deg) }
+    15% { transform: rotate(-40deg) }
+    25% { transform: rotate(20deg) }
+    35% { transform: rotate(-15deg) }
+    45% { transform: rotate(10deg) }
+    55% { transform: rotate(-5deg) }
+    60% { transform: rotate(0deg) }
+    100% { transform: rotate(0deg) }
+  }

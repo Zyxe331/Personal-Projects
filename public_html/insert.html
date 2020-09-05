@@ -1,0 +1,33 @@
+
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="static/css/ionic.css">
+        
+    <script type="text/javascript" src="static/js/jquery-3.3.1.min.js"></script>
+    
+    <!--2019-09-21 GP: Moved JS into its own file-->
+    <script type="text/javascript" src="static/js/insert.js"></script>
+    
+</head>
+<body>
+    <div class="bar bar-header bar-positive" style="margin-bottom:80px;">
+        <h1 class="title">Insert Database</h1>
+        <a class="button button-clear" href="readjson.html">Read JSON</a>
+    </div><br /><br />
+    <p>Enter your username and password, to sign up!</p>
+    <div class="list">
+        <input type="hidden" id="id" value="" />
+        <div class="item">
+            <label>Username</label>
+            <input type="text" id="ParticipantID" value="" />
+        </div>
+        <div class="item">
+            <label>Password</label>
+            <input type="text" id="Password" value="" />
+        </div>
+        <div class="item">
+            <input type="button" id="insert" class="button button-block" value="Insert" />
+        </div>
+    </div>
+</body>
+</html>

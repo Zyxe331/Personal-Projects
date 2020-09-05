@@ -1,0 +1,131 @@
+<!--Toolbar at top of page-->
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title id="logo">VitaPrayer</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid *ngIf="showSpinner" class="height100">
+    <ion-row class="align-items-center height100">
+      <ion-col class="ion-align-self-center ion-text-center" size="12">
+        <ion-spinner name="dots" color="tertiary"></ion-spinner>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div *ngIf="!showSpinner">
+    <div *ngIf="!editMode">
+      <ion-item lines="none" id="top">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-avatar id="avatar">
+                <img src="./assets/avatar.svg">
+              </ion-avatar>
+            </ion-col>
+            <ion-col>
+              <div class="bold username">{{currentUser.FirstName}} {{currentUser.LastName}}</div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-grid id="infobody">
+          <ion-row>
+            <ion-col size="10" class="bold identifier">PHONE</ion-col>
+            <ion-col size="15" class="field">{{currentUser.PhoneNumber}}</ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="10" class="bold identifier">EMAIL</ion-col>
+            <ion-col size="15" class="field">{{currentUser.Email}}</ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="10" class="bold identifier">CURRENT PLAN</ion-col>
+            <ion-col size="15" class="field">{{currentPlan.Title}}</ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+      <div class="buttons">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-button class="bold clearbutton" style="text-align:left;" [routerLink]="['/change-content-cycle']">
+                CHANGE PLAN
+              </ion-button>
+            </ion-col>
+            <ion-col>
+              <ion-button class="bold clearbutton" style="text-align:right;" on-click="toggleEdit()">
+                EDIT PROFILE
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+    </div>
+
+    <!--Page when user clicks "Edit Profile"-->
+    <div *ngIf="editMode">
+      <form [formGroup]="editProfileForm" (ngSubmit)="save()">
+        <ion-item lines="none" id="top">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-avatar id="avatar">
+                  <img src="./assets/avatar.svg">
+                </ion-avatar>
+              </ion-col>
+              <ion-col>
+                <ion-grid>
+                  <ion-row class="bold identifier">FIRST NAME</ion-row>
+                  <ion-row>
+                    <ion-input type="text" class="bold username" value="{{currentUser.FirstName}}"
+                      formControlName="firstname"></ion-input>
+                  </ion-row>
+                  <ion-row class="bold identifier">LAST NAME</ion-row>
+                  <ion-row>
+                    <ion-input type="text" class="bold username" value="{{currentUser.LastName}}"
+                      formControlName="lastname"></ion-input>
+                  </ion-row>
+                </ion-grid>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-grid id="infobody">
+            <ion-row>
+              <ion-col size="10" class="bold identifier">PHONE</ion-col>
+              <ion-col size="15" class="field">
+                <ion-input type="text" color="dark" value="{{currentUser.PhoneNumber}}" formControlName="phone">
+                </ion-input>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="10" class="bold identifier">EMAIL</ion-col>
+              <ion-col size="15" class="field">
+                <ion-input type="text" color="dark" value="{{currentUser.Email}}" formControlName="email"></ion-input>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+        <div class="buttons">
+          <div class="editbutton">
+            <ion-button class="bold " style="padding-left:10px;" color="danger" on-click="toggleEdit()">
+              CANCEL
+            </ion-button>
+          </div>
+          <div class="editbutton">
+            <ion-button class="bold " style="padding-right:10px;" color="primary" type="submit">
+              SAVE
+            </ion-button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ion-content>

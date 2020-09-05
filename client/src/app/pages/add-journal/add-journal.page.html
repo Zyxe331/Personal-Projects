@@ -1,0 +1,66 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-buttons slot="end" *ngIf="!sectionId">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-buttons slot="end" *ngIf="sectionId">
+            <ion-button (click)="dismiss()">Close</ion-button>
+        </ion-buttons>
+        <ion-title id="logo" class="ios">VitaPrayer</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <ion-grid *ngIf="showSpinner" class="height100">
+        <ion-row class="align-items-center height100">
+            <ion-col class="ion-align-self-center ion-text-center" size="12">
+                <ion-spinner name="dots" color="tertiary"></ion-spinner>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+    <form [formGroup]="addJournalForm" (ngSubmit)="save()" *ngIf="!showSpinner">
+        <ion-item id="title" lines="none">
+            <ion-input id="title" type="text" placeholder="Journal Title" formControlName="title" autocapitalize=words>
+            </ion-input>
+            <ion-text class="error" color="light"
+                *ngIf="addJournalForm.controls.title.hasError('required') && showErrors">
+                <p class="ion-no-margin ion-margin-top">
+                    <b>No title has been given</b>
+                </p>
+            </ion-text>
+        </ion-item>
+
+        <!--Display date.-->
+        <ion-item id="date" lines="none">
+            <ion-text id="dateText" color="light">{{thisDate}}</ion-text>
+        </ion-item>
+
+        <!--Joural Entry Proper-->
+        <ion-item id="textarea" lines="none">
+            <ion-textarea rows="10" id="body" formControlName="body" placeholder="Your Thoughts" spellcheck="true"
+                autocapitalize=sentences>
+            </ion-textarea>
+            <ion-text ion-text class="error" color="light"
+                *ngIf="addJournalForm.controls.body.hasError('required') && showErrors">
+                <p class="ion-no-margin ion-margin-top">
+                    <b>The journal is empty</b>
+                </p>
+            </ion-text>
+        </ion-item>
+
+        <ion-grid>
+            <ion-row class="ion-justify-content-center ion-align-items-center">
+                <ion-button type="submit" id="saveButton"><b>SAVE</b>
+                </ion-button>
+            </ion-row>
+        </ion-grid>
+
+    </form>
+
+
+</ion-content>

@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title id="logo">VitaPrayer</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!--View Card-->
+  <ion-card *ngIf="!editMode">
+    <ion-card-header>
+      <ion-row justify-content-center align-items-center>
+        <ion-col size="10">
+          <ion-card-title>{{journal.Title}}</ion-card-title>
+          <ion-card-subtitle>{{journal.LongFormattedDate}}</ion-card-subtitle>
+        </ion-col>
+        <ion-col size="2">
+            <ion-icon color="dark" size="large" name="ios-create" (click)="startEdit()"></ion-icon>
+        </ion-col>
+      </ion-row>
+
+    </ion-card-header>
+
+    <ion-card-content>
+      {{journal.Body}}
+    </ion-card-content>
+
+  </ion-card>
+
+  <!--Edit Card-->
+  <ion-card *ngIf="editMode">
+    <form [formGroup]="updateJournalForm" (ngSubmit)="save()">
+      <ion-card-header>
+        <ion-input value="{{journal.Title}}" formControlName="title" id="edittitle"></ion-input>
+        <ion-text color="danger" *ngIf="updateJournalForm.controls.title.hasError('required') && showErrors">
+          <p class="ion-no-margin ion-margin-top">
+            <ion-icon name="alert"></ion-icon> Please enter a title.
+          </p>
+        </ion-text>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-textarea rows="10" value="{{journal.Body}}" formControlName="body" id="editbody"></ion-textarea>
+        <ion-text color="danger" *ngIf="updateJournalForm.controls.body.hasError('required') && showErrors">
+          <p class="ion-no-margin ion-margin-top">
+            <ion-icon name="alert"></ion-icon> Please enter a journal.
+          </p>
+        </ion-text>
+        <ion-grid>
+          <ion-row class="ion-justify-content-center ion-align-items-center">
+            <ion-button color="danger" (click)="cancel()">Cancel</ion-button>
+            <ion-button type="submit">Save</ion-button>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </form>
+  </ion-card>
+</ion-content>

@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title id="logo">VitaPrayer</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid *ngIf="showSpinner" class="height100">
+    <ion-row class="align-items-center height100">
+      <ion-col class="ion-align-self-center ion-text-center" size="12">
+        <ion-spinner name="dots" color="tertiary"></ion-spinner>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div *ngIf="!showSpinner">
+    <form [formGroup]="joinGroupForm" (ngSubmit)="joinGroup()">
+      <ion-item id="title" lines="none">
+        <ion-input id="title" type="number" placeholder="Enter Group Join Number" formControlName="groupNumber">
+        </ion-input>
+        <ion-text class="error" color="light"
+          *ngIf="joinGroupForm.controls.groupNumber.hasError('required') && showErrors">
+          <p class="ion-no-margin ion-margin-top">
+            <b>This value is required</b>
+          </p>
+        </ion-text>
+      </ion-item>
+      <ion-button type="submit">Join Group</ion-button>
+    </form>
+
+    <ion-list-header>
+      <ion-label>Select a Cycle</ion-label>
+    </ion-list-header>
+    <ion-list lines="full" detail *ngFor="let plan of plans; let i = index">
+      <ion-item>
+        <ion-text slot="start">{{plan.Title}}</ion-text>
+        <ion-button slot="end" color="tertiary" (click)="subscribe(i)">Subscribe</ion-button>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

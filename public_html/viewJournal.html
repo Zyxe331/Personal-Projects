@@ -1,0 +1,42 @@
+<!-- journal.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="static/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/viewJournalStyle.css" />
+    
+    <script type="text/javascript" src="static/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="static/js/settings.js"></script>
+    <script type="text/javascript" src="static/js/sessionHandler.js"></script>
+
+    <!--2019-09-21 GP: Moved JS into its own file-->
+    <script type="text/javascript" src="static/js/viewJournal.js"></script>
+    
+    <title>Journal</title>
+</head>
+<body>
+    <div id="screen">
+        <div id="appHeader"></div>
+        <div id="mainContent">
+            <!-- This is where the page content will go -->
+            <a href="journal.html"><img id="backimg" src="static/imgs/back.png" /></a>
+            <br><br><br><br>
+            <center>
+                <div id="journalTitle">
+                    <font face="verdana" size="5">My Journals</font>
+                    <br><br>
+                </div>
+                <div id="journalListBox">
+                    <select id="journalList" name="journalList" size="5"></select>
+                </div>
+                <br><br>
+                <button type="button" id="selectJournal" onclick="selectJournal()">Select Journal</button>
+            </center>
+        </div>
+        <!-- End mainContent -->
+        <div id="navBar"></div>
+    </div>
+</body>
+
+</html>

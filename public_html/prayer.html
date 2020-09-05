@@ -1,0 +1,56 @@
+<!--<prayer.html>-->
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="static/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/prayerStyle.css" />
+    
+    <script type="text/javascript" src="static/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="static/js/settings.js"></script>
+    <script type="text/javascript" src="static/js/sessionHandler.js"></script>
+
+    <!--2019-09-21 GP: Moved JS into its own file-->
+    <script type="text/javascript" src="static/js/prayer.js"></script>
+    
+    <title>Prayer</title>
+</head>
+<body>
+    <div id="screen">
+        <div id="appHeader"></div>
+        <div id="mainContent">
+            <!-- This is where the page content will go -->
+            <br><br><br><br>
+            <center>
+                <div id="prayerTitle">
+                    <font face="verdana" size="5">My Prayer Requests</font>
+                    <br><br>
+                </div>
+
+                <div id="prayerListBox">
+                    <select id="prayerList" name="prayerList" size="5"></select>
+                </div>
+                
+                <a id="addPrayerLink" href="addPrayer.html">
+                    <div id="addbtn">
+                        <div id="addbtntxt">
+                            Add New Prayer<br>Requests
+                        </div>
+                    </div>
+                </a>
+
+                <br><br><br><br><br><br><br><br><br><br>
+
+                <center>
+                    <button type="button" id="selectPrayer" onclick="selectPrayer()">Select Prayer</button>
+                </center>
+
+
+
+        </div>
+        <!-- End mainContent -->
+        <div id="navBar"></div>
+    </div>
+
+</body>
+</html>

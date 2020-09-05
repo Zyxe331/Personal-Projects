@@ -1,0 +1,29 @@
+.border-bottom {
+    border-bottom: 3px solid var(--ion-color-light);
+}
+
+.smallitalic {
+    font-size: 12px;
+    font-style: italic;
+    padding: 0px;
+}
+
+.bigitalic {
+    font-size: 18px;
+    font-style: italic;
+}
+
+.subheader {
+    font-size: 24px;
+    padding: 0px;
+}
+
+.boldsmall {
+    font-weight: 600;
+    font-size: 12px;
+    padding: 0px;
+}
+
+.progressbar {
+    height: 20px;
+}

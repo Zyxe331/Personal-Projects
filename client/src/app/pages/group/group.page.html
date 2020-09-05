@@ -1,0 +1,132 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title id="logo">VitaPrayer</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid *ngIf="showSpinner" class="height100">
+    <ion-row class="align-items-center height100">
+      <ion-col class="ion-align-self-center ion-text-center" size="12">
+        <ion-spinner name="dots" color="tertiary"></ion-spinner>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div *ngIf="!showSpinner && currentGroup != null">
+    <div *ngIf="!editMode">
+      <div class="ion-text-right" style="margin-right: 16px;">
+        <ion-button *ngIf="currentUserGroup.GroupRole_Id == 1" size="small" fill="outline" color="tertiary"
+          (click)="editGroup()">Edit Group
+        </ion-button>
+      </div>
+      <ion-card style="margin-top: 2px;">
+        <ion-card-header style="padding-bottom: 0" class="ion-padding-top">
+          <ion-card-title class="ion-text-center">
+            <ion-text>
+              {{currentGroup.Name}}
+            </ion-text>
+
+          </ion-card-title>
+          <ion-card-subtitle class="ion-text-center">
+            <ion-text>
+              Group Join Code: {{currentGroup.Id}}
+            </ion-text>
+          </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content class="ion-text-center">
+          <ion-list>
+            <ion-list-header *ngIf="groupMembers.length > 0">
+              Members
+            </ion-list-header>
+            <ion-list-header *ngIf="groupMembers.length == 0">
+              No Members
+            </ion-list-header>
+
+            <ion-item *ngFor="let member of groupMembers">
+
+              <ion-grid>
+                <ion-row>
+                  <ion-text>
+                    <span *ngIf="completionObject[member.Id].timesCompleted > 0">
+                      {{completionObject[member.Id].timesCompleted}}
+                      <ion-icon color="warning" name="star"></ion-icon>
+                    </span>
+                    {{member.FirstName}} {{member.LastName}}
+                  </ion-text>
+                  <ion-progress-bar style="margin-top:4px;" color="{{completionObject[member.Id].color}}"
+                    value="{{completionObject[member.Id].planProgress}}"></ion-progress-bar>
+                </ion-row>
+              </ion-grid>
+
+              <ion-button size="small" color="tertiary" disabled="{{member.StopNudge}}" (click)="nudgeUser(member)"
+                slot="end">
+                Nudge</ion-button>
+
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <ion-card style="margin-top: 2px;" *ngIf="editMode">
+      <form [formGroup]="updateGroupForm" (ngSubmit)="save()">
+        <ion-card-header style="padding-bottom: 0" class="ion-padding-top">
+          <ion-card-title class="ion-text-center">
+            <ion-input value="{{currentGroup.Name}}" formControlName="name"></ion-input>
+            <ion-text color="danger" *ngIf="updateGroupForm.controls.name.hasError('required') && showErrors">
+              <p class="ion-no-margin ion-margin-top">
+                <ion-icon name="alert"></ion-icon> Please enter a title.
+              </p>
+            </ion-text>
+          </ion-card-title>
+          <ion-card-subtitle class="ion-text-center">
+            <ion-text>
+              Group Join Code: {{currentGroup.Id}}
+            </ion-text>
+          </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content class="ion-text-center">
+          <ion-list>
+            <ion-list-header *ngIf="groupMembers.length > 0">
+              Members
+            </ion-list-header>
+            <ion-list-header *ngIf="groupMembers.length == 0">
+              No Members
+            </ion-list-header>
+
+            <ion-item lines="full" *ngFor="let member of groupMembers">
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="2" class="ion-align-self-center">
+                    <ion-button fill="none" (click)="presentAlertRadio(member)">
+                      <ion-icon slot="icon-only" name="remove-circle" color="danger"></ion-icon>
+                    </ion-button>
+                  </ion-col>
+                  <ion-col size="10" class="ion-align-self-center">
+                    <ion-text>{{member.FirstName}} {{member.LastName}}</ion-text>
+                  </ion-col>
+
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+          </ion-list>
+          <ion-grid>
+            <ion-row class="ion-justify-content-center ion-align-items-center">
+              <ion-button color="danger" (click)="cancel()">Cancel</ion-button>
+              <ion-button type="submit">Save</ion-button>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </form>
+    </ion-card>
+  </div>
+
+</ion-content>

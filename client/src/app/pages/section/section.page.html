@@ -1,0 +1,91 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title id="logo">VitaPrayer</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid *ngIf="showSpinner" class="height100">
+    <ion-row class="align-items-center height100">
+      <ion-col class="ion-align-self-center ion-text-center" size="12">
+        <ion-spinner name="dots" color="tertiary"></ion-spinner>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div *ngIf="!showSpinner && section != null">
+    <ion-card>
+      <ion-card-header class="ion-no-padding ion-padding-top">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="2">
+              <ion-button fill="clear" style="width: 100%; height: 100%;" (click)="goToPreviousSection()">
+                <ion-icon slot="icon-only" color="medium" name="md-arrow-dropleft"></ion-icon>
+              </ion-button>
+            </ion-col>
+            <ion-col size="8" align-self-center>
+              <div class="ion-text-center">
+                <ion-card-subtitle>{{contentCycleName}}</ion-card-subtitle>
+              </div>
+            </ion-col>
+            <ion-col size="2">
+              <ion-button fill="clear" style="width: 100%; height: 100%;" (click)="goToNextSection()">
+                <ion-icon slot="icon-only" color="medium" name="md-arrow-dropright"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-header>
+
+      <ion-card-content>
+        <h1 style="margin-bottom: 16px;">{{section.Title}}</h1>
+        <ion-text class="darkitalic ion-text-center">{{section.Main_Idea}}
+        </ion-text>
+        <br /><br />
+        <ion-text class="darkitalic">{{section.Passage_Paraphrased}} - {{section.Passage_Reference}}
+        </ion-text>
+        <br /><br />
+        <a href="{{section.Song_Link}}">{{section.Song_Link}}</a>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Journals</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content class="ion-text-center">
+        <ion-list>
+          <ion-item lines="full" detail *ngFor="let journal of journals" (click)="goToJournal(journal)">
+            <ion-text style="width: 15%;" color="medium" slot="start">{{journal.ShortFormattedDate}}</ion-text>
+            <ion-label>{{journal.Title}}</ion-label>
+          </ion-item>
+        </ion-list>
+        <ion-button (click)="openCreateJournalModal()">Add Journal</ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Prayer Requests</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content class="ion-text-center">
+        <ion-list>
+          <ion-item lines="full" detail *ngFor="let prayer of prayers" (click)="goToPrayer(prayer)">
+            <ion-text style="width: 15%;" color="medium" slot="start">{{prayer.ShortFormattedDate}}</ion-text>
+            <ion-label>{{prayer.Title}}</ion-label>
+          </ion-item>
+        </ion-list>
+        <ion-button (click)="openCreatePrayerModal()">Add Prayer</ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

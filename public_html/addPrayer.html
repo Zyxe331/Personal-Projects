@@ -1,0 +1,82 @@
+<!-- addPrayer.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="static/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/addPrayerStyle.css" />
+
+    <script type="text/javascript" src="static/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="static/js/settings.js"></script>
+    <script type="text/javascript" src="static/js/sessionHandler.js"></script>
+
+
+    <!--2019-09-21 GP: Moved JS into its own file-->
+    <script type="text/javascript" src="static/js/addPrayer.js"></script>
+
+    <title>Prayer</title>
+</head>
+
+<body>
+    <div id="screen">
+        <div id="appHeader"></div>
+        <div id="mainContent">
+            <!-- This is where the page content will go -->
+            <a href="prayer.html"><img id="backimg" src="static/imgs/back.png" /></a>
+            <br><br><br><br><br>
+
+            <div class="prayerTitle">
+                <center>
+                    <label>Prayer Title</label>
+                    <br>
+                    <input type="text" id="title" value="" />
+                </center>
+            </div>
+
+            <br>
+            <div class="prayerRequest">
+                <center>
+                    <label>Prayer Request</label>
+                    <br><br>
+                    <textarea rows="10" cols="50" id="prayer"></textarea>
+                </center>
+            </div>
+
+            <div class="tagSelect">
+                <p>
+                    Tags: <select onchange="onTagChange()" id="tags">
+                        <option value=""></option>
+                    </select>
+                    <div class="tagList" contenteditable="false"></div>
+                </p>
+            </div>
+
+            <div class="frequencyInfo">
+                <center>
+                    <p>
+                        Frequency (the number of days between):
+                        <input type="text" id="frequency" value="" />
+                    </p>
+                </center>
+            </div>
+
+            <center>
+                <p>
+                    Start Date: (the day you wish to start praying for this prayer request)
+                    <input type="date" id="startDate">
+                </p>
+            </center>
+
+            <div class="item">
+                <center>
+                    <input type="button" id="insert" class="button button-block" value="insert" />
+                </center>
+            </div>
+        </div>
+        <div id="navBar"></div>
+    </div>
+
+</body>
+
+</html>

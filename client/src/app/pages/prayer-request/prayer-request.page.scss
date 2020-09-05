@@ -1,0 +1,82 @@
+ion-input {
+    font-size: 20px;
+    color: var(--ion-color-dark);
+    font-weight: 700;
+}
+
+.title{
+    --border-color: transparent !important;
+    --highlight-height: 0;
+    --padding-top:30px; 
+    --padding-start: 10%;
+    --padding-end: 10%;
+    --background: none;
+    padding-top: 10px;
+    padding-right: 10px;
+    border-radius: 4px;
+    font-size: 20px;
+}
+
+#body{
+    padding-top: 5%;
+    padding-left: 0%;
+    padding-right: 0%;
+    font-size: 18px;
+}
+
+.tagtitle{
+    font-size:15px;
+    text-align: center;
+}
+
+#buttonformatting{
+    text-align:left;
+}
+
+.prayerstat{
+    --background:#ffffff;
+    --border-color: #000000;
+    --color: #000000;
+    --border-radius: 10px;
+    --border-width: 2px;
+    font-size: 20px;
+    --padding-top: 20px;
+    --padding-bottom: 20px;
+    margin-bottom: 10%;
+
+}
+
+.prayerstatus{
+    padding-top: 20px;
+    font-size: 15px;
+    color: #494B4B;
+    --padding-start :15%;
+    --padding-end :15%;
+}
+
+#changetitle{
+    padding-top: 5%;
+    padding-right: 15%;
+    padding-left: 15%;
+    font-size: 20px;
+    height: 100px;
+}
+
+.tagformatting{
+    font-size: 18px;
+    color: #747474;
+    --padding-start :15%;
+    --padding-end :15%;
+}
+
+.endbutton{
+    
+}
+
+.submit{
+
+}
+
+.cancel{
+    
+}

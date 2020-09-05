@@ -1,0 +1,98 @@
+div {
+}
+
+body {
+    background: darkgrey;
+}
+
+#screen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    padding: 0px;
+    width: 360px;
+    height: 640px;
+    border: solid 1px;
+    margin: -320px 0 0 -180px;
+    background: black;
+}
+
+/* w3schools code for dropdown, which is unfinished in this implementation
+
+/* Dropdown Content (Hidden by Default)
+.dropdown-content {
+    display: hidden;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    right: 0;   
+}
+
+/* Links inside the dropdown
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover
+.dropdown-content a:hover {background-color: #ddd}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button)
+.show {display:block;} */
+
+/* reader styling */
+
+#exitbtn {
+    position: absolute;
+    width: 40px;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+}
+
+#exitbtnimg {
+    width: 40px;
+}
+
+#leftbtn {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translate(0%, -50%);
+}
+
+#leftbtnimg {
+    width: 25px;
+}
+
+#readerContent {
+    position: absolute;
+    left: 50px;
+    right: 50px;
+    top: 50%;
+    transform: translate(0%, -50%);
+	overflow-x: hidden;
+	overflow-y: auto;
+	height: 300px;
+}
+
+#readerText {
+    color: beige;
+    font-family: verdana;
+    font-size: 14pt;
+}
+
+#rightbtn {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translate(0%, -50%);
+}
+
+#rightbtnimg {
+    width: 25px;
+}

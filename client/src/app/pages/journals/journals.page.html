@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button [routerLink]="'/add-journal'">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title id="logo">VitaPrayer</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid *ngIf="showSpinner" class="height100">
+    <ion-row class="align-items-center height100">
+      <ion-col class="ion-align-self-center ion-text-center" size="12">
+        <ion-spinner name="dots" color="tertiary"></ion-spinner>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div *ngIf="!showSpinner">
+    <ion-searchbar animated placeholder="Search Journals" [(ngModel)]="searchTerm" (ionChange)="filterItems()"></ion-searchbar>
+    <ion-list >
+      <ion-item lines="full" detail *ngFor="let journal of filteredJournals" (click)="goToPage(journal)">
+        <ion-text style="width: 15%;" color="medium" slot="start">{{journal.ShortFormattedDate}}</ion-text>
+        <ion-label>{{journal.Title}}</ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+  
+</ion-content>

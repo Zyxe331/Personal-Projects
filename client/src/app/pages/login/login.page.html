@@ -1,0 +1,66 @@
+<!--Toolbar at top of page-->
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-title id="logo">VitaPrayer</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!--Main body of page-->
+<ion-content>
+
+  <ion-grid style="height: 66%;" class="ion-padding">
+    <ion-row style="height: 100%;" class="ion-align-items-center ion-justify-content-center ">
+
+      <!--Form to submit user information-->
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+
+        <!--Email and Password Input and Errors-->
+        <ion-row class="ion-align-items-center ion-justify-content-center">
+          <ion-item style="width: 80%;">
+            <ion-label position="floating" color="medium">Email</ion-label>
+            <ion-input id="email" type="email" formControlName="email" (keyup)=genericInputChange($event)></ion-input>
+          </ion-item>
+          <ion-text color="danger" *ngIf="emailErrors">
+            <p *ngIf="loginForm.controls.email.hasError('pattern')" class="ion-no-margin ion-margin-top">
+              <ion-icon name="alert"></ion-icon> Please enter a valid email.
+            </p>
+            <p *ngIf="loginForm.controls.email.hasError('required')" class="ion-no-margin ion-margin-top">
+              <ion-icon name="alert"></ion-icon> Email address is required.
+            </p>
+          </ion-text>
+          <ion-item style="width: 80%;">
+            <ion-label color="medium" position="floating">Password</ion-label>
+            <ion-input id="password" type="password" formControlName="password" (keyup)=genericInputChange($event)>
+            </ion-input>
+          </ion-item>
+          <ion-text color="danger" *ngIf="passwordErrors">
+            <p *ngIf="loginForm.controls.password.hasError('required')" class="ion-no-margin ion-margin-top">
+              <ion-icon name="alert"></ion-icon> Password is required.
+            </p>
+          </ion-text>
+        </ion-row>
+
+        <!--Log in Button-->
+        <ion-row class="ion-align-items-center ion-justify-content-center">
+          <ion-button type="submit" size="large" class="ion-margin-top" style="width:80%;">Login</ion-button>
+        </ion-row>
+
+        <!--Navigate to Register-->
+        <ion-row class="ion-align-items-center ion-justify-content-center">
+          <ion-text style="padding-right: 3px;">Don't have an Account? </ion-text>
+          <ion-button color="medium" fill="clear" class="ion-no-padding ion-no-margin" routerDirection="forward" [routerLink]="['/register']">Sign
+            up here</ion-button>
+        </ion-row>
+
+        <!--Server Errors-->
+        <ion-row class="ion-align-items-center ion-justify-content-center">
+          <ion-text color="danger" *ngIf="serverErrors" class="ion-margin-top">
+            {{serverError}}
+          </ion-text>
+        </ion-row>
+
+      </form>
+      
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title id="logo">VitaPrayer</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid *ngIf="showSpinner" class="height100">
+    <ion-row class="align-items-center height100">
+      <ion-col class="ion-align-self-center ion-text-center" size="12">
+        <ion-spinner name="dots" color="tertiary"></ion-spinner>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-list *ngIf="!showSpinner">
+    <ion-button (click)="markAllRead()" size="small" color="tertiary">Mark All Read</ion-button>
+    <ion-list>
+      <ion-item lines="full" detail *ngFor="let notification of notifications" [color]="notification.Color"
+        (click)="goToPage(notification)">
+        <ion-icon [name]="notification.Notification_Type_Icon"></ion-icon>
+        <ion-label style="padding-left: 5px;">
+          <h2>{{notification.Title}}</h2>
+          <p>{{notification.Body}}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="static/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/addPrayerStyle.css" />
+
+    <script type="text/javascript" src="static/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="static/js/settings.js"></script>
+    <script type="text/javascript" src="static/js/sessionHandler.js"></script>
+
+    <!--2019-09-21 GP: Moved JS into its own file-->
+    <script type="text/javascript" src="static/js/editPrayer.js"></script>
+
+    <title>Prayer Requests</title>
+</head>
+
+<body>
+    <div id="screen">
+        <div id="appHeader"></div>
+        <div id="mainContent">
+            <!-- This is where the page content will go -->
+            <a href="prayer.html"><img id="backimg" src="static/imgs/back.png" /></a>
+            <br /><br /><br><br><br>
+
+            <div class="prayerTitle">
+                <center>
+                    <label>Prayer Title</label>
+                    <br>
+                    <textarea rows="1" cols="30" id="title"></textarea>
+                    <br><br>
+                </center>
+            </div>
+
+            <div class="prayerEntry">
+                <center>
+                    <label>Prayer Request</label>
+                    <br>
+                    <textarea rows="10" cols="50" id="entry"></textarea>
+                </center>
+            </div>
+
+            <div class="tagSelect">
+                <p>
+                    Tags: <select onchange="onTagChange()" id="tags">
+                        <option value=""></option>
+                    </select>
+                    <div class="tagList" contenteditable="false"></div>
+                </p>
+            </div>
+
+            <div class="prayerFrequency">
+                <center>
+                    <label>Frequency</label>
+                    <textarea rows="1" cols="20" id="frequency"></textarea>
+                </center>
+            </div>
+
+            <div class="updateButton">
+                <center>
+                    <br />
+                    <input type="button" id="update" class="button button-block" value="Update Prayer Request" />
+                </center>
+            </div>
+
+            <div class="resolveButton">
+                <center>
+                    <br />
+                    <input type="button" id="resolve" class="button button-block" value="Resolve Prayer Request" />
+                </center>
+            </div>
+        </div>
+        <div id="navBar"></div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+.error{
+    font-size:12px;
+    font-weight:normal; //doesnt work
+    text-align: center;  //dont work
+}
+
+#title {
+    --border-color: transparent !important;
+    --highlight-height: 0;
+    --background: none;
+    padding: 10px 10px;
+    border-radius: 4px;
+    color: #494B4B;
+    font-size: 20px;
+    font-weight: bold;
+    height: 60px;
+}
+#date{
+    padding-top:0px;
+    height: 30px;
+    padding-top:0px;
+    margin:0px;
+}
+#dateText {
+    font-size: 12px;
+    padding-top:0px;     //padding here is behaving wierdly: explore why and fix it.
+    padding-left:10px;
+    margin:0px;
+}
+
+#textarea {
+    --border-color: transparent !important;
+    --highlight-height: 0;
+    --background: none;
+    border-radius: 4px;
+    color: #494B4B;
+    font-size: 14px;
+    padding-top: 0px;
+    padding-left: 10px;
+}
+
+#body{
+    padding-top:0px;
+}
+
+#saveButton{
+    width:40%;
+}
+
+input::-webkit-input-placeholder {
+    color: #000;
+}
+
+input::-moz-placeholder {
+    color: #000000;
+}

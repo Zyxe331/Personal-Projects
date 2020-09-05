@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title id="logo">VitaPrayer</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid *ngIf="showSpinner" class="height100">
+    <ion-row class="align-items-center height100">
+      <ion-col class="ion-align-self-center ion-text-center" size="12">
+        <ion-spinner name="dots" color="tertiary"></ion-spinner>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-card *ngIf="!showSpinner">
+    <ion-card-header>
+      <ion-row justify-content-center align-items-center>
+        <ion-col size="12">
+          <ion-card-title>{{notification.Title}}</ion-card-title>
+          <ion-card-subtitle>{{notification.LongFormattedDate}}</ion-card-subtitle>
+        </ion-col>
+      </ion-row>
+
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-grid>
+        <ion-row align-items-center justify-content-center>
+          <ion-col size="12">
+            <ion-text>{{notification.Body}}</ion-text>
+          </ion-col>
+        </ion-row>
+        <ion-row align-items-center justify-content-center *ngIf="notification.Notification_Type_Name == 'Join Group Request' && !notification.Completed">
+          <ion-col size="6" class="ion-text-center">
+            <ion-button color="success" (click)="acceptUser()">
+              <ion-icon slot="start" name="checkmark"></ion-icon>
+              Accept
+            </ion-button>
+          </ion-col>
+          <ion-col size="6" class="ion-text-center">
+            <ion-button color="danger" (click)="declineUser()">
+              <ion-icon slot="start" name="close"></ion-icon>
+              Reject
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+
+  </ion-card>
+</ion-content>

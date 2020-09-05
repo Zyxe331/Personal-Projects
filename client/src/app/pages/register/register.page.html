@@ -1,0 +1,94 @@
+<!--Toolbar at top of page-->
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-title id="logo">VitaPrayer</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!--Main body of page-->
+<ion-content>
+
+  <ion-grid style="height: 100%;" class="ion-padding">
+    <ion-row style="height: 100%;" class="ion-align-items-center ion-justify-content-center ">
+
+      <!--Form to submit user information-->
+      <form [formGroup]="registerForm" (ngSubmit)="register()">
+
+        <!--Email and Password Input and Errors-->
+        <ion-row class="ion-align-items-center ion-justify-content-center">
+          <ion-item style="width: 80%;">
+            <ion-label position="floating" color="medium">Email<span class="asterisk">*</span></ion-label>
+            <ion-input id="email" type="email" formControlName="email" (keyup)=genericInputChange($event)></ion-input>
+          </ion-item>
+          <ion-text color="danger" *ngIf="emailErrors">
+            <p *ngIf="registerForm.controls.email.hasError('pattern')" class="ion-no-margin ion-margin-top">
+              <ion-icon name="alert"></ion-icon> Please enter a valid email.
+            </p>
+            <p *ngIf="registerForm.controls.email.hasError('required')" class="ion-no-margin ion-margin-top">
+              <ion-icon name="alert"></ion-icon> Email address is required.
+            </p>
+          </ion-text>
+          <ion-item style="width: 80%;">
+            <ion-label position="floating" color="medium">Password<span class="asterisk">*</span></ion-label>
+            <ion-input id="password" type="password" formControlName="password" (keyup)=genericInputChange($event)>
+            </ion-input>
+          </ion-item>
+          <ion-text color="danger" *ngIf="passwordErrors">
+            <p *ngIf="registerForm.controls.password.hasError('required')" class="ion-no-margin ion-margin-top">
+              <ion-icon name="alert"></ion-icon> Password is required.
+            </p>
+          </ion-text>
+          <ion-item style="width: 80%;">
+            <ion-label position="floating" color="medium">First Name<span class="asterisk">*</span></ion-label>
+            <ion-input id="password" (keyup)=genericInputChange($event)  formControlName="firstname">
+            </ion-input>
+          </ion-item>
+          <ion-text color="danger" *ngIf="firstNameErrors">
+            <p *ngIf="registerForm.controls.firstname.hasError('required')" class="ion-no-margin ion-margin-top">
+              <ion-icon name="alert"></ion-icon> First Name is required.
+            </p>
+          </ion-text>
+          <ion-item style="width: 80%;">
+            <ion-label position="floating" color="medium">Last Name<span class="asterisk">*</span></ion-label>
+            <ion-input id="password" (keyup)=genericInputChange($event)  formControlName="lastname">
+            </ion-input>
+          </ion-item>
+          <ion-text color="danger" *ngIf="lastNameErrors">
+            <p *ngIf="registerForm.controls.lastname.hasError('required')" class="ion-no-margin ion-margin-top">
+              <ion-icon name="alert"></ion-icon>Last Name is required.
+            </p>
+          </ion-text>
+          <ion-item style="width: 80%;">
+            <ion-label position="floating" color="medium">Phone Number</ion-label>
+            <ion-input id="password" (keyup)=genericInputChange($event)  formControlName="phone">
+            </ion-input>
+          </ion-item>
+          <ion-item lines="none" class="asterisk" style="font-size: 5vw;">*Required Fields</ion-item>
+        </ion-row>
+
+        <!--Sign up Button-->
+        <ion-row class="ion-align-items-center ion-justify-content-center">
+          <ion-button class="ion-margin-top" type="submit" size="large" style="width:80%;">Sign Up</ion-button>
+        </ion-row>
+
+        <!--Navigate to Log In-->
+        <ion-row class="ion-align-items-center ion-justify-content-center">
+          <ion-text style="padding-right: 3px;">Already have an Account?</ion-text>
+          <ion-button color="medium" fill="clear" class="ion-no-padding ion-no-margin" routerDirection="back"
+            [routerLink]="['/login']">Log
+            in</ion-button>
+        </ion-row>
+
+        <!--Server Errors-->
+        <ion-row class="ion-align-items-center ion-justify-content-center">
+          <ion-text color="danger" *ngIf="serverErrors" class="ion-margin-top">
+            {{serverError}}
+          </ion-text>
+        </ion-row>
+
+      </form>
+
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

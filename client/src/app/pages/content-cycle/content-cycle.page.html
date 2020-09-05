@@ -1,0 +1,96 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title id="logo">VitaPrayer</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid *ngIf="showSpinner" class="height100">
+    <ion-row class="align-items-center height100"> 
+      <ion-col class="ion-align-self-center ion-text-center" size="12">
+        <ion-spinner name="dots" color="tertiary"></ion-spinner>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
+  <ion-grid *ngIf="!showSpinner">
+    <ion-card *ngIf="currentPlan != null">
+
+      <ion-card-header style="padding-bottom: 0" class="ion-padding-top">
+        <ion-card-title class="ion-text-center">
+          <ion-text class="ion-text-center">
+            {{currentPlan.Title}}
+          </ion-text>
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content class="ion-text-center">
+        <ion-item>
+          <ion-grid style="padding-top: 0;" class="ion-padding-bottom">
+            <ion-row class="ion-padding-horizontal ion-padding-bottom">
+              <ion-col size="9" align-self-center>
+                <p class="smallitalic" color="medium">working through with</p>
+                <p class="subheader" color="dark">{{currentGroup.Name}}</p>
+                <ion-text *ngFor="let member of currentGroupMembers; last as isLast">
+                  <span *ngIf="!isLast">{{member.FirstName}}, </span>
+                  <span *ngIf="isLast">{{member.FirstName}}</span>
+                </ion-text>
+              </ion-col>
+              <ion-col size="3" align-self-center>
+                <ion-avatar>
+                  <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+                </ion-avatar>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12">
+                <ion-label>
+                  Full Plan Progress
+                  <span *ngIf="userHasPlan.Times_Completed > 0">
+                    <ion-icon color="warning" name="star"></ion-icon>
+                    {{userHasPlan.Times_Completed}}
+                  </span>
+                </ion-label>
+                <ion-progress-bar class="progressbar" color="success" value={{planProgress}}>
+                </ion-progress-bar>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12">
+                <ion-label>Current Cycle Progress</ion-label>
+                <ion-progress-bar class="progressbar" color="success" value={{cycleProgress}}>
+                </ion-progress-bar>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+        <ion-button color="dark" fill="clear" style="width: 100%; font-weight: bold;" (click)="goToNextSection()">
+          Continue to next section
+          <ion-icon name="md-arrow-dropright"></ion-icon>
+        </ion-button>
+        <ion-button (click)="goToChangeCycle()">Change Cycle</ion-button>
+      </ion-card-content>
+
+    </ion-card>
+
+    <ion-card *ngIf="!currentPlan">
+      <ion-card-content>
+        <ion-grid>
+          <ion-row align-items-center justify-content-center>
+            <ion-col size="12" class="ion-text-center">
+              <ion-text>You haven't joined a Group/Plan yet:</ion-text>
+              <ion-button (click)="goToChangeCycle()">
+                <ion-icon slot="start" name="add"></ion-icon>
+                Join Plan Now
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  </ion-grid>
+
+</ion-content>
