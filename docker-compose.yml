@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+
+    ############################
+    #  Setup node container
+    ############################
+    server:
+        build:
+            context: ./server
+            dockerfile: ./Dockerfile
+        expose:
+            - ${APP_SERVER_PORT}
+        environment: 
+            API_HOST: ${API_HOST}
+            APP_SERVER_PORT: ${APP_SERVER_PORT}
+        ports:
+            - ${APP_SERVER_PORT}:${APP_SERVER_PORT}
+        command: node index.js
+
+    ############################
+    #  Setup client container
+    ############################
+    # client:
+    #     build: ./client
+    #     environment: 
+    #         - IONIC_APP_PORT=${IONIC_APP_PORT}
+    #     expose: 
+    #         - ${IONIC_APP_PORT}
+    #     ports: 
+    #         - ${IONIC_APP_PORT}:${IONIC_APP_PORT}
+    #     links:
+    #         - server
+    #     command: npm run start
+
+
+    ############################
+    #  Setup database container
+    ############################
+    database:
+        build: ./database
+        image: mysql:latest
+        volumes:
+            - ./db_data:/var/lib/mysql:rw
+            - ./Vet-Database-Script-v30.sql:/docker-entrypoint-initdb.d
+        environment: 
+            MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+            MYSQL_DATABASE: ${DATABASE_NAME}
+            #MYSQL_USER: ${DATABASE_USERNAME}
+            #MYSQL_PASSWORD: ${DATABASE_PASSWORD}
