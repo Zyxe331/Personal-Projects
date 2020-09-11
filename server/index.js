@@ -33,5 +33,5 @@ if (process.env.PRODUCTION === 'TRUE') {
 			console.log(`API listening on ${process.env.SERVER_URL}:${process.env.PORT} over https.`)
 		})
 } else {
-	app.listen(process.env.port);
+	app.listen(process.env.PORT);
 }
