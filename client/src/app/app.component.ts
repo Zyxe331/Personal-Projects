@@ -97,7 +97,7 @@ export class AppComponent {
 
     public study: boolean = false;
 
-    updateDriverStudyMode() {
+    updateDriverStudyMode(event) {
         this.study = !this.study;
 
         let notificationButton = document.getElementById('notifications');

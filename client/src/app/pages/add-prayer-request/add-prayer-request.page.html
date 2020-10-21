@@ -62,7 +62,7 @@
     <!--Prayer Tag-->
     <ion-item id="prayertags" lines="none">
       <ion-label class="bold">Tags:</ion-label>
-      <ion-select formControlName="tags" placeholder="Select Tags" [(ngModel)]="tag" multiple="true">
+      <ion-select formControlName="tags" placeholder="Select Tags" [(ngModel)]="tags" multiple="true">
         <ion-select-option *ngFor="let tag of tags" [value]="tag.Id.toString()">{{tag.Name}}</ion-select-option>
       </ion-select>
     </ion-item>

@@ -113,7 +113,7 @@ export class AddPrayerRequestPage implements OnInit {
 
   }
 
-  dismiss(prayer: PrayerRequest) {
+  dismiss(prayer?: PrayerRequest) {
     // using the injected ModalController this page
     // can "dismiss" itself and optionally pass back data
     this.modalController.dismiss({

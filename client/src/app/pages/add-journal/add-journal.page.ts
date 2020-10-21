@@ -90,7 +90,7 @@ export class AddJournalPage implements OnInit {
 
   }
 
-  dismiss(journal: Journal) {
+  dismiss(journal?: Journal) {
     // using the injected ModalController this page
     // can "dismiss" itself and optionally pass back data
     this.modalController.dismiss({
