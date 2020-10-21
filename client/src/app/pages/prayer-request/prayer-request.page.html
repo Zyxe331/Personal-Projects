@@ -88,7 +88,7 @@
       <!--Prayer Tag-->
       <ion-item class =" bold tagformatting" lines="none">
         <ion-label>Tags:</ion-label>
-        <ion-select formControlName="tags" placeholder="Select Tags" [(ngModel)]="tag" multiple="true" [value]="tagIds">
+        <ion-select formControlName="tags" placeholder="Select Tags" [(ngModel)]="tags" multiple="true" [value]="tagIds">
           <ion-select-option *ngFor="let tag of tags" [value]="tag.Id.toString()">{{tag.Name}}</ion-select-option>
         </ion-select>
       </ion-item>

@@ -60,7 +60,7 @@ const findAdminUserForGroup = async (groupNumber) => {
 }
 
 const createUser = async (email, password, firstName, lastName, phoneNumber) => {
-
+    let user;
     try {
 
         // Get the current date and hash the password

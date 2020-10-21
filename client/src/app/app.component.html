@@ -36,7 +36,7 @@
                                                 <div style="margin-left: 0px; font-size:4.5vw;"><b>{{p.title}}</b></div>
                                             </ion-col>
                                             <ion-col size="3">
-                                                <div *ngIf="p.title == 'Notifications' && numberOfUnreadNotifications && !this.study > 0" class="notifications"><b>{{numberOfUnreadNotifications}}</b></div>
+                                                <div *ngIf="p.title == 'Notifications' && numberOfUnreadNotifications && !this.study != false" class="notifications"><b>{{numberOfUnreadNotifications}}</b></div>
                                             </ion-col>
                                         </ion-row>
                                     </ion-grid>
