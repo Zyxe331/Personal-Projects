@@ -8,7 +8,7 @@
 <!--Main body of page-->
 <ion-content>
 
-  <ion-grid style="height: 66%;" class="ion-padding">
+  <ion-grid class="ion-padding">
     <ion-row style="height: 100%;" class="ion-align-items-center ion-justify-content-center ">
 
       <!--Form to submit user information-->
@@ -16,7 +16,7 @@
 
         <!--Email and Password Input and Errors-->
         <ion-row class="ion-align-items-center ion-justify-content-center">
-          <ion-item style="width: 80%;">
+          <ion-item>
             <ion-label position="floating" color="medium">Email</ion-label>
             <ion-input id="email" type="email" formControlName="email" (keyup)=genericInputChange($event)></ion-input>
           </ion-item>
@@ -28,7 +28,7 @@
               <ion-icon name="alert"></ion-icon> Email address is required.
             </p>
           </ion-text>
-          <ion-item style="width: 80%;">
+          <ion-item>
             <ion-label color="medium" position="floating">Password</ion-label>
             <ion-input id="password" type="password" formControlName="password" (keyup)=genericInputChange($event)>
             </ion-input>
@@ -42,7 +42,7 @@
 
         <!--Log in Button-->
         <ion-row class="ion-align-items-center ion-justify-content-center">
-          <ion-button type="submit" size="large" class="ion-margin-top" style="width:80%;">Login</ion-button>
+          <ion-button type="submit" size="large" class="ion-margin-top">Login</ion-button>
         </ion-row>
 
         <!--Navigate to Register-->
