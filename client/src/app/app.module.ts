@@ -25,7 +25,7 @@ import { LocalNotifications} from '@ionic-native/local-notifications/ngx'
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
-    IonicStorageModule.forRoot(),
+    IonicStorageModule.forRoot({name: 'vetUserStorage',driverOrder: ['localstorage', 'sqlite', 'indexeddb']}),
     FormsModule, ReactiveFormsModule, AddJournalPageModule,AddPrayerRequestPageModule
   ],
   providers: [

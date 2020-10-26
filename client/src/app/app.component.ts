@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Platform, Events } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { UserProviderService } from './services/user-provider.service';
@@ -66,6 +67,7 @@ export class AppComponent {
         private userService: UserProviderService,
         private router: Router,
         private events: Events,
+        private storage: Storage,
         private chatService: ChatProviderService,
         private cycleServices: ContentCycleProviderService,
         private tagServices: TagProviderService
@@ -81,10 +83,13 @@ export class AppComponent {
     }
 
     initializeApp() {
-        this.platform.ready().then(() => {
-            this.statusBar.styleDefault();
-            this.splashScreen.hide();
-        });
+        this.storage.get('USER').then(user => {
+            this.userService.currentUser = user
+            this.platform.ready().then(() => {
+                this.statusBar.styleDefault();
+                this.splashScreen.hide();
+            });  
+        })
     }
 
     async logout() {
