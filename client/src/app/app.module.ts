@@ -16,6 +16,15 @@ import { TokenInterceptorService } from './services/token-interceptor.service';
 import { AddJournalPageModule } from './pages/add-journal/add-journal.module'
 import { AddPrayerRequestPageModule } from './pages/add-prayer-request/add-prayer-request.module';
 import { LocalNotifications} from '@ionic-native/local-notifications/ngx'
+import { SharedModule } from './shared/shared.module';
+import { ContentCyclePageModule } from './pages/content-cycle/content-cycle.module';
+import { ChangeContentCyclePageModule } from './pages/change-content-cycle/change-content-cycle.module';
+import { GroupPageModule } from './pages/group/group.module';
+import { JournalPageModule } from './pages/journal/journal.module';
+import { NotificationPageModule } from './pages/notification/notification.module';
+import { NotificationsPageModule } from './pages/notifications/notifications.module';
+import { PrayerRequestPageModule } from './pages/prayer-request/prayer-request.module';
+import { SectionPageModule } from './pages/section/section.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,7 +35,8 @@ import { LocalNotifications} from '@ionic-native/local-notifications/ngx'
     AppRoutingModule,
     HttpClientModule,
     IonicStorageModule.forRoot({name: 'vetUserStorage',driverOrder: ['localstorage', 'sqlite', 'indexeddb']}),
-    FormsModule, ReactiveFormsModule, AddJournalPageModule,AddPrayerRequestPageModule
+    FormsModule, ReactiveFormsModule, AddJournalPageModule,AddPrayerRequestPageModule, SharedModule, 
+    ContentCyclePageModule, ChangeContentCyclePageModule, GroupPageModule, JournalPageModule, NotificationPageModule, NotificationsPageModule, PrayerRequestPageModule, SectionPageModule
   ],
   providers: [
     StatusBar,
