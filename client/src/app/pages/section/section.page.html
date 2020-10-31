@@ -1,7 +1,18 @@
 <ion-header>
-  <app-header></app-header>
+  <ion-toolbar>
+    <ion-buttons left>
+      <ion-button class="contentCycleBtn" (click)="goToContentCycle()">
+        <ion-icon name="arrow-back"></ion-icon>
+        Back
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title id="logo">VitaPrayer</ion-title>
+  </ion-toolbar>
 </ion-header>
-
+<!--slot="start"-->
 <ion-content>
 
   <ion-grid *ngIf="showSpinner" class="height100">

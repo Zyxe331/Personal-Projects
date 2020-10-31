@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, ModalController } from '@ionic/angular'
-import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
+import { ActivatedRoute, Router, NavigationExtras, NavigationEnd } from '@angular/router';
 import { ContentCycleProviderService } from '../../services/content-cycle-provider.service';
 import { JournalProviderService } from '../../services/journal-provider.service';
 import { PrayerRequestProviderService } from '../../services/prayer-request-provider.service';
@@ -177,4 +177,9 @@ export class SectionPage implements OnInit {
     }
     this.router.navigate(['/prayer-request'], navigationExtras);
   }
+
+  goToContentCycle() {
+    this.navCtrl.navigateBack(['/content-cycle/']);
+  }
+
 }
