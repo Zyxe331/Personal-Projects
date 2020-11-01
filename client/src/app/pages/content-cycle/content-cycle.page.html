@@ -19,7 +19,7 @@
   <ion-grid *ngIf="!showSpinner">
     <ion-card *ngIf="currentPlan != null">
 
-      <ion-card-header style="padding-bottom: 0" class="ion-padding-top">
+      <ion-card-header class="ion-padding-top">
         <ion-card-title class="ion-text-center">
           <ion-text class="ion-text-center">
             {{currentPlan.Title}}
@@ -67,11 +67,11 @@
             </ion-row>
           </ion-grid>
         </ion-item>
-        <ion-button color="dark" fill="clear" style="width: 100%; font-weight: bold;" (click)="goToNextSection()">
+        <ion-button class="nextSectionBtn" color="success" fill="solid" (click)="goToNextSection()">
           Continue to next section
           <ion-icon name="md-arrow-dropright"></ion-icon>
         </ion-button>
-        <ion-button (click)="goToChangeCycle()">Change Cycle</ion-button>
+        <ion-button fill="clear" class="changeCycleBtn" (click)="goToChangeCycle()">Change Cycle</ion-button>
       </ion-card-content>
 
     </ion-card>
