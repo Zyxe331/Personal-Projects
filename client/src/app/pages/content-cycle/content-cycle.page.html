@@ -31,7 +31,7 @@
         <ion-item>
           <ion-grid style="padding-top: 0;" class="ion-padding-bottom">
             <ion-row class="ion-padding-horizontal ion-padding-bottom">
-              <ion-col size="9" align-self-center>
+              <ion-col size="9" class="ion-align-self-center ion-text-center">
                 <p class="smallitalic" color="medium">working through with</p>
                 <p class="subheader" color="dark">{{currentGroup.Name}}</p>
                 <ion-text *ngFor="let member of currentGroupMembers; last as isLast">
@@ -39,7 +39,7 @@
                   <span *ngIf="isLast">{{member.FirstName}}</span>
                 </ion-text>
               </ion-col>
-              <ion-col size="3" align-self-center>
+              <ion-col size="3" class="ion-align-self-center ion-text-center">
                 <ion-avatar>
                   <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
                 </ion-avatar>
@@ -71,7 +71,7 @@
           Continue to next section
           <ion-icon name="md-arrow-dropright"></ion-icon>
         </ion-button>
-        <ion-button fill="clear" class="changeCycleBtn" (click)="goToChangeCycle()">Change Cycle</ion-button>
+        <ion-button fill="clear" class="changeCycleBtn" (click)="presentPopover($event)">Change Cycle</ion-button>
       </ion-card-content>
 
     </ion-card>
