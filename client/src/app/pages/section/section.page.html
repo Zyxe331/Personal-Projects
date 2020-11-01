@@ -18,7 +18,7 @@
         <ion-grid>
           <ion-row>
             <ion-col size="2">
-              <ion-button fill="clear" style="width: 100%; height: 100%;" (click)="goToPreviousSection()">
+              <ion-button class="navArrow" fill="clear" (click)="goToPreviousSection()">
                 <ion-icon slot="icon-only" color="medium" name="md-arrow-dropleft"></ion-icon>
               </ion-button>
             </ion-col>
@@ -28,7 +28,7 @@
               </div>
             </ion-col>
             <ion-col size="2">
-              <ion-button fill="clear" style="width: 100%; height: 100%;" (click)="goToNextSection()">
+              <ion-button class="navArrow" fill="clear" (click)="goToNextSection()">
                 <ion-icon slot="icon-only" color="medium" name="md-arrow-dropright"></ion-icon>
               </ion-button>
             </ion-col>
@@ -37,7 +37,7 @@
       </ion-card-header>
 
       <ion-card-content>
-        <h1 style="margin-bottom: 16px;">{{section.Title}}</h1>
+        <h1 class="sectionTitle">{{section.Title}}</h1>
         <ion-text class="darkitalic ion-text-center">{{section.Main_Idea}}
         </ion-text>
         <br /><br />
