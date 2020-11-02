@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { PopoverController } from '@ionic/angular';
+import { ChangeCyclePopoverComponent } from './change-cycle-popover/change-cycle-popover.component'
 import { Router, NavigationExtras } from '@angular/router';
 import { ContentCycleProviderService } from '../../services/content-cycle-provider.service';
 import { ChatProviderService } from '../../services/chat-provider.service';
@@ -30,7 +32,8 @@ export class ContentCyclePage implements OnInit {
     private router: Router,
     private contentCycleService: ContentCycleProviderService,
     private chatService: ChatProviderService,
-    private globalService: GlobalProviderService
+    private globalService: GlobalProviderService,
+    public popoverController: PopoverController
   ) { }
 
   async ngOnInit() {
@@ -73,6 +76,19 @@ export class ContentCyclePage implements OnInit {
   goToNextSection() {
     this.router.navigate(['/section/' + this.contentCycleService.currentSectionIndex]);
   }
+
+  //Trigger confirmation popup
+  async presentPopover(ev: any) {
+    const popover = await this.popoverController.create({
+      component: ChangeCyclePopoverComponent,
+      showBackdrop:true,
+      cssClass: 'change-cycle-popup',
+      event: ev,
+      translucent: false
+    });
+    return await popover.present();
+  }
+
 
   goToChangeCycle() {
     this.router.navigate(['/change-content-cycle']);
