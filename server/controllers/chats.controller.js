@@ -23,7 +23,9 @@ const getCurrentUserGroupInformation = async (request, response) => {
         }
 
         let userHasGroup = await chatServices.getCurrentUserHasGroup(userid);
+        console.log(userHasGroup);
         responseBody.currentUserHasGroup = userHasGroup;
+        console.log(responseBody);
 
         let group = await chatServices.getCurrentGroup(userHasGroup.Group_Id);
         responseBody.currentGroup = group;

@@ -3,7 +3,7 @@ const utils = require('../utils/general_utils.js');
 const jsStringEscape = require('js-string-escape');
 const deactivateActiveUserHasGroups = async (userid) => {
     const db = new Database();
-    await db.query(`UPDATE User_has_Group SET Active = 0 WHERE Active = 1 AND User_Id = ${userid}`).catch(error => {
+    await db.query(`UPDATE User_has_Group INNER JOIN User_has_Plan ON User_has_Group.User_has_Plan_Id=User_has_Plan.Id SET User_has_Group.Active=0 WHERE User_has_Group.Active = 1 AND User_has_Plan.User_Id = ${userid}`).catch(error => {
         console.error(error);
         throw error;
     });
@@ -26,7 +26,7 @@ const createGroup = async (planName, planid) => {
 const createUserHasGroup = async (userid, groupid, userHasPlanId, groupRoleId) => {
 
     const db = new Database();
-    let result = await db.query(`INSERT INTO User_has_Group (User_Id, Group_Id, GroupRole_Id, User_has_Plan_Id, Active) VALUES (${userid}, ${groupid}, ${groupRoleId}, ${userHasPlanId}, 1)`).catch(error => {
+    let result = await db.query(`INSERT INTO User_has_Group (Group_Id, GroupRole_Id, User_has_Plan_Id, Active) VALUES (${groupid}, ${groupRoleId}, ${userHasPlanId}, 1)`).catch(error => {
         console.error(error);
         throw error;
     });
@@ -37,10 +37,12 @@ const createUserHasGroup = async (userid, groupid, userHasPlanId, groupRoleId) =
 
 const getCurrentUserHasGroup = async (userid) => {
     const db = new Database();
-    let userHasGroup = await db.query(`SELECT * FROM User_has_Group WHERE User_Id = ${userid} AND Active = 1`).catch(error => {
+    console.log(userid);
+    let userHasGroup = await db.query(`SELECT User_has_Group.* FROM User_has_Group INNER JOIN User_has_Plan ON User_has_Group.User_has_Plan_Id=User_has_Plan.Id WHERE User_has_Plan.User_Id=${userid} AND User_has_Group.Active=1`).catch(error => {
         console.error(error);
         throw error;
     });
+    console.log(userHasGroup[0]);
     db.close();
 
     return userHasGroup[0];
@@ -59,7 +61,7 @@ const getCurrentGroup = async (groupid) => {
 
 const getUserGroups = async (groupid, currentuserid) => {
     const db = new Database();
-    let userHasGroups = await db.query(`SELECT User_has_Plan_Id, User_Id FROM User_has_Group WHERE User_Id != ${currentuserid} AND Group_Id = ${groupid} AND Active = 1`).catch(error => {
+    let userHasGroups = await db.query(`SELECT User_has_Plan_Id, User_has_Plan.User_Id FROM User_has_Group INNER JOIN User_has_Plan ON User_has_Group.User_has_Plan_Id = User_has_Plan.Id WHERE User_has_Plan.User_Id != ${currentuserid} AND User_has_Group.Group_Id = ${groupid} AND User_has_Group.Active = 1`).catch(error => {
         console.error(error);
         throw error;
     });
