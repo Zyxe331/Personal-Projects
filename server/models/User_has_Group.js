@@ -8,14 +8,6 @@ module.exports = function(sequelize, DataTypes) {
 			allowNull: false,
 			primaryKey: true
 		},
-		User_Id: {
-			type: DataTypes.INTEGER,
-			allowNull: false,
-			references: {
-				model: 'User',
-				key: 'Id'
-			},
-		},
 		Group_Id: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
