@@ -17,7 +17,7 @@ var https = require('https')
 dotenv.config();
 
 //create the models in ./models
-// var auto = new SequelizeAuto('vets_database', 'root', 'SQLRoot333', {
+// var auto = new SequelizeAuto(process.env.DATABASE_NAME, process.env.DATABASE_USER, process.env.DATABASE_PASSWORD, {
 // 	host: 'localhost',
 // 	port: '3306',
 // 	dialect: 'mysql'
@@ -28,7 +28,7 @@ dotenv.config();
 // 	console.log(auto.foreignKeys);
 // })
 
-const sequelize = new Sequelize('vets_database', 'root', 'SQLRoot333', {
+const sequelize = new Sequelize(process.env.DATABASE_NAME, process.env.DATABASE_USER, process.env.DATABASE_PASSWORD, {
 	host: 'localhost',
 	dialect: 'mysql',
 	define: {

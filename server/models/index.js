@@ -2,7 +2,7 @@ var fs = require('fs')
         , path      = require('path')
         , Sequelize = require('sequelize')
         , lodash    = require('lodash')
-        , sequelize = new Sequelize('vets_database', 'root', 'SQLRoot333', {
+        , sequelize = new Sequelize(process.env.DATABASE_NAME, process.env.DATABASE_USER, process.env.DATABASE_PASSWORD, {
             host: 'localhost',
             dialect: 'mysql',
             define: {

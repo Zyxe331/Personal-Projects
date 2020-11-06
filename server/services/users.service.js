@@ -44,10 +44,11 @@ const findAdminUserForGroup = async (groupNumber) => {
     try {
         const db = new Database();
         let rows = await db.query(
-            `SELECT u.Id Id, u.FirstName FirstName, u.LastName LastName FROM User_has_Group uhg
-            INNER JOIN GroupRole gr ON gr.Id = uhg.GroupRole_Id
-            INNER JOIN User u ON u.Id = uhg.User_Id 
-            WHERE uhg.Group_Id = ${groupNumber} AND gr.Name = 'Admin'`
+            `SELECT User.Id Id, User.FirstName FirstName, User.LastName LastName FROM User_has_Group
+            INNER JOIN GroupRole ON GroupRole.Id = User_has_Group.GroupRole_Id
+            INNER JOIN User_has_Plan on User_has_Plan.Id = User_has_Group.User_has_Plan_Id
+            INNER JOIN User ON User.Id = User_has_Plan.User_Id 
+            WHERE User_has_Group.Group_Id = ${groupNumber} AND GroupRole.Name = 'Admin'`
         );
         if (rows.length === 1) {
             user = rows[0];
