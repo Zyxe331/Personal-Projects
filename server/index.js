@@ -1,5 +1,5 @@
-const AdminBro =require('admin-bro');
-const AdminBroExpress = require('@admin-bro/express');
+const AdminBro = require('admin-bro')
+const AdminBroExpressjs = require('@admin-bro/express');
 const { Sequelize } = require('sequelize');
 var SequelizeAuto = require('sequelize-auto');
 const AdminBroSequelize = require('@admin-bro/sequelize');
@@ -12,6 +12,7 @@ const routes = require('./routes');
 const dotenv = require('dotenv');
 var fs = require('fs')
 var https = require('https')
+const UsersService = require('./services/users.service')
 
 // Set up environment file
 dotenv.config();
@@ -38,16 +39,60 @@ const sequelize = new Sequelize(process.env.DATABASE_NAME, process.env.DATABASE_
 })
 
 AdminBro.registerAdapter(AdminBroSequelize);
+// Set up Express
+const app = express();
+
 const db = require('./models');
+
+// RBAC functions
+const canEditUser = ({ currentAdmin }) => {
+	return currentAdmin && currentAdmin.Role_Id === 1
+}
+
+
 const adminBro = new AdminBro({
 	databases: [db],
+	resources: [{
+		resource: db.User,
+		options: {
+			properties: {
+				'1': { isVisible: { edit: true, show: false, list: true, filter: true }}
+			},
+			actions: {
+				edit: { isAccessible: false},
+				delete: { isAccessible: canEditUser},
+				new: {
+					before: async (request, { currentAdmin }) => {
+						request.payload = {
+						  ...request.payload,
+						  1: currentAdmin._id,
+						}
+						return request
+					}
+				}
+			}
+		}	
+	}],
 	rootPath: '/admin'
 })
 
-const router = AdminBroExpress.buildRouter(adminBro);
+// Adminbro login authentication
+const router = AdminBroExpressjs.buildAuthenticatedRouter(adminBro, {
+	authenticate: async (email, password) => {
+	  const user = new String(await UsersService.findUserByEmail(email));
+	  if (user) {
+		const userPassword = await UsersService.getPasswordFromEmail(email);
+		const matched = await UsersService.checkPassword(password, userPassword);
+		if (matched) {
+		  return user
+		}
+	  }
+	  return false
+	},
+	cookiePassword: 'adM3mYETRmLw7r2B7FPr66',
+  })
 
-// Set up Express
-const app = express();
+
 app.use(adminBro.options.rootPath, router)
 app.listen(8080, () => console.log('AdminBro is under localhost:8080/admin'))
 const app2 = express();

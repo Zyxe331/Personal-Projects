@@ -19,8 +19,25 @@ const findUserByEmail = async (email) => {
     return user;
 }
 
-const checkPassword = async (inputPassword, hasedPassword) => {
-    return await bcrypt.compare(inputPassword, hasedPassword);
+const getPasswordFromEmail = async (email) => {
+
+    let userPassword;
+    try {
+        const db = new Database();
+        let rows = await db.query(`SELECT Password FROM User WHERE Email = '${email}'`);
+        if (rows.length === 1) {
+            userPassword = rows[0].Password;
+        }
+        console.log(userPassword);
+    } catch (error) {
+        console.error(error);
+    }
+
+    return userPassword;      
+}
+
+const checkPassword = async (inputPassword, hashedPassword) => {
+    return await bcrypt.compare(inputPassword, hashedPassword);
 }
 
 const findUserById = async (id) => {
@@ -116,5 +133,6 @@ module.exports = {
     createUser: createUser,
     checkPassword: checkPassword,
     updateUser: updateUser,
-    findAdminUserForGroup: findAdminUserForGroup
+    findAdminUserForGroup: findAdminUserForGroup,
+    getPasswordFromEmail: getPasswordFromEmail
 }
