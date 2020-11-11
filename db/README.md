@@ -4,5 +4,6 @@ If you are creating a new script to store in here, please provide some informati
 
 Existing Scripts(WIP):
  - Vet-Database-Script.sql: This script defines the database without any data
- - dump.sql: this script restores the db and it's data from a previous dump.
- - Vet-Database-v2.mwb: 
+ - dump.sql: this script restores the db and it's data from a previous dump. (not present)
+ - server_vets_database.sql: This script defines the database creation for the server and provides data from the client.
+ - testInserts/*.sql: insert statements to provide test data.
