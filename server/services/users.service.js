@@ -28,7 +28,6 @@ const getPasswordFromEmail = async (email) => {
         if (rows.length === 1) {
             userPassword = rows[0].Password;
         }
-        console.log(userPassword);
     } catch (error) {
         console.error(error);
     }

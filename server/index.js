@@ -13,6 +13,16 @@ const dotenv = require('dotenv');
 var fs = require('fs')
 var https = require('https')
 const UsersService = require('./services/users.service')
+const sidebarGroups = {
+	admin: {
+		name: 'Administrator Tables',
+		icon: 'Home'
+	},
+	developer: {
+		name: 'Developer Tables',
+		icon: 'Settings'
+	}
+};
 
 // Set up environment file
 dotenv.config();
@@ -46,33 +56,30 @@ const db = require('./models');
 
 // RBAC functions
 const canEditUser = ({ currentAdmin }) => {
+	console.log(currentAdmin);
 	return currentAdmin && currentAdmin.Role_Id === 1
 }
 
-
 const adminBro = new AdminBro({
-	databases: [db],
-	resources: [{
-		resource: db.User,
-		options: {
-			properties: {
-				'1': { isVisible: { edit: true, show: false, list: true, filter: true }}
-			},
-			actions: {
-				edit: { isAccessible: false},
-				delete: { isAccessible: canEditUser},
-				new: {
-					before: async (request, { currentAdmin }) => {
-						request.payload = {
-						  ...request.payload,
-						  1: currentAdmin._id,
-						}
-						return request
-					}
-				}
-			}
-		}	
-	}],
+	resources: [
+		{ resource: db.User, options: { parent: sidebarGroups.developer}}, 
+		{ resource: db.Role, options: { parent: sidebarGroups.developer}},
+		{ resource: db.ContentCycle, options: { parent: sidebarGroups.admin}},
+		{ resource: db.Group, options: { parent: sidebarGroups.admin}},
+		{ resource: db.GroupRole, options: { parent: sidebarGroups.developer}},
+		{ resource: db.Journal, options: { parent: sidebarGroups.developer}},
+		{ resource: db.Message, options: { parent: sidebarGroups.developer}},
+		{ resource: db.Notification, options: { parent: sidebarGroups.developer}},
+		{ resource: db.Notification_Type, options: { parent: sidebarGroups.developer}},
+		{ resource: db.Plan, options: { parent: sidebarGroups.admin}},
+		{ resource: db.Prayer_has_Tag, options: { parent: sidebarGroups.developer}},
+		{ resource: db.PrayerRequest, options: {parent: sidebarGroups.developer}},
+		{ resource: db.Section_has_Tag, options: { parent: sidebarGroups.admin}},
+		{ resource: db.Section, options: { parent: sidebarGroups.admin}},
+		{ resource: db.Tag, options: { parent: sidebarGroups.admin}},
+		{ resource: db.User_has_Group, options: { parent: sidebarGroups.developer}},
+		{ resource: db.User_has_Plan, options: { parent: sidebarGroups.developer}}
+	],
 	rootPath: '/admin'
 })
 
