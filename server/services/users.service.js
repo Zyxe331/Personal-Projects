@@ -35,6 +35,22 @@ const getPasswordFromEmail = async (email) => {
     return userPassword;      
 }
 
+const getUserRoleId = async (email) => {
+    let userRoleID;
+    try {
+        const db = new Database();
+        let rows = await db.query(`SELECT Role_Id FROM User WHERE Email = '${email}'`);
+        if (rows.length === 1) {
+            userRoleID = rows[0].Role_Id;
+        }
+        console.log(userRoleID);
+    } catch (error) {
+        console.error(error);
+    }
+
+    return userRoleID;      
+}
+
 const checkPassword = async (inputPassword, hashedPassword) => {
     return await bcrypt.compare(inputPassword, hashedPassword);
 }
@@ -133,5 +149,6 @@ module.exports = {
     checkPassword: checkPassword,
     updateUser: updateUser,
     findAdminUserForGroup: findAdminUserForGroup,
-    getPasswordFromEmail: getPasswordFromEmail
+    getPasswordFromEmail: getPasswordFromEmail,
+    getUserRoleId: getUserRoleId
 }

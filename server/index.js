@@ -90,7 +90,8 @@ const router = AdminBroExpressjs.buildAuthenticatedRouter(adminBro, {
 	  if (user) {
 		const userPassword = await UsersService.getPasswordFromEmail(email);
 		const matched = await UsersService.checkPassword(password, userPassword);
-		if (matched) {
+		const userRoleID = await UsersService.getUserRoleId(email);
+		if (matched && (userRoleID == 1 || userRoleID == 3)) {
 		  return user
 		}
 	  }
