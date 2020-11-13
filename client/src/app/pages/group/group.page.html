@@ -14,12 +14,12 @@
 
   <div *ngIf="!showSpinner && currentGroup != null">
     <div *ngIf="!editMode">
-      <div class="ion-text-right" style="margin-right: 16px;">
+      <div class="ion-text-right editGroup">
         <ion-button *ngIf="currentUserGroup.GroupRole_Id == 1" size="small" fill="outline" color="tertiary"
           (click)="editGroup()">Edit Group
         </ion-button>
       </div>
-      <ion-card style="margin-top: 2px;">
+      <ion-card class="groupCard">
         <ion-card-header style="padding-bottom: 0" class="ion-padding-top">
           <ion-card-title class="ion-text-center">
             <ion-text>
