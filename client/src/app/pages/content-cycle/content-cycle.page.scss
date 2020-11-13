@@ -28,6 +28,10 @@
     height: 20px;
 }
 
+ion-card.noGroupCard ion-button{
+    align-self: stretch;
+}
+
 .nextSectionBtn {
     height: 50px;
     width: 100%; 

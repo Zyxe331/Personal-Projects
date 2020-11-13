@@ -1,0 +1,16 @@
+ion-grid{
+    height: 66%;
+}
+
+ion-item, ion-button[type="submit"]{
+    width: 80%;
+}
+
+ion-label{
+    position: "floating";
+    color: "medium";
+}
+
+.registerRow ion-text {
+    padding-right: 3px;
+}
