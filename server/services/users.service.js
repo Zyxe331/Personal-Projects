@@ -52,7 +52,13 @@ const getUserRoleId = async (email) => {
 }
 
 const checkPassword = async (inputPassword, hashedPassword) => {
-    return await bcrypt.compare(inputPassword, hashedPassword);
+    try {
+        return await bcrypt.compare(inputPassword, hashedPassword);
+    }
+    catch (err) {
+        console.error(`There was a problem verifying the password: ${err.message}`)
+        return false
+    }
 }
 
 const findUserById = async (id) => {
