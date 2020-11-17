@@ -19,8 +19,46 @@ const findUserByEmail = async (email) => {
     return user;
 }
 
-const checkPassword = async (inputPassword, hasedPassword) => {
-    return await bcrypt.compare(inputPassword, hasedPassword);
+const getPasswordFromEmail = async (email) => {
+
+    let userPassword;
+    try {
+        const db = new Database();
+        let rows = await db.query(`SELECT Password FROM User WHERE Email = '${email}'`);
+        if (rows.length === 1) {
+            userPassword = rows[0].Password;
+        }
+    } catch (error) {
+        console.error(error);
+    }
+
+    return userPassword;      
+}
+
+const getUserRoleId = async (email) => {
+    let userRoleID;
+    try {
+        const db = new Database();
+        let rows = await db.query(`SELECT Role_Id FROM User WHERE Email = '${email}'`);
+        if (rows.length === 1) {
+            userRoleID = rows[0].Role_Id;
+        }
+        console.log(userRoleID);
+    } catch (error) {
+        console.error(error);
+    }
+
+    return userRoleID;      
+}
+
+const checkPassword = async (inputPassword, hashedPassword) => {
+    try {
+        return await bcrypt.compare(inputPassword, hashedPassword);
+    }
+    catch (err) {
+        console.error(`There was a problem verifying the password: ${err.message}`)
+        return false
+    }
 }
 
 const findUserById = async (id) => {
@@ -116,5 +154,7 @@ module.exports = {
     createUser: createUser,
     checkPassword: checkPassword,
     updateUser: updateUser,
-    findAdminUserForGroup: findAdminUserForGroup
+    findAdminUserForGroup: findAdminUserForGroup,
+    getPasswordFromEmail: getPasswordFromEmail,
+    getUserRoleId: getUserRoleId
 }

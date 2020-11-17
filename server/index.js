@@ -1,5 +1,5 @@
-const AdminBro =require('admin-bro');
-const AdminBroExpress = require('@admin-bro/express');
+const AdminBro = require('admin-bro')
+const AdminBroExpressjs = require('@admin-bro/express');
 const { Sequelize } = require('sequelize');
 var SequelizeAuto = require('sequelize-auto');
 const AdminBroSequelize = require('@admin-bro/sequelize');
@@ -12,6 +12,17 @@ const routes = require('./routes');
 const dotenv = require('dotenv');
 var fs = require('fs')
 var https = require('https')
+const UsersService = require('./services/users.service')
+const sidebarGroups = {
+	admin: {
+		name: 'Administrator Tables',
+		icon: 'Home'
+	},
+	developer: {
+		name: 'Developer Tables',
+		icon: 'Settings'
+	}
+};
 
 // Set up environment file
 dotenv.config();
@@ -38,16 +49,58 @@ const sequelize = new Sequelize(process.env.DATABASE_NAME, process.env.DATABASE_
 })
 
 AdminBro.registerAdapter(AdminBroSequelize);
+// Set up Express
+const app = express();
+
 const db = require('./models');
+
+// RBAC functions
+const canEditUser = ({ currentAdmin }) => {
+	console.log(currentAdmin);
+	return currentAdmin && currentAdmin.Role_Id === 1
+}
+
 const adminBro = new AdminBro({
-	databases: [db],
+	resources: [
+		{ resource: db.User, options: { parent: sidebarGroups.developer}}, 
+		{ resource: db.Role, options: { parent: sidebarGroups.developer}},
+		{ resource: db.ContentCycle, options: { parent: sidebarGroups.admin}},
+		{ resource: db.Group, options: { parent: sidebarGroups.admin}},
+		{ resource: db.GroupRole, options: { parent: sidebarGroups.developer}},
+		{ resource: db.Journal, options: { parent: sidebarGroups.developer}},
+		{ resource: db.Message, options: { parent: sidebarGroups.developer}},
+		{ resource: db.Notification, options: { parent: sidebarGroups.developer}},
+		{ resource: db.Notification_Type, options: { parent: sidebarGroups.developer}},
+		{ resource: db.Plan, options: { parent: sidebarGroups.admin}},
+		{ resource: db.Prayer_has_Tag, options: { parent: sidebarGroups.developer}},
+		{ resource: db.PrayerRequest, options: {parent: sidebarGroups.developer}},
+		{ resource: db.Section_has_Tag, options: { parent: sidebarGroups.admin}},
+		{ resource: db.Section, options: { parent: sidebarGroups.admin}},
+		{ resource: db.Tag, options: { parent: sidebarGroups.admin}},
+		{ resource: db.User_has_Group, options: { parent: sidebarGroups.developer}},
+		{ resource: db.User_has_Plan, options: { parent: sidebarGroups.developer}}
+	],
 	rootPath: '/admin'
 })
 
-const router = AdminBroExpress.buildRouter(adminBro);
+// Adminbro login authentication
+const router = AdminBroExpressjs.buildAuthenticatedRouter(adminBro, {
+	authenticate: async (email, password) => {
+	  const user = new String(await UsersService.findUserByEmail(email));
+	  if (user) {
+		const userPassword = await UsersService.getPasswordFromEmail(email);
+		const matched = await UsersService.checkPassword(password, userPassword);
+		const userRoleID = await UsersService.getUserRoleId(email);
+		if (matched && (userRoleID == 1 || userRoleID == 3)) {
+		  return user
+		}
+	  }
+	  return false
+	},
+	cookiePassword: 'adM3mYETRmLw7r2B7FPr66',
+  })
 
-// Set up Express
-const app = express();
+
 app.use(adminBro.options.rootPath, router)
 app.listen(8080, () => console.log('AdminBro is under localhost:8080/admin'))
 const app2 = express();
