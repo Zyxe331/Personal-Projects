@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Tag } from 'src/app/interfaces/tag';
 import { SERVER_URL } from '../../environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,10 @@ export class TagProviderService {
   public tagsById: Tag[];
 
   constructor(private http: HttpClient) { }
+
+  getAllTagsAsObservable(): Observable<Tag[]> {
+    return this.http.get<Tag[]>(SERVER_URL + 'tags/')
+  }
 
   async getAllTags(): Promise<Tag[]> {
 

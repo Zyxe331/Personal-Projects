@@ -7,6 +7,7 @@ import { PrayerSchedule } from '../interfaces/prayer-schedule';
 import { Tag } from 'src/app/interfaces/tag';
 import { GlobalProviderService } from '../services/global-provider.service';
 import { PrayerTag } from '../interfaces/prayer-tag';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -67,6 +68,11 @@ export class PrayerRequestProviderService {
         reject(error.error);
       }
     })
+  }
+
+  getThisPrayersTagsAsObservable(prayerId: number): Observable<PrayerTag[]> {
+        // Ask the server to get all tags for the prayer
+        return this.http.get<PrayerTag[]>(SERVER_URL + 'tags/' + prayerId)
   }
 
   /**
