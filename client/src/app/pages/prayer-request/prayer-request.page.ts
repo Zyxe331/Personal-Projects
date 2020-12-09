@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PrayerRequestProviderService } from '../../services/prayer-request-provider.service';
 import { PrayerRequest } from '../../interfaces/prayer-request';
 import { PrayerSchedule } from '../../interfaces/prayer-schedule';
-import { GlobalProviderService } from 'src/app/services/global-provider.service';
 import { Tag } from 'src/app/interfaces/tag';
 import { PrayerTag } from 'src/app/interfaces/prayer-tag';
-import { TagProviderService } from 'src/app/services/tag-provider.service';
 
 @Component({
   selector: 'app-prayer-request',
@@ -30,10 +27,7 @@ export class PrayerRequestPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    public formBuilder: FormBuilder,
-    private prayerServices: PrayerRequestProviderService,
-    private globalServices: GlobalProviderService,
-    private tagService: TagProviderService
+    public formBuilder: FormBuilder
   ) {
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
