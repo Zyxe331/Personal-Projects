@@ -14,6 +14,21 @@ const queryAllTags = async () => {
 
 }
 
+const addTag = async (name) => {
+    const db = new Database()
+    let newTag = await db.query(`INSERT INTO Tag(Name, Active) VALUES ('${name}', 1)`).catch(err => {
+        console.error(err)
+        throw err
+    })
+    db.close()
+    console.log(newTag)
+    return {
+        Id: newTag.insertId,
+        Name: name,
+        Active: true
+    }
+}
+
 const querySectionsTags = async (sectionIds) => {
 
     const db = new Database();
@@ -102,4 +117,5 @@ module.exports = {
     queryTagById: queryTagById,
     insertPrayerTags: insertPrayerTags,
     updatePrayerTags: updatePrayerTags,
+    addTag: addTag
 }

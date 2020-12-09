@@ -18,6 +18,10 @@ export class TagProviderService {
     return this.http.get<Tag[]>(SERVER_URL + 'tags/')
   }
 
+  addTag(tagName: string): Observable<Tag> {
+    return this.http.post<Tag>(SERVER_URL + 'tags/', {name: tagName})
+  }
+
   async getAllTags(): Promise<Tag[]> {
 
     if (this.allTags && this.allTags.length > 0) {
