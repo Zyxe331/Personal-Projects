@@ -129,6 +129,8 @@ export class EditPrayerCardComponent implements OnInit {
           // } else {
           //   this.router.navigate(['/prayer-requests']);
           // }
+          this.editMode = false;
+          this.editModeChange.emit(this.editMode)
         })
 
       } catch (error) {
