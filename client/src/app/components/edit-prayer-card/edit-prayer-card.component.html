@@ -1,74 +1,72 @@
- <!--Edit Card-->
- <ion-card>
-  <form [formGroup]="editRequestForm" (ngSubmit)="submit()">
+<!--Edit Card-->
+<form [formGroup]="editRequestForm" (ngSubmit)="submit()">
 
-    <!--Prayer Title-->
-    <ion-item class="title" lines="none">
-      <ion-input type="text" color="dark" placeholder="Prayer Request Title" formControlName="title"
-        autocapitalize=words>
-      </ion-input>
-    </ion-item>
-    <ion-row class="ion-align-items-center ion-justify-content-center">
-      <ion-text color="danger" *ngIf="editRequestForm.controls.title.hasError('required') && showErrors">
-        <p class="ion-no-margin">
-          <ion-icon name="alert"></ion-icon> Please enter a prayer title.
-        </p>
-      </ion-text>
+  <!--Prayer Title-->
+  <ion-item class="title" lines="none">
+    <ion-input type="text" color="dark" placeholder="Prayer Request Title" formControlName="title" autocapitalize=words>
+    </ion-input>
+  </ion-item>
+  <ion-row class="ion-align-items-center ion-justify-content-center">
+    <ion-text color="danger" *ngIf="editRequestForm.controls.title.hasError('required') && showErrors">
+      <p class="ion-no-margin">
+        <ion-icon name="alert"></ion-icon> Please enter a prayer title.
+      </p>
+    </ion-text>
+  </ion-row>
+
+  <!--Display date.-->
+  <ion-item id="date" lines="none">
+    <ion-text id="dateText" color="light">{{request.LongFormattedDate}}</ion-text>
+  </ion-item>
+
+  <!--Prayer Body-->
+  <ion-item id="textarea" lines="none" color="">
+    <ion-textarea rows="10" id="body" formControlName="body" placeholder="Your Prayer" spellcheck="true"
+      autocapitalize=sentences>
+    </ion-textarea>
+  </ion-item>
+  <ion-row class="ion-align-items-center ion-justify-content-center">
+    <ion-text color="danger" *ngIf="editRequestForm.controls.body.hasError('required') && showErrors">
+      <p class="ion-no-margin">
+        <ion-icon name="alert"></ion-icon> Please enter a prayer body.
+      </p>
+    </ion-text>
+  </ion-row>
+
+  <!--Prayer Tag-->
+  <ion-item class=" bold tagformatting" lines="none">
+    <ion-label>Tags:</ion-label>
+    <ion-select class="form-control" formControlName="formTags" placeholder="Select Tags" multiple="true"
+      [(value)]="tagIds">
+      <ion-select-option *ngFor="let tag of tags" [value]="tag.Id">{{tag.Name}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-button (click)="newTag()">New Tag</ion-button>
+
+  <!--Prayer Schedule-->
+  <ion-item class=" bold tagformatting" lines="none">
+    <ion-label>Prayer Schedule:</ion-label>
+    <ion-input formControlName="frequency" type="number"></ion-input>
+  </ion-item>
+  <ion-row class="ion-align-items-center ion-justify-content-center">
+    <ion-text color="danger" *ngIf="editRequestForm.controls.frequency.hasError('required') && showErrors">
+      <p class="ion-no-margin">
+        <ion-icon name="alert"></ion-icon> Please select a prayer schedule.
+      </p>
+    </ion-text>
+  </ion-row>
+
+  <!--Is Private checkbox-->
+  <ion-item class="bold tagformatting" lines="none">
+    <ion-label>Private Request</ion-label>
+    <ion-checkbox slot="end" formControlName="private"></ion-checkbox>
+  </ion-item>
+
+  <ion-grid>
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      <ion-button class="bold endbutton cancel" color="danger" (click)="cancel()">Cancel</ion-button>
+      <ion-button class="bold endbutton submit" type="submit">Submit</ion-button>
     </ion-row>
+  </ion-grid>
 
-    <!--Display date.-->
-    <ion-item id="date" lines="none">
-      <ion-text id="dateText" color="light">{{request.LongFormattedDate}}</ion-text>
-    </ion-item>
-
-    <!--Prayer Body-->
-    <ion-item id="textarea" lines="none" color="">
-      <ion-textarea rows="10" id="body" formControlName="body" placeholder="Your Prayer" spellcheck="true"
-        autocapitalize=sentences>
-      </ion-textarea>
-    </ion-item>
-    <ion-row class="ion-align-items-center ion-justify-content-center">
-      <ion-text color="danger" *ngIf="editRequestForm.controls.body.hasError('required') && showErrors">
-        <p class="ion-no-margin">
-          <ion-icon name="alert"></ion-icon> Please enter a prayer body.
-        </p>
-      </ion-text>
-    </ion-row>
-
-    <!--Prayer Tag-->
-    <ion-item class =" bold tagformatting" lines="none">
-      <ion-label>Tags:</ion-label>
-      <ion-select class="form-control" formControlName="formTags" placeholder="Select Tags" multiple="true" [(value)]="tagIds">
-        <ion-select-option *ngFor="let tag of tags" [value]="tag.Id">{{tag.Name}}</ion-select-option>
-      </ion-select>
-    </ion-item>
-    <ion-button (click)="newTag()">New Tag</ion-button>
-
-    <!--Prayer Schedule-->
-    <ion-item class =" bold tagformatting"lines="none">
-      <ion-label>Prayer Schedule:</ion-label>
-      <ion-input formControlName="frequency" type="number"></ion-input>
-    </ion-item>
-    <ion-row class="ion-align-items-center ion-justify-content-center">
-      <ion-text color="danger" *ngIf="editRequestForm.controls.frequency.hasError('required') && showErrors">
-        <p class="ion-no-margin">
-          <ion-icon name="alert"></ion-icon> Please select a prayer schedule.
-        </p>
-      </ion-text>
-    </ion-row>
-
-    <!--Is Private checkbox-->
-    <ion-item class ="bold tagformatting" lines="none">
-      <ion-label>Private Request</ion-label>
-      <ion-checkbox slot="end" formControlName="private"></ion-checkbox>
-    </ion-item>
-
-    <ion-grid>
-      <ion-row class="ion-justify-content-center ion-align-items-center">
-        <ion-button  class="bold endbutton cancel" color="danger" (click)="cancel()">Cancel</ion-button>
-        <ion-button class="bold endbutton submit" type="submit">Submit</ion-button>
-      </ion-row>
-    </ion-grid>
-
-  </form>
-</ion-card>
+</form>

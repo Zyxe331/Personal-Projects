@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AlertController } from '@ionic/angular';
+import { AlertController, PopoverController } from '@ionic/angular';
 import { PrayerTag } from 'src/app/interfaces/prayer-tag';
 import { Tag } from 'src/app/interfaces/tag';
 import { GlobalProviderService } from 'src/app/services/global-provider.service';
@@ -14,10 +14,9 @@ import { PrayerRequest } from '../../interfaces/prayer-request';
   styleUrls: ['./edit-prayer-card.component.scss'],
 })
 export class EditPrayerCardComponent implements OnInit {
-  @Input('editMode') editMode: boolean
-  @Output() editModeChange: EventEmitter<boolean> = new EventEmitter()
   @Input('request') request: PrayerRequest
   @Output() requestChange = new EventEmitter()
+  @Input('sectionId') sectionId: number = null
   editRequestForm: FormGroup;
   tags: Tag[]
   prayerTags: PrayerTag[]
@@ -32,7 +31,8 @@ export class EditPrayerCardComponent implements OnInit {
     private prayerServices: PrayerRequestProviderService,
     private tagService: TagProviderService,
     private globalServices: GlobalProviderService,
-    public alertController: AlertController) {
+    public alertController: AlertController,
+    private popover: PopoverController) {
   }
 
   ngOnInit() {
@@ -76,9 +76,12 @@ export class EditPrayerCardComponent implements OnInit {
     });
   }
 
+  ClosePopover() {
+    this.popover.dismiss({request: this.request})
+  }
+
   cancel() {
-    this.editMode = false;
-    this.editModeChange.emit(this.editMode)
+    this.popover.dismiss()
   }
 
   //TODO: implement function to add custom tags
@@ -121,16 +124,10 @@ export class EditPrayerCardComponent implements OnInit {
       try {
 
         // Send journal form values to the server to insert journal
-        this.prayerServices.addPrayerAsObservable(formValues.title, formValues.body, formValues.private, formValues.frequency, formValues.tags, null).subscribe(prayer => { // TODO: ADD A WAY TO INPUT SECTION ID ON THIS FORM
+        this.prayerServices.addPrayerAsObservable(formValues.title, formValues.body, formValues.private, formValues.frequency, formValues.formTags, this.sectionId).subscribe(prayer => {
           this.globalServices.sendSuccessToast(`You successfully added a new prayer request "${prayer.Title}"`);
-          // if (this.sectionId != undefined) {
-          //   prayer = this.prayerServices.setPrayerDates(prayer);
-          //   this.dismiss(prayer);
-          // } else {
-          //   this.router.navigate(['/prayer-requests']);
-          // }
-          this.editMode = false;
-          this.editModeChange.emit(this.editMode)
+          this.request = prayer;
+          this.ClosePopover()
         })
 
       } catch (error) {
@@ -153,8 +150,7 @@ export class EditPrayerCardComponent implements OnInit {
           if (prayer) {
             this.globalServices.sendSuccessToast(`You successfully updated prayer request "${prayer.Title}"`);
             this.request = prayer;
-            this.editMode = false;
-            this.editModeChange.emit(this.editMode)
+            this.ClosePopover()
           }
         })
 
@@ -168,7 +164,6 @@ export class EditPrayerCardComponent implements OnInit {
         this.serverError = error;
       }
     }
-
   }
 
 }

@@ -3,6 +3,8 @@ import { Router, NavigationExtras } from '@angular/router';
 import { PrayerRequestProviderService } from '../../services/prayer-request-provider.service';
 import { PrayerRequest } from '../../interfaces/prayer-request';
 import { GlobalProviderService } from 'src/app/services/global-provider.service';
+import { PopoverController } from '@ionic/angular';
+import { EditPrayerCardComponent } from 'src/app/components/edit-prayer-card/edit-prayer-card.component';
 
 @Component({
   selector: 'app-prayer-requests',
@@ -22,7 +24,8 @@ export class PrayerRequestsPage implements OnInit {
   constructor(
     private router: Router,
     private prayerService: PrayerRequestProviderService,
-    private globalServices: GlobalProviderService
+    private globalServices: GlobalProviderService,
+    public popoverController: PopoverController
   ) { }
 
   /**
@@ -47,6 +50,18 @@ export class PrayerRequestsPage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  //Trigger prayer creation popup
+  async presentPopover(ev: any) {
+    const popover = await this.popoverController.create({
+      component: EditPrayerCardComponent,
+      showBackdrop:true,
+      cssClass: 'generic-popup',
+      //event: ev,
+      translucent: false
+    });
+    return await popover.present();
   }
 
   goToPage(request) {

@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 
 import { PrayerRequestPage } from './prayer-request.page';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { EditPrayerCardComponent } from '../../components/edit-prayer-card/edit-prayer-card.component'
 
 const routes: Routes = [
   {
@@ -25,7 +24,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     SharedModule
   ],
-  declarations: [PrayerRequestPage, EditPrayerCardComponent]
+  declarations: [PrayerRequestPage]
 })
 
 export class PrayerRequestPageModule {}
