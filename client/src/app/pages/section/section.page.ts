@@ -7,7 +7,6 @@ import { PrayerRequestProviderService } from '../../services/prayer-request-prov
 import { TagProviderService } from 'src/app/services/tag-provider.service';
 import { Section } from 'src/app/interfaces/section';
 import { AddJournalPage } from '../add-journal/add-journal.page';
-import { AddPrayerRequestPage } from '../add-prayer-request/add-prayer-request.page';
 import { Journal } from 'src/app/interfaces/journal';
 import { PrayerRequest } from 'src/app/interfaces/prayer-request';
 import { Tag } from 'src/app/interfaces/tag';
