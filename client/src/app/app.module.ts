@@ -14,7 +14,6 @@ import { IonicStorageModule } from '@ionic/storage';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TokenInterceptorService } from './services/token-interceptor.service';
 import { AddJournalPageModule } from './pages/add-journal/add-journal.module'
-import { AddPrayerRequestPageModule } from './pages/add-prayer-request/add-prayer-request.module';
 import { LocalNotifications} from '@ionic-native/local-notifications/ngx'
 import { SharedModule } from './shared/shared.module';
 import { ContentCyclePageModule } from './pages/content-cycle/content-cycle.module';
@@ -35,7 +34,7 @@ import { SectionPageModule } from './pages/section/section.module';
     AppRoutingModule,
     HttpClientModule,
     IonicStorageModule.forRoot({name: 'vetUserStorage',driverOrder: ['localstorage', 'sqlite', 'indexeddb']}),
-    FormsModule, ReactiveFormsModule, AddJournalPageModule,AddPrayerRequestPageModule, SharedModule, 
+    FormsModule, ReactiveFormsModule, AddJournalPageModule, SharedModule, 
     ContentCyclePageModule, ChangeContentCyclePageModule, GroupPageModule, JournalPageModule, NotificationPageModule, NotificationsPageModule, PrayerRequestPageModule, SectionPageModule
   ],
   providers: [
