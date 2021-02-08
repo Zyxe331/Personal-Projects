@@ -30,17 +30,17 @@
           <ion-row>
             <ion-col size="2">
               <ion-button class="navArrow" fill="clear" (click)="goToPreviousSection()">
-                <ion-icon slot="icon-only" color="medium" name="md-arrow-dropleft"></ion-icon>
+                <ion-icon slot="icon-only" color="dark" name="md-arrow-dropleft"></ion-icon>
               </ion-button>
             </ion-col>
-            <ion-col size="8" align-self-center>
+            <ion-col size="8" class="ion-align-self-center">
               <div class="ion-text-center">
                 <ion-card-subtitle>{{contentCycleName}}</ion-card-subtitle>
               </div>
             </ion-col>
             <ion-col size="2">
               <ion-button class="navArrow" fill="clear" (click)="goToNextSection()">
-                <ion-icon slot="icon-only" color="medium" name="md-arrow-dropright"></ion-icon>
+                <ion-icon slot="icon-only" color="dark" name="md-arrow-dropright"></ion-icon>
               </ion-button>
             </ion-col>
           </ion-row>
@@ -49,10 +49,9 @@
 
       <ion-card-content>
         <h1 class="sectionTitle">{{section.Title}}</h1>
-        <ion-text class="darkitalic ion-text-center">{{section.Main_Idea}}
-        </ion-text>
+        <ion-text color="dark" class="ion-text-center">{{section.Main_Idea}}</ion-text>
         <br /><br />
-        <ion-text class="darkitalic">{{section.Passage_Paraphrased}} - {{section.Passage_Reference}}
+        <ion-text color="dark">{{section.Passage_Paraphrased}} - {{section.Passage_Reference}}
         </ion-text>
         <br /><br />
         <a href="{{section.Song_Link}}">{{section.Song_Link}}</a>
