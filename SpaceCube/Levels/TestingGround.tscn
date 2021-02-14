@@ -1,0 +1,79 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Levels/TestingGround.gd" type="Script" id=1]
+[ext_resource path="res://Elements/Tileset/d775ufv-b90740cd-0664-48a1-9de9-04518f65b857.png" type="Texture" id=2]
+[ext_resource path="res://Elements/Tileset/Tile.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Elements/Door/Door.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Elements/Key/SpaceKey.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Elements/Player/Player.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Elements/UI/SpeedLevel.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Elements/Enemy/Enemy.tscn" type="PackedScene" id=8]
+
+[node name="TestingGround" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground"]
+position = Vector2( 522.855, 269.213 )
+scale = Vector2( 1.39132, 1.16527 )
+texture = ExtResource( 2 )
+
+[node name="TileHolder" type="Node2D" parent="."]
+
+[node name="Tile" parent="TileHolder" instance=ExtResource( 3 )]
+position = Vector2( 515.489, 546.79 )
+scale = Vector2( 10.4, 1 )
+
+[node name="Tile2" parent="TileHolder" instance=ExtResource( 3 )]
+position = Vector2( 762.469, 271.725 )
+
+[node name="Invisible Walls" type="Node2D" parent="TileHolder"]
+editor/display_folded = true
+
+[node name="Tile3" parent="TileHolder/Invisible Walls" instance=ExtResource( 3 )]
+visible = false
+position = Vector2( -25.6529, 298.157 )
+scale = Vector2( 0.5, 6 )
+
+[node name="Tile4" parent="TileHolder/Invisible Walls" instance=ExtResource( 3 )]
+visible = false
+position = Vector2( 1050.23, 298.157 )
+scale = Vector2( 0.5, 6 )
+
+[node name="Tile5" parent="TileHolder/Invisible Walls" instance=ExtResource( 3 )]
+visible = false
+position = Vector2( 508.176, -51.0257 )
+scale = Vector2( 10.4, 1 )
+
+[node name="Door" parent="." instance=ExtResource( 4 )]
+position = Vector2( 921.835, 447.729 )
+
+[node name="Key" parent="." instance=ExtResource( 5 )]
+position = Vector2( 761.648, 179.924 )
+
+[node name="Key2" parent="." instance=ExtResource( 5 )]
+position = Vector2( 492.114, 286.841 )
+
+[node name="Player" parent="." instance=ExtResource( 6 )]
+position = Vector2( 271.053, 408.045 )
+
+[node name="SpeedLevel" parent="." instance=ExtResource( 7 )]
+margin_left = 59.9235
+margin_top = 49.7861
+margin_right = 59.9235
+margin_bottom = 49.7861
+
+[node name="Enemy" parent="." instance=ExtResource( 8 )]
+position = Vector2( 493.024, 353.974 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Enemy2" parent="." instance=ExtResource( 8 )]
+position = Vector2( 493.024, 407.112 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Enemy3" parent="." instance=ExtResource( 8 )]
+position = Vector2( 493.664, 462.171 )
+scale = Vector2( 0.5, 0.5 )
+
+[connection signal="body_entered" from="Door" to="." method="_on_Door_body_entered"]

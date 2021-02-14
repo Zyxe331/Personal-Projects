@@ -1,0 +1,53 @@
+[gd_scene load_steps=15 format=2]
+
+[ext_resource path="res://Control.gd" type="Script" id=1]
+[ext_resource path="res://Elements/UI/Space Font/SpaceZero.png" type="Texture" id=2]
+[ext_resource path="res://Elements/UI/Space Font/SpaceOne.png" type="Texture" id=3]
+[ext_resource path="res://Elements/UI/Space Font/SpaceTwo.png" type="Texture" id=4]
+[ext_resource path="res://Elements/UI/Space Font/SpaceThree.png" type="Texture" id=5]
+[ext_resource path="res://Elements/UI/Space Font/SpaceFour.png" type="Texture" id=6]
+[ext_resource path="res://Elements/UI/Space Font/SpaceFive.png" type="Texture" id=7]
+[ext_resource path="res://Elements/UI/Space Font/SpaceSix.png" type="Texture" id=8]
+[ext_resource path="res://Elements/UI/Space Font/SpaceSeven.png" type="Texture" id=9]
+[ext_resource path="res://Elements/UI/Space Font/SpaceEight.png" type="Texture" id=10]
+[ext_resource path="res://Elements/UI/Space Font/SpaceNine.png" type="Texture" id=11]
+[ext_resource path="res://Elements/UI/Space Font/SpaceDot.png" type="Texture" id=12]
+[ext_resource path="res://Elements/UI/whiteBlock.png" type="Texture" id=13]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 2 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[node name="SpeedLevel" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -5.08289
+margin_right = -5.08289
+script = ExtResource( 1 )
+
+[node name="Tens" type="AnimatedSprite" parent="."]
+position = Vector2( 7.39334, 8.77962 )
+scale = Vector2( 1.2, 1.2 )
+frames = SubResource( 1 )
+frame = 6
+
+[node name="Decimal" type="Sprite" parent="."]
+position = Vector2( 67.4945, 36.3785 )
+scale = Vector2( 0.7, 0.7 )
+texture = ExtResource( 12 )
+
+[node name="Ones" type="AnimatedSprite" parent="."]
+position = Vector2( 116.174, 14.8273 )
+scale = Vector2( 0.7, 0.7 )
+frames = SubResource( 1 )
+frame = 5
+
+[node name="Bar" type="Sprite" parent="."]
+position = Vector2( 55.4501, 93.3411 )
+scale = Vector2( 2, 1 )
+texture = ExtResource( 13 )
+

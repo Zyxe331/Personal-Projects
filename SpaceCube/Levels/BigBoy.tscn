@@ -1,0 +1,847 @@
+[gd_scene load_steps=16 format=2]
+
+[ext_resource path="res://Levels/BigBoy.gd" type="Script" id=1]
+[ext_resource path="res://Elements/Tileset/d775ufv-b90740cd-0664-48a1-9de9-04518f65b857.png" type="Texture" id=2]
+[ext_resource path="res://Levels/Camera2D.gd" type="Script" id=3]
+[ext_resource path="res://Elements/UI/SpeedLevel.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Elements/Door/Door.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Elements/Flag/FlagHolder.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Elements/Flag/Checkpoint.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Elements/Tileset/Tile.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Levels/4sil5gk1nnd01.jpg" type="Texture" id=9]
+[ext_resource path="res://Elements/TileMappingTests/TileMapOverlay.tres" type="TileSet" id=10]
+[ext_resource path="res://Levels/KeyHolder.gd" type="Script" id=11]
+[ext_resource path="res://Elements/Key/SpaceKey.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Elements/Enemy/Enemy.tscn" type="PackedScene" id=13]
+[ext_resource path="res://Elements/Enemy/MovingEnemy.tscn" type="PackedScene" id=14]
+[ext_resource path="res://Elements/Player/Player.tscn" type="PackedScene" id=15]
+
+[node name="BigBoy" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="BackgroundHolder" type="Node2D" parent="."]
+editor/display_folded = true
+position = Vector2( 532.82, 289.963 )
+scale = Vector2( 1.96884, 1.50673 )
+
+[node name="Background" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( 223.419, 0 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="Background5" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( 223.419, -600 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="Background7" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( 223.419, -1200 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="Background3" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( 219.807, 602.832 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="Background2" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( -2176.58, 0 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="Background6" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( -2176.58, -600 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="Background8" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( -2176.58, -1200 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="Background4" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( -2176.58, 600 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="BackgroundL" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( -576.581, 0 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="BackgroundL6" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( -576.581, -600 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="BackgroundL7" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( -576.581, -1200 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="BackgroundL4" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( -576.581, 600 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="BackgroundL2" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( -1376.58, 0 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="BackgroundL5" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( -1376.58, -600 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="BackgroundL8" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( -1376.58, -1200 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="BackgroundL3" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( -1376.58, 600 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="BackgroundR" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( 1023.42, 0 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="BackgroundR6" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( 1023.42, -600 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="BackgroundR7" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( 1023.42, -1200 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="BackgroundR4" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( 1023.42, 600 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="BackgroundR2" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( 1823.42, 0 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="BackgroundR5" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( 1823.42, -600 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="BackgroundR8" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( 1823.42, -1200 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="BackgroundR3" type="Sprite" parent="BackgroundHolder"]
+position = Vector2( 1823.42, 600 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 800, 600 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 511.296, 298.807 )
+rotating = true
+current = true
+drag_margin_bottom = 0.5
+script = ExtResource( 3 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+editor/display_folded = true
+
+[node name="SpeedLevel" parent="CanvasLayer" instance=ExtResource( 4 )]
+margin_left = 55.5509
+margin_top = 48.3164
+margin_right = 55.5509
+margin_bottom = 48.3164
+
+[node name="Door" parent="." instance=ExtResource( 5 )]
+position = Vector2( 696.525, 447.175 )
+
+[node name="FlagHolder" parent="." instance=ExtResource( 6 )]
+position = Vector2( 0.33783, 0.119446 )
+
+[node name="Checkpoint" parent="FlagHolder" instance=ExtResource( 7 )]
+position = Vector2( 302.484, 445.646 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Checkpoint2" parent="FlagHolder" instance=ExtResource( 7 )]
+position = Vector2( 2247.49, -906.936 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Checkpoint5" parent="FlagHolder" instance=ExtResource( 7 )]
+position = Vector2( 2817.08, 379.649 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Checkpoint3" parent="FlagHolder" instance=ExtResource( 7 )]
+position = Vector2( -1902.77, 129.557 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Checkpoint4" parent="FlagHolder" instance=ExtResource( 7 )]
+position = Vector2( 396.252, -1126.92 )
+scale = Vector2( -0.3, 0.3 )
+
+[node name="TileHolder" type="Node2D" parent="."]
+editor/display_folded = true
+position = Vector2( -73.1967, 30.8196 )
+
+[node name="Start Area" type="Node2D" parent="TileHolder"]
+editor/display_folded = true
+
+[node name="Tile" parent="TileHolder/Start Area" instance=ExtResource( 8 )]
+position = Vector2( 575.152, 517.393 )
+scale = Vector2( 6.5, 1 )
+
+[node name="Tile2" parent="TileHolder/Start Area" instance=ExtResource( 8 )]
+position = Vector2( 947.442, 467.426 )
+scale = Vector2( 1, 2 )
+
+[node name="Tile3" parent="TileHolder/Start Area" instance=ExtResource( 8 )]
+position = Vector2( 219.086, 442.654 )
+scale = Vector2( 1, 2.5 )
+
+[node name="Tile4" parent="TileHolder/Start Area" instance=ExtResource( 8 )]
+position = Vector2( 1047.48, 367.815 )
+scale = Vector2( 1, 4 )
+
+[node name="Tile5" parent="TileHolder/Start Area" instance=ExtResource( 8 )]
+position = Vector2( 123.545, 367.101 )
+scale = Vector2( 1, 4 )
+
+[node name="Right Elevator" type="Node2D" parent="TileHolder"]
+editor/display_folded = true
+
+[node name="Tile6" parent="TileHolder/Right Elevator" instance=ExtResource( 8 )]
+position = Vector2( 1888.45, 446.526 )
+scale = Vector2( 13, 0.6 )
+
+[node name="Tile7" parent="TileHolder/Right Elevator" instance=ExtResource( 8 )]
+position = Vector2( 2339.37, 154.931 )
+scale = Vector2( 4, 0.6 )
+
+[node name="Tile14" parent="TileHolder/Right Elevator" instance=ExtResource( 8 )]
+position = Vector2( 2258.07, -856.03 )
+scale = Vector2( 6, 0.6 )
+
+[node name="Tile13" parent="TileHolder/Right Elevator" instance=ExtResource( 8 )]
+position = Vector2( 1534.74, -698.629 )
+scale = Vector2( 3, 0.6 )
+
+[node name="Tile10" parent="TileHolder/Right Elevator" instance=ExtResource( 8 )]
+position = Vector2( 1314.51, -346.71 )
+scale = Vector2( 2.8, 0.6 )
+
+[node name="Tile11" parent="TileHolder/Right Elevator" instance=ExtResource( 8 )]
+position = Vector2( 1875.29, -448.055 )
+scale = Vector2( 1, 0.6 )
+
+[node name="Tile8" parent="TileHolder/Right Elevator" instance=ExtResource( 8 )]
+position = Vector2( 2265.61, -445.445 )
+scale = Vector2( 0.1, 2 )
+
+[node name="Tile12" parent="TileHolder/Right Elevator" instance=ExtResource( 8 )]
+position = Vector2( 2189.28, -445.445 )
+scale = Vector2( 0.1, 2 )
+
+[node name="Tile9" parent="TileHolder/Right Elevator" instance=ExtResource( 8 )]
+position = Vector2( 1805.91, -113.968 )
+scale = Vector2( 4, 0.6 )
+
+[node name="LeftSqueeze" type="Node2D" parent="TileHolder"]
+editor/display_folded = true
+
+[node name="Tile6" parent="TileHolder/LeftSqueeze" instance=ExtResource( 8 )]
+position = Vector2( -324.738, 201.421 )
+scale = Vector2( 6.5, 0.4 )
+
+[node name="Tile11" parent="TileHolder/LeftSqueeze" instance=ExtResource( 8 )]
+position = Vector2( -971.633, 190.483 )
+scale = Vector2( 3, 0.4 )
+
+[node name="Tile12" parent="TileHolder/LeftSqueeze" instance=ExtResource( 8 )]
+position = Vector2( -1387.88, 397.369 )
+scale = Vector2( 3, 0.4 )
+
+[node name="Tile17" parent="TileHolder/LeftSqueeze" instance=ExtResource( 8 )]
+position = Vector2( -1848, 170.018 )
+scale = Vector2( 3, 0.4 )
+
+[node name="Tile7" parent="TileHolder/LeftSqueeze" instance=ExtResource( 8 )]
+position = Vector2( -311.833, 490.771 )
+scale = Vector2( 0.4, 3 )
+
+[node name="Tile9" parent="TileHolder/LeftSqueeze" instance=ExtResource( 8 )]
+position = Vector2( -733.175, 319.478 )
+scale = Vector2( 0.4, 3 )
+
+[node name="Tile13" parent="TileHolder/LeftSqueeze" instance=ExtResource( 8 )]
+position = Vector2( -1202.7, 241.431 )
+scale = Vector2( 0.4, 3 )
+
+[node name="Tile15" parent="TileHolder/LeftSqueeze" instance=ExtResource( 8 )]
+position = Vector2( -1589.66, 296.422 )
+scale = Vector2( 0.4, 3 )
+
+[node name="Tile8" parent="TileHolder/LeftSqueeze" instance=ExtResource( 8 )]
+position = Vector2( -317.121, -89.9413 )
+scale = Vector2( 0.4, 3 )
+
+[node name="Tile10" parent="TileHolder/LeftSqueeze" instance=ExtResource( 8 )]
+position = Vector2( -735.556, -199.882 )
+scale = Vector2( 0.4, 3 )
+
+[node name="Tile14" parent="TileHolder/LeftSqueeze" instance=ExtResource( 8 )]
+position = Vector2( -1201.36, -251.642 )
+scale = Vector2( 0.4, 3 )
+
+[node name="Tile16" parent="TileHolder/LeftSqueeze" instance=ExtResource( 8 )]
+position = Vector2( -1586.41, -197.464 )
+scale = Vector2( 0.4, 3 )
+
+[node name="RightMaze" type="Node2D" parent="TileHolder"]
+editor/display_folded = true
+
+[node name="Frame" type="Node2D" parent="TileHolder/RightMaze"]
+
+[node name="Tile" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 2706.88, 447.094 )
+
+[node name="Tile41" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3705.08, 447.096 )
+
+[node name="Tile6" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 2706.88, 151.893 )
+
+[node name="Tile31" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3705.08, 151.895 )
+
+[node name="Tile9" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 2706.88, -145.224 )
+
+[node name="Tile39" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3705.08, -145.223 )
+
+[node name="Tile14" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 2706.88, -639.054 )
+
+[node name="Tile37" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3705.08, -639.052 )
+
+[node name="Tile17" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 2607.83, -836.087 )
+
+[node name="Tile2" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 2706.88, 347.533 )
+
+[node name="Tile33" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3705.08, 347.535 )
+
+[node name="Tile5" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 2706.88, 52.3323 )
+
+[node name="Tile29" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3705.08, 52.3341 )
+
+[node name="Tile10" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 2706.88, -441.497 )
+
+[node name="Tile35" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3705.08, -441.496 )
+
+[node name="Tile7" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 2706.88, -244.785 )
+
+[node name="Tile38" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3705.08, -244.783 )
+
+[node name="Tile13" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 2706.88, -738.615 )
+
+[node name="Tile32" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3705.08, -738.613 )
+
+[node name="Tile16" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 2706.88, -1035.73 )
+
+[node name="Tile42" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3705.08, -1035.73 )
+
+[node name="Tile43" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3705.08, -935.73 )
+
+[node name="Tile3" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 2706.88, 250.061 )
+
+[node name="Tile28" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3705.08, 250.063 )
+
+[node name="Tile4" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 2706.88, -45.1398 )
+
+[node name="Tile30" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3705.08, -45.1379 )
+
+[node name="Tile11" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 2706.88, -538.969 )
+
+[node name="Tile36" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3705.08, -538.968 )
+
+[node name="Tile8" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 2706.88, -342.257 )
+
+[node name="Tile34" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3705.08, -342.255 )
+
+[node name="Tile12" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 2706.88, -836.087 )
+
+[node name="Tile27" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3705.08, -836.085 )
+
+[node name="Tile15" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 2706.88, -1133.2 )
+
+[node name="Tile40" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3705.08, -1133.2 )
+
+[node name="Tile18" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 2806.83, -1133.2 )
+
+[node name="Tile46" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 2806.33, 447.112 )
+
+[node name="Tile21" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3106.52, -1133.2 )
+
+[node name="Tile45" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3106.02, 447.112 )
+
+[node name="Tile25" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3405.59, -1133.2 )
+
+[node name="Tile49" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3405.09, 447.112 )
+
+[node name="Tile19" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 2906.61, -1133.2 )
+
+[node name="Tile48" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 2906.11, 447.112 )
+
+[node name="Tile22" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3206.3, -1133.2 )
+
+[node name="Tile44" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3205.8, 447.112 )
+
+[node name="Tile24" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3505.37, -1133.2 )
+
+[node name="Tile47" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3504.87, 447.112 )
+
+[node name="Tile20" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3006.32, -1133.2 )
+
+[node name="Tile51" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3005.82, 447.112 )
+
+[node name="Tile23" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3306.01, -1133.2 )
+
+[node name="Tile52" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3305.51, 447.112 )
+
+[node name="Tile26" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3605.08, -1133.2 )
+
+[node name="Tile50" parent="TileHolder/RightMaze/Frame" instance=ExtResource( 8 )]
+position = Vector2( 3604.58, 447.112 )
+
+[node name="Tile" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 2806.92, -836.03 )
+
+[node name="Tile16" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3206.71, -638.666 )
+
+[node name="Tile22" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3105.54, -439.133 )
+
+[node name="Tile26" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3207.06, -145.224 )
+
+[node name="Tile38" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3106.52, 152.776 )
+
+[node name="Tile42" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3106.52, 347.533 )
+
+[node name="Tile44" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3305.97, 347.533 )
+
+[node name="Tile47" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3205.8, 347.533 )
+
+[node name="Tile2" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3106.5, -836.019 )
+
+[node name="Tile15" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3106.4, -638.666 )
+
+[node name="Tile21" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 2806.48, -439.133 )
+
+[node name="Tile28" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3106.79, -145.224 )
+
+[node name="Tile34" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3106.52, 52.334 )
+
+[node name="Tile43" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3106.52, 250.061 )
+
+[node name="Tile45" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3305.97, 250.061 )
+
+[node name="Tile46" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3504.87, 250.061 )
+
+[node name="Tile3" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3405.57, -836.019 )
+
+[node name="Tile13" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3006.1, -538.706 )
+
+[node name="Tile17" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3304.29, -439.133 )
+
+[node name="Tile29" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3405.81, -145.224 )
+
+[node name="Tile35" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3405.54, 52.334 )
+
+[node name="Tile4" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 2906.59, -836.019 )
+
+[node name="Tile12" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 2906.49, -638.666 )
+
+[node name="Tile18" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 2906.32, -439.133 )
+
+[node name="Tile30" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 2806.84, -145.224 )
+
+[node name="Tile33" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 2905.84, 52.334 )
+
+[node name="Tile41" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 2806.33, 250.061 )
+
+[node name="Tile5" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3505.35, -836.019 )
+
+[node name="Tile14" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3405.86, -638.666 )
+
+[node name="Tile20" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3505.08, -439.133 )
+
+[node name="Tile27" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3505.6, -145.224 )
+
+[node name="Tile39" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3305.97, 152.776 )
+
+[node name="Tile6" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3006.3, -836.019 )
+
+[node name="Tile10" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3006.2, -638.666 )
+
+[node name="Tile23" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3006.03, -439.133 )
+
+[node name="Tile31" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 2906.88, -145.224 )
+
+[node name="Tile37" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3006.28, 52.334 )
+
+[node name="Tile7" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3305.99, -836.019 )
+
+[node name="Tile9" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3305.89, -638.666 )
+
+[node name="Tile24" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3204.72, -439.133 )
+
+[node name="Tile25" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3306.24, -145.224 )
+
+[node name="Tile36" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3305.97, 52.334 )
+
+[node name="Tile8" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3605.06, -836.019 )
+
+[node name="Tile11" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3505.57, -638.666 )
+
+[node name="Tile19" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3604.79, -439.133 )
+
+[node name="Tile32" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3605.31, -145.224 )
+
+[node name="Tile40" parent="TileHolder/RightMaze" instance=ExtResource( 8 )]
+position = Vector2( 3605.04, 52.334 )
+
+[node name="Left Staircase" type="Node2D" parent="TileHolder"]
+editor/display_folded = true
+
+[node name="Tile1" parent="TileHolder/Left Staircase" instance=ExtResource( 8 )]
+position = Vector2( -2179.22, 143.725 )
+
+[node name="Tile2" parent="TileHolder/Left Staircase" instance=ExtResource( 8 )]
+position = Vector2( -2329.37, 65.7427 )
+scale = Vector2( 2, 2 )
+
+[node name="Tile3" parent="TileHolder/Left Staircase" instance=ExtResource( 8 )]
+position = Vector2( -2579.53, -47.0287 )
+scale = Vector2( 3, 3 )
+
+[node name="Tile4" parent="TileHolder/Left Staircase" instance=ExtResource( 8 )]
+position = Vector2( -2867.7, -408.421 )
+scale = Vector2( 3, 1 )
+
+[node name="Tile5" parent="TileHolder/Left Staircase" instance=ExtResource( 8 )]
+position = Vector2( -2400.46, -630.211 )
+scale = Vector2( 3, 1 )
+
+[node name="Tile6" parent="TileHolder/Left Staircase" instance=ExtResource( 8 )]
+position = Vector2( -2225.14, 639.604 )
+scale = Vector2( 5, 0.6 )
+
+[node name="Sprite" type="Sprite" parent="TileHolder/Left Staircase"]
+position = Vector2( -2426.76, 489.591 )
+scale = Vector2( -0.1, 0.1 )
+texture = ExtResource( 9 )
+
+[node name="Label" type="Label" parent="TileHolder/Left Staircase"]
+margin_left = -2353.0
+margin_top = 429.0
+margin_right = -2177.0
+margin_bottom = 560.0
+text = "         Such Easter Egg
+
+                          Very Secret
+
+Much Wow!"
+
+[node name="LeftNostalgia" type="Node2D" parent="TileHolder"]
+editor/display_folded = true
+position = Vector2( -2400.84, -629.767 )
+
+[node name="Tile1" parent="TileHolder/LeftNostalgia" instance=ExtResource( 8 )]
+position = Vector2( 1309.01, -88.1503 )
+scale = Vector2( 0.8, 1 )
+
+[node name="Tile6" parent="TileHolder/LeftNostalgia" instance=ExtResource( 8 )]
+position = Vector2( 1576.78, -89.5633 )
+scale = Vector2( 0.8, 1 )
+
+[node name="Tile7" parent="TileHolder/LeftNostalgia" instance=ExtResource( 8 )]
+position = Vector2( 2875.89, -280.869 )
+scale = Vector2( 0.1, 4 )
+
+[node name="Tile4" parent="TileHolder/LeftNostalgia" instance=ExtResource( 8 )]
+position = Vector2( 1080.09, -42.2258 )
+scale = Vector2( 0.8, 1 )
+
+[node name="Tile2" parent="TileHolder/LeftNostalgia" instance=ExtResource( 8 )]
+position = Vector2( 1310.75, -157.634 )
+scale = Vector2( 1, 0.4 )
+
+[node name="Tile5" parent="TileHolder/LeftNostalgia" instance=ExtResource( 8 )]
+position = Vector2( 1578.53, -159.047 )
+scale = Vector2( 1, 0.4 )
+
+[node name="Tile3" parent="TileHolder/LeftNostalgia" instance=ExtResource( 8 )]
+position = Vector2( 1081.84, -111.71 )
+scale = Vector2( 1, 0.4 )
+
+[node name="TileMap" type="TileMap" parent="TileHolder/LeftNostalgia"]
+scale = Vector2( 0.5, 0.5 )
+tile_set = ExtResource( 10 )
+cell_size = Vector2( 100, 100 )
+format = 1
+tile_data = PoolIntArray( -655303, 0, 0, -589776, 0, 0, -524241, 0, 0, -524240, 0, 0, -458739, 0, 0, -458706, 0, 0, -458705, 0, 0, -458704, 0, 0, -393171, 0, 0, -393170, 0, 0, -393169, 0, 0, -393168, 0, 0, -327636, 0, 0, -327635, 0, 0, -327634, 0, 0, -327633, 0, 0, -327632, 0, 0, -262136, 0, 0, -262133, 0, 0, -262132, 0, 0, -262131, 0, 0, -262130, 0, 0, -262129, 0, 0, -262101, 0, 0, -262100, 0, 0, -262099, 0, 0, -262098, 0, 0, -262097, 0, 0, -262096, 0, 0, -196566, 0, 0, -196565, 0, 0, -196564, 0, 0, -196563, 0, 0, -196562, 0, 0, -196561, 0, 0, -196560, 0, 0, -131015, 0, 0, -65533, 0, 0, -65532, 0, 0, -65531, 0, 0, -65530, 0, 0, -65529, 0, 0, -65528, 0, 0, -65527, 0, 0, -65526, 0, 0, -65525, 0, 0, -65524, 0, 0, -65523, 0, 0, -65522, 0, 0, -65521, 0, 0, -65520, 0, 0, -65519, 0, 0, -65518, 0, 0, -65517, 0, 0, -65516, 0, 0, -65515, 0, 0, -65514, 0, 0, -65513, 0, 0, -65512, 0, 0, -65511, 0, 0, -65510, 0, 0, -65509, 0, 0, -65508, 0, 0, -65507, 0, 0, -65506, 0, 0, -65505, 0, 0, -65504, 0, 0, -65503, 0, 0, -65502, 0, 0, -65501, 0, 0, -65500, 0, 0, -65499, 0, 0, -65498, 0, 0, -65497, 0, 0, -65496, 0, 0, -65495, 0, 0, -65494, 0, 0, -65493, 0, 0, -65492, 0, 0, -65491, 0, 0, -65490, 0, 0, -65489, 0, 0, -65488, 0, 0, -65487, 0, 0, -65486, 0, 0, -65485, 0, 0, -65484, 0, 0, -65483, 0, 0, -65482, 0, 0, -65481, 0, 0, -65480, 0, 0, -65479, 0, 0, 3, 0, 0, 4, 0, 0, 5, 0, 0, 6, 0, 0, 7, 0, 0, 8, 0, 0, 9, 0, 0, 10, 0, 0, 11, 0, 0, 12, 0, 0, 13, 0, 0, 14, 0, 0, 15, 0, 0, 16, 0, 0, 17, 0, 0, 18, 0, 0, 19, 0, 0, 20, 0, 0, 21, 0, 0, 22, 0, 0, 23, 0, 0, 24, 0, 0, 25, 0, 0, 26, 0, 0, 27, 0, 0, 28, 0, 0, 29, 0, 0, 30, 0, 0, 31, 0, 0, 32, 0, 0, 33, 0, 0, 34, 0, 0, 35, 0, 0, 36, 0, 0, 37, 0, 0, 38, 0, 0, 39, 0, 0, 40, 0, 0, 41, 0, 0, 42, 0, 0, 43, 0, 0, 44, 0, 0, 45, 0, 0, 46, 0, 0, 47, 0, 0, 48, 0, 0, 49, 0, 0, 50, 0, 0, 51, 0, 0, 52, 0, 0, 53, 0, 0, 54, 0, 0, 55, 0, 0, 56, 0, 0, 57, 0, 0 )
+
+[node name="Box" type="Node2D" parent="TileHolder"]
+editor/display_folded = true
+
+[node name="LeftWall" parent="TileHolder/Box" instance=ExtResource( 8 )]
+visible = false
+position = Vector2( -3886.02, -282.385 )
+scale = Vector2( 1, 30 )
+
+[node name="LeftWall2" parent="TileHolder/Box" instance=ExtResource( 8 )]
+visible = false
+position = Vector2( 4403.12, -260.118 )
+scale = Vector2( 1, 30 )
+
+[node name="KeyHolder" type="Node2D" parent="."]
+editor/display_folded = true
+position = Vector2( 529.644, 588.943 )
+script = ExtResource( 11 )
+
+[node name="Key" parent="KeyHolder" instance=ExtResource( 12 )]
+position = Vector2( -24.0331, -527.057 )
+
+[node name="Key6" parent="KeyHolder" instance=ExtResource( 12 )]
+position = Vector2( -133.044, -1783.52 )
+
+[node name="Key3" parent="KeyHolder" instance=ExtResource( 12 )]
+position = Vector2( -2353.03, -470.109 )
+
+[node name="Key2" parent="KeyHolder" instance=ExtResource( 12 )]
+position = Vector2( 1622.95, -1000.72 )
+
+[node name="Key4" parent="KeyHolder" instance=ExtResource( 12 )]
+position = Vector2( 2201.35, -213.456 )
+
+[node name="Key5" parent="KeyHolder" instance=ExtResource( 12 )]
+position = Vector2( 2891.27, -1796.3 )
+
+[node name="EnemyHolder" type="Node2D" parent="."]
+editor/display_folded = true
+
+[node name="DeathWall" parent="EnemyHolder" instance=ExtResource( 13 )]
+visible = false
+position = Vector2( 213.012, 1260.23 )
+scale = Vector2( 100, 1 )
+
+[node name="LSquuzeEn" type="Node2D" parent="EnemyHolder"]
+editor/display_folded = true
+
+[node name="Enemy" parent="EnemyHolder/LSquuzeEn" instance=ExtResource( 13 )]
+position = Vector2( -396.07, 116.873 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Enemy4" parent="EnemyHolder/LSquuzeEn" instance=ExtResource( 13 )]
+position = Vector2( -808.757, 12.0428 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Enemy5" parent="EnemyHolder/LSquuzeEn" instance=ExtResource( 13 )]
+position = Vector2( -1275.8, -29.8064 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Enemy7" parent="EnemyHolder/LSquuzeEn" instance=ExtResource( 13 )]
+position = Vector2( -1660.85, 24.3709 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Enemy2" parent="EnemyHolder/LSquuzeEn" instance=ExtResource( 13 )]
+position = Vector2( -389.877, 346.599 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Enemy3" parent="EnemyHolder/LSquuzeEn" instance=ExtResource( 13 )]
+position = Vector2( -805.578, 175.144 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Enemy6" parent="EnemyHolder/LSquuzeEn" instance=ExtResource( 13 )]
+position = Vector2( -1278.81, 92.4129 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Enemy8" parent="EnemyHolder/LSquuzeEn" instance=ExtResource( 13 )]
+position = Vector2( -1663.86, 146.59 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Right Maze" type="Node2D" parent="EnemyHolder"]
+editor/display_folded = true
+
+[node name="Enemy9" parent="EnemyHolder/Right Maze" instance=ExtResource( 13 )]
+position = Vector2( 3031.12, -190.297 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Enemy11" parent="EnemyHolder/Right Maze" instance=ExtResource( 13 )]
+position = Vector2( 2816.94, 283.096 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Enemy10" parent="EnemyHolder/Right Maze" instance=ExtResource( 13 )]
+position = Vector2( 3031.12, -239.872 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Enemy12" parent="EnemyHolder/Right Maze" instance=ExtResource( 13 )]
+position = Vector2( 2951.78, 275.069 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="LNostalgia" type="Node2D" parent="EnemyHolder"]
+
+[node name="Enemy2" parent="EnemyHolder/LNostalgia" instance=ExtResource( 13 )]
+position = Vector2( -892.253, -802.542 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="MovingEnemy" parent="EnemyHolder/LNostalgia" instance=ExtResource( 14 )]
+position = Vector2( -1920.22, -676.587 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Player" parent="." instance=ExtResource( 15 )]
+position = Vector2( 511.262, 299.269 )
+
