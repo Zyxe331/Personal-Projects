@@ -1,2 +1,3 @@
 # Personal-Projects
-These are some of the main projects I've created in my free time.
+
+Here is a portfolio of my personal projects. All of these were made in my free time, not as requirements for classes.
