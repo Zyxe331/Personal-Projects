@@ -1,6 +1,7 @@
 const Database = require('../utils/database');
 const utils = require('../utils/general_utils.js');
 
+//Function that holds a query that grabs all of the current plans made in the database and returns them
 const queryAllPlans = async () => {
 
     const db = new Database();

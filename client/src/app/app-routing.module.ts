@@ -18,10 +18,10 @@ const routes: Routes = [
   { path: 'add-journal', loadChildren: './pages/add-journal/add-journal.module#AddJournalPageModule' },
   { path: 'prayer-requests', loadChildren: './pages/prayer-requests/prayer-requests.module#PrayerRequestsPageModule' },
   { path: 'prayer-request', loadChildren: './pages/prayer-request/prayer-request.module#PrayerRequestPageModule' },
-  { path: 'add-prayer-request', loadChildren: './pages/add-prayer-request/add-prayer-request.module#AddPrayerRequestPageModule' },
   { path: 'groups', loadChildren: './pages/groups/groups.module#GroupsPageModule' },
   { path: 'group', loadChildren: './pages/group/group.module#GroupPageModule' },
-  { path: 'add-group', loadChildren: './pages/add-group/add-group.module#AddGroupPageModule' },  { path: 'notifications', loadChildren: './pages/notifications/notifications.module#NotificationsPageModule' },
+  { path: 'add-group', loadChildren: './pages/add-group/add-group.module#AddGroupPageModule' },
+  { path: 'notifications', loadChildren: './pages/notifications/notifications.module#NotificationsPageModule' },
   { path: 'notification', loadChildren: './pages/notification/notification.module#NotificationPageModule' }
 
 ];
