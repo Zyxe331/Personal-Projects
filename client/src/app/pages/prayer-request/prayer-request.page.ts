@@ -16,7 +16,7 @@ import { PrayerRequestProviderService } from 'src/app/services/prayer-request-pr
 })
 export class PrayerRequestPage implements OnInit {
 
-  request: PrayerRequest;
+  request: PrayerRequest = new PrayerRequest();
   prayerSchedules: PrayerSchedule[];
   prayerTags: PrayerTag[];
   tagList: Tag[];
@@ -39,13 +39,15 @@ export class PrayerRequestPage implements OnInit {
       if (this.router.getCurrentNavigation().extras.state) {
         this.request = this.router.getCurrentNavigation().extras.state.request;
         console.log(this.router.getCurrentNavigation().extras.state)
+        this.prayerServices.getThisPrayersTagsAsObservable(this.router.getCurrentNavigation().extras.state.request.Id).subscribe(tags => {
+          this.prayerTags = tags
+        })
+      }
+      else {
+        this.router.navigate(['/prayer-requests'])
       }
     })
-    if (this.request !== undefined) {
-      this.prayerServices.getThisPrayersTagsAsObservable(this.request.Id).subscribe(tags => {
-        this.prayerTags = tags
-      })
-    } 
+    
   }
 
   //Trigger prayer creation popup
