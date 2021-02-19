@@ -1,22 +1,22 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddPrayerRequestPage } from './add-prayer-request.page';
+import { EditPrayerCardComponent } from './edit-prayer-card.component';
 
-describe('AddPrayerRequestPage', () => {
-  let component: AddPrayerRequestPage;
-  let fixture: ComponentFixture<AddPrayerRequestPage>;
+describe('EditPrayerCardComponent', () => {
+  let component: EditPrayerCardComponent;
+  let fixture: ComponentFixture<EditPrayerCardComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddPrayerRequestPage ],
+      declarations: [ EditPrayerCardComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddPrayerRequestPage);
+    fixture = TestBed.createComponent(EditPrayerCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

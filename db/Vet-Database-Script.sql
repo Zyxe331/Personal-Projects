@@ -293,22 +293,15 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `vets_database`.`User_has_Group` (
   `Id` INT NOT NULL AUTO_INCREMENT,
-  `User_Id` INT NOT NULL,
   `Group_Id` INT NOT NULL,
   `GroupRole_Id` INT NOT NULL,
   `User_has_Plan_Id` INT NOT NULL,
   `Active` TINYINT NULL DEFAULT 0,
   INDEX `fk_User_has_Group_Group1_idx` (`Group_Id` ASC),
-  INDEX `fk_User_has_Group_User1_idx` (`User_Id` ASC),
   INDEX `fk_User_has_Group_GroupRole1_idx` (`GroupRole_Id` ASC),
   PRIMARY KEY (`Id`),
   UNIQUE INDEX `Id_UNIQUE` (`Id` ASC),
   INDEX `fk_User_has_Group_User_has_Plan1_idx` (`User_has_Plan_Id` ASC),
-  CONSTRAINT `fk_User_has_Group_User1`
-    FOREIGN KEY (`User_Id`)
-    REFERENCES `vets_database`.`User` (`Id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `fk_User_has_Group_Group1`
     FOREIGN KEY (`Group_Id`)
     REFERENCES `vets_database`.`Group` (`Id`)

@@ -7,6 +7,7 @@ import { PrayerSchedule } from '../interfaces/prayer-schedule';
 import { Tag } from 'src/app/interfaces/tag';
 import { GlobalProviderService } from '../services/global-provider.service';
 import { PrayerTag } from '../interfaces/prayer-tag';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -69,6 +70,11 @@ export class PrayerRequestProviderService {
     })
   }
 
+  getThisPrayersTagsAsObservable(prayerId: number): Observable<PrayerTag[]> {
+        // Ask the server to get all tags for the prayer
+        return this.http.get<PrayerTag[]>(SERVER_URL + 'tags/' + prayerId)
+  }
+
   /**
    * Sends information to the database in order to create a 
    * prayer request with the provided data
@@ -115,6 +121,21 @@ export class PrayerRequestProviderService {
     })
   }
 
+  addPrayerAsObservable(title: string, body: string, isprivate: boolean, frequency: number, tagIds: number[], sectionId: number): Observable<PrayerRequest> {
+    let requestBody = {
+      title: title,
+      body: body,
+      isprivate: isprivate,
+      userId: this.userServices.currentUser.Id,
+      frequency: frequency,
+      tagIds: tagIds,
+      sectionId: sectionId
+    }
+
+    console.log(sectionId);
+    return this.http.post<PrayerRequest>(SERVER_URL + 'prayer-requests/', requestBody)
+  }
+
   /**
    * Sends prayer info to the database to update the prayer with 
    * the provided data
@@ -155,6 +176,17 @@ export class PrayerRequestProviderService {
         reject(error.error);
       }
     })
+  }
+
+  updatePrayerAsObservable(prayerid: number, title: string, body: string, isprivate: boolean, frequency: number, tagIds: number[]): Observable<PrayerRequest> {
+    let requestBody = {
+      title: title,
+      body: body,
+      isprivate: isprivate,
+      frequency: frequency,
+      tagIds: tagIds
+    }
+    return this.http.patch<PrayerRequest>(SERVER_URL + 'prayer-requests/' + prayerid, requestBody)
   }
 
   /**

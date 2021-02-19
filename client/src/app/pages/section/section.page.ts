@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, ModalController } from '@ionic/angular'
+import { NavController, ModalController, PopoverController } from '@ionic/angular'
 import { ActivatedRoute, Router, NavigationExtras, NavigationEnd } from '@angular/router';
 import { ContentCycleProviderService } from '../../services/content-cycle-provider.service';
 import { JournalProviderService } from '../../services/journal-provider.service';
@@ -7,12 +7,12 @@ import { PrayerRequestProviderService } from '../../services/prayer-request-prov
 import { TagProviderService } from 'src/app/services/tag-provider.service';
 import { Section } from 'src/app/interfaces/section';
 import { AddJournalPage } from '../add-journal/add-journal.page';
-import { AddPrayerRequestPage } from '../add-prayer-request/add-prayer-request.page';
 import { Journal } from 'src/app/interfaces/journal';
 import { PrayerRequest } from 'src/app/interfaces/prayer-request';
 import { Tag } from 'src/app/interfaces/tag';
 import { async } from '@angular/core/testing';
 import { GlobalProviderService } from 'src/app/services/global-provider.service';
+import { EditPrayerCardComponent } from 'src/app/components/edit-prayer-card/edit-prayer-card.component';
 
 
 @Component({
@@ -42,7 +42,8 @@ export class SectionPage implements OnInit {
     private router: Router,
     private contentCycleService: ContentCycleProviderService,
     private globalServices: GlobalProviderService,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    public popoverController: PopoverController
   ) {
 
   }
@@ -142,23 +143,24 @@ export class SectionPage implements OnInit {
     return await modal.present();
   }
 
-  async openCreatePrayerModal() {
-    const modal = await this.modalController.create({
-      component: AddPrayerRequestPage,
-      componentProps: {
-        'sectionId': this.section.Id,
-      }
-    });
+  // DEPRECIATED
+  // async openCreatePrayerModal() {
+  //   const modal = await this.modalController.create({
+  //     component: AddPrayerRequestPage,
+  //     componentProps: {
+  //       'sectionId': this.section.Id,
+  //     }
+  //   });
 
-    let _this = this;
-    modal.onDidDismiss().then( async (dataReturned) => {
-      if (dataReturned !== null) {
-        await _this.globalServices.loadContent(_this, _this.getAndOrganizeData);
-      }
-    });
+  //   let _this = this;
+  //   modal.onDidDismiss().then( async (dataReturned) => {
+  //     if (dataReturned !== null) {
+  //       await _this.globalServices.loadContent(_this, _this.getAndOrganizeData);
+  //     }
+  //   });
 
-    return await modal.present();
-  }
+  //   return await modal.present();
+  // }
 
   goToJournal(journal) {
     let navigationExtras: NavigationExtras = {
@@ -176,6 +178,21 @@ export class SectionPage implements OnInit {
       }
     }
     this.router.navigate(['/prayer-request'], navigationExtras);
+  }
+
+  //Trigger prayer creation popup
+  async presentPrayerPopover(ev: any) {
+    const popover = await this.popoverController.create({
+      component: EditPrayerCardComponent,
+      componentProps: {
+        'sectionId': this.section.Id,
+      },
+      showBackdrop:true,
+      cssClass: 'generic-popup',
+      //event: ev,
+      translucent: false
+    });
+    return await popover.present();
   }
 
   goToContentCycle() {

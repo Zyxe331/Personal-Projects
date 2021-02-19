@@ -15,6 +15,14 @@ const getAllTags = async (request, response) => {
 
 }
 
+const addTag = async (request, response) => {
+    tagServices.addTag(request.body.name).then(res => {
+        response.status(200).send(res)
+    }, err => {
+        response.status(500).send(err.message)
+    })
+}
+
 const getTagById = async (request, response) => {
 
     try {
@@ -47,4 +55,5 @@ module.exports = {
     getAllTags: getAllTags,
     getTagById: getTagById,
     getPrayerTags: getPrayerTags,
+    addTag: addTag
 }
