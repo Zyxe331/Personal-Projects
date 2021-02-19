@@ -49,10 +49,13 @@
 
       <ion-card-content>
         <h1 class="sectionTitle">{{section.Title}}</h1>
+        <ion-text class="sectionCard">Main Idea: </ion-text>
+        <br />
         <ion-text class="sectionCard ion-text-center">{{section.Main_Idea}}</ion-text>
         <br /><br />
-        <ion-text class="sectionCard">{{section.Passage_Paraphrased}} - {{section.Passage_Reference}}
-        </ion-text>
+        <ion-text class="sectionCard">Passage: </ion-text>
+        <br />
+        <ion-text class="sectionCard">{{section.Passage_Paraphrased}} - {{section.Passage_Reference}}</ion-text>
         <br /><br />
         <a href="{{section.Song_Link}}">{{section.Song_Link}}</a>
       </ion-card-content>
@@ -64,7 +67,6 @@
       </ion-card-header>
 
       <ion-card-content class="ion-text-center">
-        <h1>Testing</h1>
         <ion-list>
           <ion-item lines="full" detail *ngFor="let journal of journals" (click)="goToJournal(journal)">
             <ion-text style="width: 15%;" color="medium" slot="start">{{journal.ShortFormattedDate}}</ion-text>
