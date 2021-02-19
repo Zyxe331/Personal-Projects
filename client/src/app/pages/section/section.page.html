@@ -35,7 +35,7 @@
             </ion-col>
             <ion-col size="8" class="ion-align-self-center">
               <div class="ion-text-center">
-                <ion-card-subtitle>{{contentCycleName}}</ion-card-subtitle>
+                <ion-card-subtitle class="sectionCard">{{contentCycleName}}</ion-card-subtitle>
               </div>
             </ion-col>
             <ion-col size="2">
@@ -49,9 +49,9 @@
 
       <ion-card-content>
         <h1 class="sectionTitle">{{section.Title}}</h1>
-        <ion-text color="dark" class="ion-text-center">{{section.Main_Idea}}</ion-text>
+        <ion-text class="sectionCard ion-text-center">{{section.Main_Idea}}</ion-text>
         <br /><br />
-        <ion-text color="dark">{{section.Passage_Paraphrased}} - {{section.Passage_Reference}}
+        <ion-text class="sectionCard">{{section.Passage_Paraphrased}} - {{section.Passage_Reference}}
         </ion-text>
         <br /><br />
         <a href="{{section.Song_Link}}">{{section.Song_Link}}</a>
@@ -64,6 +64,7 @@
       </ion-card-header>
 
       <ion-card-content class="ion-text-center">
+        <h1>Testing</h1>
         <ion-list>
           <ion-item lines="full" detail *ngFor="let journal of journals" (click)="goToJournal(journal)">
             <ion-text style="width: 15%;" color="medium" slot="start">{{journal.ShortFormattedDate}}</ion-text>
