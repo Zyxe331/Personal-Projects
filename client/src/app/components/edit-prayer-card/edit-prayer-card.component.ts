@@ -51,19 +51,10 @@ export class EditPrayerCardComponent implements OnInit {
     else {
       //create dummy data for creating a new prayer request
       let newDate = new Date()
-      this.request = {
-        Id: -1,
-        Title: '',
-        Body: '',
-        Resolved: false,
-        IsPrivate: true,
-        CreatedDate: newDate,
-        ShortFormattedDate: this.globalServices.createShortFormattedDate(newDate),
-        LongFormattedDate: this.globalServices.createLongFormattedDate(newDate),
-        User_Id: -1,
-        Prayer_Schedule_Id: -1,
-        Frequency: ''
-      }
+      this.request = new PrayerRequest()
+      this.request.CreatedDate = newDate
+      this.request.ShortFormattedDate = this.globalServices.createShortFormattedDate(newDate)
+      this.request.LongFormattedDate = this.globalServices.createLongFormattedDate(newDate)
     }
 
     // Creates the edit prayer form with validators

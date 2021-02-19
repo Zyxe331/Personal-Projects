@@ -9,6 +9,6 @@ export class PrayerRequest {
     LongFormattedDate: string
     User_Id: number
     Prayer_Schedule_Id: number
-    Frequency: string,
+    Frequency: string
     Section_Id: number
 }
