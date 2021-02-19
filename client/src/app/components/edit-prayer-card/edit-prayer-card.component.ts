@@ -68,7 +68,7 @@ export class EditPrayerCardComponent implements OnInit {
   }
 
   ClosePopover() {
-    this.popover.dismiss({request: this.request})
+    this.popover.dismiss({request: this.request, tags: this.prayerTags})
   }
 
   cancel() {

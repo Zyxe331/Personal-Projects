@@ -65,6 +65,7 @@ export class PrayerRequestPage implements OnInit {
     popover.onDidDismiss().then(data => {
       if (data.data != undefined) {
         this.request = data.data.request
+        this.prayerTags = data.data.tags
       }
     })
     return await popover.present();
