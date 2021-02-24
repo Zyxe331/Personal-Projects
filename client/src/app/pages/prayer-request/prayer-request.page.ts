@@ -16,7 +16,7 @@ import { PrayerRequestProviderService } from 'src/app/services/prayer-request-pr
 })
 export class PrayerRequestPage implements OnInit {
 
-  request: PrayerRequest;
+  request: PrayerRequest = new PrayerRequest();
   prayerSchedules: PrayerSchedule[];
   prayerTags: PrayerTag[];
   tagList: Tag[];
@@ -34,18 +34,22 @@ export class PrayerRequestPage implements OnInit {
 
   public prayerstate: boolean = true;
 
+  //Added functionality inside of ngOnInit() that redirects the user back to the 
+  //prayer-requests page when the user tries to refresh while inside of an existing prayer
   ngOnInit() {    
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
         this.request = this.router.getCurrentNavigation().extras.state.request;
         console.log(this.router.getCurrentNavigation().extras.state)
+        this.prayerServices.getThisPrayersTagsAsObservable(this.router.getCurrentNavigation().extras.state.request.Id).subscribe(tags => {
+          this.prayerTags = tags
+        })
+      }
+      else {
+        this.router.navigate(['/prayer-requests'])
       }
     })
-    if (this.request !== undefined) {
-      this.prayerServices.getThisPrayersTagsAsObservable(this.request.Id).subscribe(tags => {
-        this.prayerTags = tags
-      })
-    } 
+    
   }
 
   //Trigger prayer creation popup

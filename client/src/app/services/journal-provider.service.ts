@@ -4,13 +4,18 @@ import { SERVER_URL } from '../../environments/environment';
 import { UserProviderService } from '../services/user-provider.service';
 import { GlobalProviderService } from '../services/global-provider.service';
 import { Journal } from '../interfaces/journal';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class JournalProviderService {
 
-  constructor(private http: HttpClient, private userServices: UserProviderService, private globalServices: GlobalProviderService) { }
+  constructor(
+    private http: HttpClient, 
+    private userServices: UserProviderService, 
+    private globalServices: GlobalProviderService
+    ) { }
 
   /**
    * Sends a journal object to the server to insert into database
@@ -119,6 +124,11 @@ export class JournalProviderService {
       }
     })
   }
+
+  // getThisUsersJournalsAsObservable(userId: number) :Observable<Journal[]> {
+  //   //let userId = this.userServices.currentUser.Id;
+  //   return this.http.get<Journal[]>(SERVER_URL + 'journals/' + userId)
+  // }
 
   /**
    * Sets fake date fields on journals that are better formatted on a list of journals
