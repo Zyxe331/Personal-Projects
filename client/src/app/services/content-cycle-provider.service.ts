@@ -25,7 +25,10 @@ export class ContentCycleProviderService {
   public sectionPrayersBySection: object;
   public sectionsByCycleId: object;
 
-  constructor(private http: HttpClient, private userServices: UserProviderService) { }
+  constructor(
+    private http: HttpClient, 
+    private userServices: UserProviderService
+  ) { }
 
   /**
    * Gets all plans in the database
@@ -138,6 +141,13 @@ export class ContentCycleProviderService {
               }
             }
             _this.currentSectionIndex = _this.orderedSections.findIndex(item => item.Id == _this.userPlan.Current_Section_Id);
+          } else {
+            //If the user does not have a plan, generate stand-in plan data
+            _this.currentPlan = {
+                Id: 0,
+                CreatedDate: null,
+                Title: "No enrolled plan"
+            }
           }
           resolve(response.currentPlan);
 

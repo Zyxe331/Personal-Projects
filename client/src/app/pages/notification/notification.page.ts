@@ -11,7 +11,7 @@ import { GlobalProviderService } from 'src/app/services/global-provider.service'
 })
 export class NotificationPage implements OnInit {
 
-  notification: Notification;
+  notification: Notification = new Notification();
 
   get showSpinner() {
     return this.globalServices.showSpinner;
@@ -22,16 +22,26 @@ export class NotificationPage implements OnInit {
     private router: Router,
     private chatServices: ChatProviderService,
     private globalServices: GlobalProviderService
-  ) {
+   ) {
+  //   this.route.queryParams.subscribe(params => {
+  //     if (this.router.getCurrentNavigation().extras.state) {
+  //       this.notification = this.router.getCurrentNavigation().extras.state.notification;
+  //     }
+  //   })
+  }
+
+  //Added functionality inside of ngOnInit() that redirects the user back to the 
+  //notifications page when the user tries to refresh while inside of a notification
+  ngOnInit() {
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
         this.notification = this.router.getCurrentNavigation().extras.state.notification;
+        console.log(this.router.getCurrentNavigation().extras.state)
+      }
+      else {
+        this.router.navigate(['/notifications'])
       }
     })
-  }
-
-  ngOnInit() {
-
   }
 
   /**

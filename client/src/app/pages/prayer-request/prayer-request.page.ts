@@ -34,6 +34,8 @@ export class PrayerRequestPage implements OnInit {
 
   public prayerstate: boolean = true;
 
+  //Added functionality inside of ngOnInit() that redirects the user back to the 
+  //prayer-requests page when the user tries to refresh while inside of an existing prayer
   ngOnInit() {    
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
