@@ -31,8 +31,8 @@
           <b>Tags: <ion-item *ngFor="let tag of prayerTags;" lines="none">
             {{tag.Tag_Name}}
           </ion-item><br>
-          Reminder Date: {{request.NotificationDate}}<br>
-          Reminder Time: {{request.NotificationTime}}<br>
+          Reminder Date: {{notifDate}}<br>
+          Reminder Time: {{notifTime}}<br>
           {{request.IsPrivate ? "Private" : "Shared"}}<br>
           {{request.Resolved ? "Resolved" : "Ongoing"}}<br></b>
         </div>

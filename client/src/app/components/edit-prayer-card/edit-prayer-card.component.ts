@@ -72,8 +72,8 @@ export class EditPrayerCardComponent implements OnInit {
         User_Id: -1,
         Prayer_Schedule_Id: -1,
         frequency: '',
-        nDate: this.globalServices.createShortFormattedDate(newDate),
-        nTime: ''
+        NotificationDate: this.globalServices.createShortFormattedDate(newDate),
+        NotificationTime: ''
       }
     }
 

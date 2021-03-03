@@ -9,7 +9,7 @@ export interface PrayerRequest {
     LongFormattedDate: string,
     User_Id: number,
     Prayer_Schedule_Id: number,
-    nDate: string,
-    nTime: string,
+    NotificationDate: string,
+    NotificationTime: string,
     frequency: string
 }

@@ -50,7 +50,7 @@ export class PrayerRequestPage implements OnInit {
       })
     } 
     this.setNotificationDate();
-    console.log(this.request.nDate);
+    console.log(this.request.NotificationDate);
     this.setNotificationTime();
   }
 
@@ -76,12 +76,12 @@ export class PrayerRequestPage implements OnInit {
 
   setNotificationDate() {
     console.log('Getting date');
-    console.log(this.request.nDate);
-    this.notifDate = this.request.nDate;
+    console.log(this.request.NotificationDate);
+    this.notifDate = new Date(this.request.NotificationDate).toLocaleDateString("en-US", { month: 'long', day: 'numeric', year: 'numeric' })
   }
 
   setNotificationTime() {
-    this.notifDate = this.request.nDate;
+    this.notifTime = new Date(this.request.NotificationTime).toLocaleTimeString("en-US")
   }
   
 }
