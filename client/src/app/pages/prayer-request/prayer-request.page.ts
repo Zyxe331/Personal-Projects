@@ -8,6 +8,7 @@ import { PrayerTag } from 'src/app/interfaces/prayer-tag';
 import { PopoverController } from '@ionic/angular';
 import { EditPrayerCardComponent } from 'src/app/components/edit-prayer-card/edit-prayer-card.component';
 import { PrayerRequestProviderService } from 'src/app/services/prayer-request-provider.service';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 @Component({
   selector: 'app-prayer-request',
@@ -23,13 +24,15 @@ export class PrayerRequestPage implements OnInit {
   showErrors: boolean = false;
   serverErrors: boolean = false;
   serverError: string;
+  notifDate: any;
+  notifTime: any;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     public formBuilder: FormBuilder,
     private prayerServices: PrayerRequestProviderService,
-    public popoverController: PopoverController
+    public popoverController: PopoverController,
   ) { }
 
   public prayerstate: boolean = true;
@@ -38,7 +41,7 @@ export class PrayerRequestPage implements OnInit {
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
         this.request = this.router.getCurrentNavigation().extras.state.request;
-        console.log(this.router.getCurrentNavigation().extras.state)
+        console.log(this.router.getCurrentNavigation().extras.state);
       }
     })
     if (this.request !== undefined) {
@@ -46,6 +49,9 @@ export class PrayerRequestPage implements OnInit {
         this.prayerTags = tags
       })
     } 
+    this.setNotificationDate();
+    console.log(this.request.nDate);
+    this.setNotificationTime();
   }
 
   //Trigger prayer creation popup
@@ -68,4 +74,14 @@ export class PrayerRequestPage implements OnInit {
     return await popover.present();
   }
 
+  setNotificationDate() {
+    console.log('Getting date');
+    console.log(this.request.nDate);
+    this.notifDate = this.request.nDate;
+  }
+
+  setNotificationTime() {
+    this.notifDate = this.request.nDate;
+  }
+  
 }

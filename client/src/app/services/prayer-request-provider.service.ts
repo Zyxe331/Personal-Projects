@@ -8,6 +8,7 @@ import { Tag } from 'src/app/interfaces/tag';
 import { GlobalProviderService } from '../services/global-provider.service';
 import { PrayerTag } from '../interfaces/prayer-tag';
 import { Observable } from 'rxjs';
+import { Time } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -87,16 +88,17 @@ export class PrayerRequestProviderService {
    * @returns {Promise<PrayerRequest>}
    * @memberof PrayerRequestProviderService
    */
-  async addPrayer(title: string, body: string, isprivate: boolean, frequency: number, tagIds: number[], sectionId: number): Promise<PrayerRequest> {
+  async addPrayer(title: string, body: string, isprivate: boolean, tagIds: number[], sectionId: number, nDate?: Date, nTime?: Time ): Promise<PrayerRequest> {
 
     let requestBody = {
       title: title,
       body: body,
       isprivate: isprivate,
       userId: this.userServices.currentUser.Id,
-      frequency: frequency,
       tagIds: tagIds,
-      sectionId: sectionId
+      sectionId: sectionId,
+      nDate: nDate,
+      nTime: nTime
     }
 
     console.log(sectionId);
@@ -121,15 +123,17 @@ export class PrayerRequestProviderService {
     })
   }
 
-  addPrayerAsObservable(title: string, body: string, isprivate: boolean, frequency: number, tagIds: number[], sectionId: number): Observable<PrayerRequest> {
+  addPrayerAsObservable(title: string, body: string, isprivate: boolean, tagIds: number[], sectionId: number, nDate?: Date, nTime?: Time, frequency?: number): Observable<PrayerRequest> {
     let requestBody = {
       title: title,
       body: body,
       isprivate: isprivate,
       userId: this.userServices.currentUser.Id,
-      frequency: frequency,
       tagIds: tagIds,
-      sectionId: sectionId
+      sectionId: sectionId,
+      nDate: nDate,
+      nTime: nTime,
+      frequency: frequency
     }
 
     console.log(sectionId);
@@ -148,14 +152,16 @@ export class PrayerRequestProviderService {
    * @returns {Promise<PrayerRequest>}
    * @memberof PrayerRequestProviderService
    */
-  async updatePrayer(prayerid: number, title: string, body: string, isprivate: boolean, frequency: number, tagIds: number[]): Promise<PrayerRequest> {
+  async updatePrayer(prayerid: number, title: string, body: string, isprivate: boolean, tagIds: number[], nDate?: Date, nTime?: Time, frequency?: number): Promise<PrayerRequest> {
 
     let requestBody = {
       title: title,
       body: body,
       isprivate: isprivate,
-      frequency: frequency,
-      tagIds: tagIds
+      tagIds: tagIds,
+      nDate: nDate,
+      nTime: nTime,
+      frequency: frequency
     }
 
     let _this = this;
@@ -178,11 +184,13 @@ export class PrayerRequestProviderService {
     })
   }
 
-  updatePrayerAsObservable(prayerid: number, title: string, body: string, isprivate: boolean, frequency: number, tagIds: number[]): Observable<PrayerRequest> {
+  updatePrayerAsObservable(prayerid: number, title: string, body: string, isprivate: boolean, tagIds: number[], nDate?: Date, nTime?: Time, frequency?: number): Observable<PrayerRequest> {
     let requestBody = {
       title: title,
       body: body,
       isprivate: isprivate,
+      nDate: nDate,
+      nTime: nTime,
       frequency: frequency,
       tagIds: tagIds
     }

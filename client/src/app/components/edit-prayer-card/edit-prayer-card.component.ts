@@ -1,12 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AlertController, PopoverController } from '@ionic/angular';
+import { AlertController, PopoverController, MenuController } from '@ionic/angular';
 import { PrayerTag } from 'src/app/interfaces/prayer-tag';
 import { Tag } from 'src/app/interfaces/tag';
 import { GlobalProviderService } from 'src/app/services/global-provider.service';
 import { PrayerRequestProviderService } from 'src/app/services/prayer-request-provider.service';
 import { TagProviderService } from 'src/app/services/tag-provider.service';
 import { PrayerRequest } from '../../interfaces/prayer-request';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import { Timestamp } from 'rxjs/internal/operators/timestamp';
 
 @Component({
   selector: 'app-edit-prayer-card',
@@ -20,7 +22,12 @@ export class EditPrayerCardComponent implements OnInit {
   editRequestForm: FormGroup;
   tags: Tag[]
   prayerTags: PrayerTag[]
-  tagIds: number[] = []
+  tagIds: number[] = [];
+  myDate = new Date().toISOString();
+  myTime = '';
+  notificationToggle = false;
+  minDate: any = (new Date()).getFullYear();
+  maxDate: any = (new Date()).getFullYear() + 50;
 
   showErrors: boolean = false;
   serverErrors: boolean = false;
@@ -32,7 +39,9 @@ export class EditPrayerCardComponent implements OnInit {
     private tagService: TagProviderService,
     private globalServices: GlobalProviderService,
     public alertController: AlertController,
-    private popover: PopoverController) {
+    private popover: PopoverController,
+    private localNotifications: LocalNotifications,
+    private menu: MenuController) {
   }
 
   ngOnInit() {
@@ -62,7 +71,9 @@ export class EditPrayerCardComponent implements OnInit {
         LongFormattedDate: this.globalServices.createLongFormattedDate(newDate),
         User_Id: -1,
         Prayer_Schedule_Id: -1,
-        Frequency: ''
+        frequency: '',
+        nDate: this.globalServices.createShortFormattedDate(newDate),
+        nTime: ''
       }
     }
 
@@ -71,7 +82,9 @@ export class EditPrayerCardComponent implements OnInit {
       title: new FormControl(this.request.Title, Validators.compose([Validators.required])),
       body: new FormControl(this.request.Body, Validators.compose([Validators.required])),
       formTags: new FormControl(this.tagIds),
-      frequency: new FormControl(this.request.Frequency, Validators.compose([Validators.required])),
+      nDate: new FormControl(this.myDate),
+      nTime: new FormControl(this.myTime),
+      frequency: new FormControl(this.request.frequency),
       private: new FormControl(this.request.IsPrivate)
     });
   }
@@ -109,14 +122,39 @@ export class EditPrayerCardComponent implements OnInit {
     //TODO: implement search bar or something to filter tags
   }
 
+  change(datePicker){    
+    datePicker.open();
+  }
+
+  openRepeatMenu() {
+    this.menu.enable(true, 'repeat');
+    this.menu.open('repeat');
+  }
+
+  scheduleNotification(prayerID: any, prayerTitle: any, prayerBody: any, notificationDate: any, notificationTime: any, notificationFrequency: number) {
+    let freq
+    if(notificationFrequency == 1) freq = {}
+    else if (notificationFrequency == 2) freq = {day:1}
+    else if (notificationFrequency == 3) freq = {week:1}
+    else if (notificationFrequency == 4) freq = {month:1}
+    else if (notificationFrequency == 5) freq = {year:1}
+    this.localNotifications.schedule({
+    id: prayerID, 
+     title: prayerTitle,
+    text: prayerBody,
+    trigger: {at: notificationDate + notificationTime, every: freq}
+    })
+    console.log('Successfully scheduled notification');
+  }
+
   submit() {
     console.warn('This is what we gonna submit: ', this.editRequestForm.value)
     let formValues = this.editRequestForm.value;
     this.serverError = '';
     this.serverErrors = false;
-
+    
     // Check if there are title or body errors
-    if (!this.editRequestForm.controls.title.valid || !this.editRequestForm.controls.body.valid || !this.editRequestForm.controls.frequency.valid) {
+    if (!this.editRequestForm.controls.title.valid || !this.editRequestForm.controls.body.valid) {
       this.showErrors = true;
       return
     }
@@ -124,7 +162,11 @@ export class EditPrayerCardComponent implements OnInit {
       try {
 
         // Send journal form values to the server to insert journal
-        this.prayerServices.addPrayerAsObservable(formValues.title, formValues.body, formValues.private, formValues.frequency, formValues.formTags, this.sectionId).subscribe(prayer => {
+        this.prayerServices.addPrayerAsObservable(formValues.title, formValues.body, formValues.private, formValues.formTags, this.sectionId, formValues.nDate, formValues.nTime, formValues.frequency).subscribe(prayer => {
+          if (this.notificationToggle) {
+            console.log('Creating prayer notification');
+            this.scheduleNotification(prayer.Id, prayer.Title, prayer.Body, formValues.nDate, formValues.nTime, formValues.frequency) // Add validation if notification is toggled on (date, time, freq required)
+          }
           this.globalServices.sendSuccessToast(`You successfully added a new prayer request "${prayer.Title}"`);
           this.request = prayer;
           this.ClosePopover()
@@ -148,6 +190,21 @@ export class EditPrayerCardComponent implements OnInit {
         console.log(formValues);
         this.prayerServices.updatePrayerAsObservable(this.request.Id, formValues.title, formValues.body, formValues.private, formValues.frequency, formValues.formTags).subscribe(prayer => {
           if (prayer) {
+            if (this.notificationToggle) { // If notification is toggled on, check if notification exists. If it does, update. If not, create new notification
+              if (this.localNotifications.isPresent(prayer.Id)) {
+                let notification;
+                notification = this.localNotifications.get(prayer.Id);
+                this.localNotifications.update(notification);
+              }
+              else {
+                this.scheduleNotification(prayer.Id, prayer.Title, prayer.Body, formValues.nDate, formValues.nTime, formValues.frequency) // Add validation if notification is toggled on (date, time, freq required)
+              }
+            }
+            else { // If toggled off, check if it exists. If it does, delete it
+              if (this.localNotifications.isPresent(prayer.Id)) {
+                this.localNotifications.clear(prayer.Id);
+              }
+            }
             this.globalServices.sendSuccessToast(`You successfully updated prayer request "${prayer.Title}"`);
             this.request = prayer;
             this.ClosePopover()
@@ -164,6 +221,15 @@ export class EditPrayerCardComponent implements OnInit {
         this.serverError = error;
       }
     }
+  }
+
+  dateChanged(date) {
+    console.log(date.detail.value);
+    console.log(this.myDate);
+  }
+
+  changeNotificationToggle() {
+    this.notificationToggle = !this.notificationToggle;
   }
 
 }
