@@ -27,12 +27,14 @@ const createPrayerController = async (request, response) => {
         const isprivate = request.body.isprivate;
         const userid = request.body.userId;
         const frequency = request.body.frequency;
+        const nDate = request.body.nDate;
+        const nTime = request.body.nTime;
         const tagids = request.body.tagIds;
         const sectionid = request.body.sectionId;
 
         console.log(sectionid);
 
-        let prayer = await prayerRequestServices.insertPrayer(title, body, isprivate, userid, frequency, sectionid);
+        let prayer = await prayerRequestServices.insertPrayer(title, body, isprivate, userid, frequency, nDate, nTime, sectionid);
         console.log(tagids);
         if (tagids.length != 0) await tagServices.insertPrayerTags(prayer.Id, tagids);
 

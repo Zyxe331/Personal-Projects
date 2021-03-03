@@ -40,6 +40,14 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.INTEGER,
 			allowNull: true
 		},
+		NotificationDate: {
+			type: DataTypes.STRING(40),
+			allowNull: true
+		},
+		NotificationTime: {
+			type: DataTypes.STRING(40),
+			allowNull: true
+		},
 		Section_Id: {
 			type: DataTypes.INTEGER,
 			allowNull: true,
