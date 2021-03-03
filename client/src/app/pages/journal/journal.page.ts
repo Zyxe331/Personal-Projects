@@ -12,7 +12,7 @@ import { GlobalProviderService } from 'src/app/services/global-provider.service'
 })
 export class JournalPage implements OnInit {
 
-  journal: Journal;
+  journal: Journal = new Journal();
   editMode: boolean = false;
   updateJournalForm: FormGroup;
   showErrors: boolean = false;
@@ -26,16 +26,22 @@ export class JournalPage implements OnInit {
     private journalService: JournalProviderService,
     private globalService: GlobalProviderService
   ) {
+
+  //Added functionality inside of that redirects the user back to the 
+  //journals page when the user tries to refresh while inside of an existing journal
     this.route.queryParams.subscribe(params => {
-      if (this.router.getCurrentNavigation().extras.state) {
-        this.journal = this.router.getCurrentNavigation().extras.state.journal;
+     if (this.router.getCurrentNavigation().extras.state) {
+       this.journal = this.router.getCurrentNavigation().extras.state.journal;
+     }
+      else {
+        this.router.navigate(['/journals'])
       }
-      // Creates the update Journal form with validators
+      //Creates the update Journal form with validators
       let thisJournal = this.journal;
       this.updateJournalForm = formBuilder.group({
-        title: [thisJournal.Title, Validators.compose([Validators.required])],
-        body: [thisJournal.Body, Validators.compose([Validators.required])],
-      });
+      title: [thisJournal.Title, Validators.compose([Validators.required])],
+      body: [thisJournal.Body, Validators.compose([Validators.required])],
+     });
     });
 
   }

@@ -71,7 +71,7 @@ export class EditPrayerCardComponent implements OnInit {
         LongFormattedDate: this.globalServices.createLongFormattedDate(newDate),
         User_Id: -1,
         Prayer_Schedule_Id: -1,
-        frequency: '',
+        Frequency: '',
         NotificationDate: this.globalServices.createShortFormattedDate(newDate),
         NotificationTime: ''
       }
@@ -84,7 +84,7 @@ export class EditPrayerCardComponent implements OnInit {
       formTags: new FormControl(this.tagIds),
       nDate: new FormControl(this.myDate),
       nTime: new FormControl(this.myTime),
-      frequency: new FormControl(this.request.frequency),
+      frequency: new FormControl(this.request.Frequency),
       private: new FormControl(this.request.IsPrivate)
     });
   }
