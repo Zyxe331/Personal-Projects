@@ -28,6 +28,7 @@ export class EditPrayerCardComponent implements OnInit {
   notificationToggle = false;
   minDate: any = (new Date()).getFullYear();
   maxDate: any = (new Date()).getFullYear() + 50;
+  myFrequency: any = '';
 
   showErrors: boolean = false;
   serverErrors: boolean = false;
@@ -49,6 +50,12 @@ export class EditPrayerCardComponent implements OnInit {
       this.tags = tags
     })
     if (this.request !== undefined) {
+      if (this.request.NotificationDate) {
+        this.myDate = new Date(this.request.NotificationDate).toISOString()
+        this.myTime = new Date(this.request.NotificationTime).toISOString()
+        this.myFrequency = this.request.Frequency;
+        this.changeNotificationToggle()
+      }
       this.prayerServices.getThisPrayersTagsAsObservable(this.request.Id).subscribe(tags => {
         this.prayerTags = tags
         tags.forEach(tag => {
@@ -188,7 +195,7 @@ export class EditPrayerCardComponent implements OnInit {
 
         // Send prayer form values to the server to insert journal
         console.log(formValues);
-        this.prayerServices.updatePrayerAsObservable(this.request.Id, formValues.title, formValues.body, formValues.private, formValues.frequency, formValues.formTags).subscribe(prayer => {
+        this.prayerServices.updatePrayerAsObservable(this.request.Id, formValues.title, formValues.body, formValues.private, formValues.frequency, formValues.formTags, formValues.nDate, formValues.nTime).subscribe(prayer => {
           if (prayer) {
             if (this.notificationToggle) { // If notification is toggled on, check if notification exists. If it does, update. If not, create new notification
               if (this.localNotifications.isPresent(prayer.Id)) {

@@ -47,14 +47,14 @@
   <!--Prayer Notification Toggle-->
   <ion-item id="prayernotificationtoggle" lines="none">
     <ion-label class="bold">Prayer Notification:</ion-label>
-    <ion-toggle (ionChange)="changeNotificationToggle()">Prayer Reminder</ion-toggle>
+    <ion-toggle (ionChange)="changeNotificationToggle()" checked={{notificationToggle}}>Prayer Reminder</ion-toggle>
   </ion-item>
   
   
   <!--Prayer Reminder-->
   <ion-item [disabled]="!notificationToggle" id="prayerdate" lines="none">
     <ion-label class="bold">Date:</ion-label>
-    <ion-datetime placeholder="Select Date" displayFormat="DD / MMM / YYYY" formControlName="nDate" [(ngModel)]="myDate" (ionchange)="dateChanged($event)" [min]="minDate" [max]="maxDate"></ion-datetime>     
+    <ion-datetime placeholder="Select Date" displayFormat="DD / MMM / YYYY" value={{myDate}} formControlName="nDate" [(ngModel)]="myDate" (ionchange)="dateChanged($event)" [min]="minDate" [max]="maxDate"></ion-datetime>     
     <ion-row class="ion-align-items-center ion-justify-content-center">
     </ion-row>    
   </ion-item>
@@ -68,7 +68,7 @@
     
   <ion-item [disabled]="!notificationToggle" id="prayertime" lines="none">
     <ion-label class="bold">Time:</ion-label>
-    <ion-datetime placeholder="Select Time" displayFormat="hh:mm A" formControlName="nTime" [(ngModel)]="myTime" (ionchange)="timeChanged($event)"></ion-datetime>
+    <ion-datetime placeholder="Select Time" displayFormat="hh:mm A" value={{myTime}} formControlName="nTime" [(ngModel)]="myTime" (ionchange)="timeChanged($event)"></ion-datetime>
     <ion-row class="ion-align-items-center ion-justify-content-center">
     </ion-row>    
   </ion-item>
@@ -82,7 +82,7 @@
 
   <ion-item  [disabled]="!notificationToggle" id="prayerrepeat" lines="none">
     <ion-label class="bold">Repeat:</ion-label>
-    <ion-select formControlName="frequency" placeholder="Select One">
+    <ion-select formControlName="frequency" value={{myFrequency}} placeholder="Select One">
       <ion-select-option value=1>
         Never
       </ion-select-option>

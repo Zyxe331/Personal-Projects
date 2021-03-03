@@ -84,7 +84,7 @@ const updatePrayerController = async (request, response) => {
         tagids = request.body.tagIds;
 
         console.log(tagids);
-        let prayer = await prayerRequestServices.updatePrayer(prayerid, title, body, isprivate, frequency);
+        let prayer = await prayerRequestServices.updatePrayer(prayerid, title, body, isprivate, frequency, nDate, nTime);
         let prayerTags = await tagServices.updatePrayerTags(prayerid, tagids);
 
         if (prayer) {
