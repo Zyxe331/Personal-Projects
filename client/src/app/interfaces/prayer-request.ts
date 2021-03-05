@@ -12,4 +12,5 @@ export class PrayerRequest {
     NotificationDate: string;
     NotificationTime: string;
     Frequency: string
+    Section_Id: number
 }

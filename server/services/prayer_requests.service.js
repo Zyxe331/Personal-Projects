@@ -41,7 +41,7 @@ const insertPrayer = async (title, body, isprivate, userid, frequency, Notificat
 const queryUserPrayers = async (userid) => {
 
     const db = new Database();
-    let prayers = await db.query(`SELECT pr.Id, pr.Title, pr.Body, pr.CreatedDate, pr.IsPrivate, pr.Resolved, pr.User_Id, pr.Frequency, pr.NotificationDate, pr.NotificationTime FROM PrayerRequest pr WHERE pr.User_Id = ${userid} ORDER BY pr.CreatedDate DESC`).catch(error => {
+    let prayers = await db.query(`SELECT pr.Id, pr.Title, pr.Body, pr.CreatedDate, pr.IsPrivate, pr.Resolved, pr.User_Id, pr.Frequency, pr.NotificationDate, pr.NotificationTime, pr.Section_Id FROM PrayerRequest pr WHERE pr.User_Id = ${userid} ORDER BY pr.CreatedDate DESC`).catch(error => {
         console.error(error);
         throw error;
     });

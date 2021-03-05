@@ -5,6 +5,7 @@ import { PrayerRequest } from '../../interfaces/prayer-request';
 import { GlobalProviderService } from 'src/app/services/global-provider.service';
 import { PopoverController } from '@ionic/angular';
 import { EditPrayerCardComponent } from 'src/app/components/edit-prayer-card/edit-prayer-card.component';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-prayer-requests',
@@ -13,7 +14,8 @@ import { EditPrayerCardComponent } from 'src/app/components/edit-prayer-card/edi
 })
 export class PrayerRequestsPage implements OnInit {
 
-  allRequests: PrayerRequest[];
+  //allRequests: PrayerRequest[];
+  allRequests$: Observable<PrayerRequest[]> = this.prayerService.fetchUsersPrayers()
   filteredRequests: PrayerRequest[];
   searchTerm: string;
 
@@ -44,12 +46,16 @@ export class PrayerRequestsPage implements OnInit {
    * @memberof PrayerRequestsPage
    */
   async getAndOrganizeData(thisPage) {
-    thisPage.allRequests = await thisPage.prayerService.getThisUsersPrayers();
-    thisPage.allRequests = thisPage.prayerService.setPrayersDates(thisPage.allRequests);
-    thisPage.filteredRequests = JSON.parse(JSON.stringify(thisPage.allRequests));
+    // thisPage.allRequests$.subscribe(requests => {
+    //   thisPage.filteredRequests = JSON.parse(JSON.stringify(requests))
+    // })
   }
 
   ngOnInit() {
+    this.prayerService.getThisUsersPrayersAsObservable().subscribe()
+    this.allRequests$.subscribe(requests => {
+      this.filteredRequests = requests
+    })
   }
 
   //Trigger prayer creation popup
@@ -61,6 +67,11 @@ export class PrayerRequestsPage implements OnInit {
       //event: ev,
       translucent: false
     });
+    popover.onDidDismiss().then(data => {
+      if (data.data != undefined) {
+        this.prayerService.getThisUsersPrayersAsObservable().subscribe()
+      }
+    })
     return await popover.present();
   }
 
@@ -74,11 +85,11 @@ export class PrayerRequestsPage implements OnInit {
   }
 
   filterItems() {
-    let searchTerm = this.searchTerm;
-    this.filteredRequests = JSON.parse(JSON.stringify(this.allRequests));
-    this.filteredRequests = this.filteredRequests.filter(journal => {
-      return journal.Title.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
-    });
+    this.allRequests$.subscribe(requests => {
+      this.filteredRequests = requests.filter(prayer => {
+        return prayer.Title.toLowerCase().includes(this.searchTerm.toLowerCase())
+      })
+    })
   }
 
 }

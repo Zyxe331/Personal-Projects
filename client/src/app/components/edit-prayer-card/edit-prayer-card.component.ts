@@ -56,7 +56,7 @@ export class EditPrayerCardComponent implements OnInit {
         this.myFrequency = this.request.Frequency;
         this.changeNotificationToggle()
       }
-      this.prayerServices.getThisPrayersTagsAsObservable(this.request.Id).subscribe(tags => {
+        this.prayerServices.getThisPrayersTagsAsObservable(this.request.Id).subscribe(tags => {
         this.prayerTags = tags
         tags.forEach(tag => {
           this.tagIds.push(tag.Tag_Id)
@@ -67,21 +67,11 @@ export class EditPrayerCardComponent implements OnInit {
     else {
       //create dummy data for creating a new prayer request
       let newDate = new Date()
-      this.request = {
-        Id: -1,
-        Title: '',
-        Body: '',
-        Resolved: false,
-        IsPrivate: true,
-        CreatedDate: newDate,
-        ShortFormattedDate: this.globalServices.createShortFormattedDate(newDate),
-        LongFormattedDate: this.globalServices.createLongFormattedDate(newDate),
-        User_Id: -1,
-        Prayer_Schedule_Id: -1,
-        Frequency: '',
-        NotificationDate: this.globalServices.createShortFormattedDate(newDate),
-        NotificationTime: ''
-      }
+      this.request = new PrayerRequest()
+      this.request.CreatedDate = newDate
+      this.request.ShortFormattedDate = this.globalServices.createShortFormattedDate(newDate)
+      this.request.LongFormattedDate = this.globalServices.createLongFormattedDate(newDate)
+      this.request.NotificationDate = this.globalServices.createShortFormattedDate(newDate)
     }
 
     // Creates the edit prayer form with validators
@@ -97,7 +87,7 @@ export class EditPrayerCardComponent implements OnInit {
   }
 
   ClosePopover() {
-    this.popover.dismiss({request: this.request})
+    this.popover.dismiss({request: this.request, tags: this.prayerTags})
   }
 
   cancel() {
@@ -165,7 +155,7 @@ export class EditPrayerCardComponent implements OnInit {
       this.showErrors = true;
       return
     }
-    if (this.request.Id === -1) { // If it's a new prayer request submit a new one
+    if (this.request.Id === undefined) { // If it's a new prayer request submit a new one
       try {
 
         // Send journal form values to the server to insert journal
