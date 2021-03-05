@@ -14,7 +14,7 @@ const queryAllPrayerSchedules = async () => {
     return schedules;
 }
 
-const insertPrayer = async (title, body, isprivate, userid, frequency, nDate, nTime, sectionid) => {
+const insertPrayer = async (title, body, isprivate, userid, frequency, NotificationDate, NotificationTime, sectionid) => {
     let now = utils.toMysqlFormat(new Date());
     title = title.replace('\'', '\'\'');
     body = body.replace('\'', '\'\'');
@@ -24,7 +24,7 @@ const insertPrayer = async (title, body, isprivate, userid, frequency, nDate, nT
     }
 
     const db = new Database();
-    let result = await db.query(`INSERT INTO PrayerRequest (Title, Body, IsPrivate, Resolved, CreatedDate, User_Id, Frequency, NotificationDate, NotificationTime, Section_Id ) VALUES ('${title}', '${body}', ${isprivate}, false, '${now}', ${userid}, ${frequency}, '${nDate}', '${nTime}', ${sectionid})`).catch(error => {
+    let result = await db.query(`INSERT INTO PrayerRequest (Title, Body, IsPrivate, Resolved, CreatedDate, User_Id, Frequency, NotificationDate, NotificationTime, Section_Id ) VALUES ('${title}', '${body}', ${isprivate}, false, '${now}', ${userid}, ${frequency}, '${NotificationDate}', '${NotificationTime}', ${sectionid})`).catch(error => {
         console.error(error);
         throw error;
     });
@@ -63,14 +63,14 @@ const querySectionsPrayers = async (userid, sectionIds) => {
 
 }
 
-const updatePrayer = async (prayerid, title, body, isprivate, prayerscheduleid, nDate, nTime) => {
+const updatePrayer = async (prayerid, title, body, isprivate, prayerscheduleid, NotificationDate, NotificationTime) => {
     title = title.replace('\'', '\'\'');
     body = body.replace('\'', '\'\'');
 
     let journal;
     try {
         const db = new Database();
-        let result = await db.query(`UPDATE PrayerRequest SET Title = '${title}', Body = '${body}', IsPrivate = ${isprivate}, Frequency = ${prayerscheduleid}, NotificationDate = ${nDate}, NotificationTime = ${nTime} WHERE Id = ${prayerid}`);
+        let result = await db.query(`UPDATE PrayerRequest SET Title = '${title}', Body = '${body}', IsPrivate = ${isprivate}, Frequency = ${prayerscheduleid}, NotificationDate = '${NotificationDate}', NotificationTime = '${NotificationTime}' WHERE Id = ${prayerid}`);
         let rows = await db.query(`SELECT pr.Id, pr.Title, pr.Body, pr.CreatedDate, pr.IsPrivate, pr.Resolved, pr.User_Id, pr.Frequency, pr.NotificationDate, pr.NotificationTime FROM PrayerRequest pr WHERE pr.Id = ${prayerid} ORDER BY pr.CreatedDate DESC`);
         db.close();
         if (rows.length === 1) {

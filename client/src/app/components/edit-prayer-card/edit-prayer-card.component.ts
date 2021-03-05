@@ -89,8 +89,8 @@ export class EditPrayerCardComponent implements OnInit {
       title: new FormControl(this.request.Title, Validators.compose([Validators.required])),
       body: new FormControl(this.request.Body, Validators.compose([Validators.required])),
       formTags: new FormControl(this.tagIds),
-      nDate: new FormControl(this.myDate),
-      nTime: new FormControl(this.myTime),
+      NotificationDate: new FormControl(this.myDate),
+      NotificationTime: new FormControl(this.myTime),
       frequency: new FormControl(this.request.Frequency),
       private: new FormControl(this.request.IsPrivate)
     });
@@ -149,7 +149,7 @@ export class EditPrayerCardComponent implements OnInit {
     id: prayerID, 
      title: prayerTitle,
     text: prayerBody,
-    trigger: {at: notificationDate + notificationTime, every: freq}
+    trigger: {at: new Date(notificationTime), every: freq}
     })
     console.log('Successfully scheduled notification');
   }
@@ -169,10 +169,10 @@ export class EditPrayerCardComponent implements OnInit {
       try {
 
         // Send journal form values to the server to insert journal
-        this.prayerServices.addPrayerAsObservable(formValues.title, formValues.body, formValues.private, formValues.formTags, this.sectionId, formValues.nDate, formValues.nTime, formValues.frequency).subscribe(prayer => {
+        this.prayerServices.addPrayerAsObservable(formValues.title, formValues.body, formValues.private, formValues.formTags, this.sectionId, formValues.NotificationDate, formValues.NotificationTime, formValues.frequency).subscribe(prayer => {
           if (this.notificationToggle) {
             console.log('Creating prayer notification');
-            this.scheduleNotification(prayer.Id, prayer.Title, prayer.Body, formValues.nDate, formValues.nTime, formValues.frequency) // Add validation if notification is toggled on (date, time, freq required)
+            this.scheduleNotification(prayer.Id, prayer.Title, prayer.Body, formValues.NotificationDate, formValues.NotificationTime, formValues.frequency) // Add validation if notification is toggled on (date, time, freq required)
           }
           this.globalServices.sendSuccessToast(`You successfully added a new prayer request "${prayer.Title}"`);
           this.request = prayer;
@@ -195,7 +195,7 @@ export class EditPrayerCardComponent implements OnInit {
 
         // Send prayer form values to the server to insert journal
         console.log(formValues);
-        this.prayerServices.updatePrayerAsObservable(this.request.Id, formValues.title, formValues.body, formValues.private, formValues.frequency, formValues.formTags, formValues.nDate, formValues.nTime).subscribe(prayer => {
+        this.prayerServices.updatePrayerAsObservable(this.request.Id, formValues.title, formValues.body, formValues.private, formValues.frequency, formValues.formTags, formValues.NotificationDate, formValues.NotificationTime).subscribe(prayer => {
           if (prayer) {
             if (this.notificationToggle) { // If notification is toggled on, check if notification exists. If it does, update. If not, create new notification
               if (this.localNotifications.isPresent(prayer.Id)) {
@@ -204,7 +204,7 @@ export class EditPrayerCardComponent implements OnInit {
                 this.localNotifications.update(notification);
               }
               else {
-                this.scheduleNotification(prayer.Id, prayer.Title, prayer.Body, formValues.nDate, formValues.nTime, formValues.frequency) // Add validation if notification is toggled on (date, time, freq required)
+                this.scheduleNotification(prayer.Id, prayer.Title, prayer.Body, formValues.NotificationDate, formValues.NotificationTime, formValues.frequency) // Add validation if notification is toggled on (date, time, freq required)
               }
             }
             else { // If toggled off, check if it exists. If it does, delete it

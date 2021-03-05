@@ -54,12 +54,12 @@
   <!--Prayer Reminder-->
   <ion-item [disabled]="!notificationToggle" id="prayerdate" lines="none">
     <ion-label class="bold">Date:</ion-label>
-    <ion-datetime placeholder="Select Date" displayFormat="DD / MMM / YYYY" value={{myDate}} formControlName="nDate" [(ngModel)]="myDate" (ionchange)="dateChanged($event)" [min]="minDate" [max]="maxDate"></ion-datetime>     
+    <ion-datetime placeholder="Select Date" displayFormat="DD / MMM / YYYY" value={{myDate}} formControlName="NotificationDate" [(ngModel)]="myDate" (ionchange)="dateChanged($event)" [min]="minDate" [max]="maxDate"></ion-datetime>     
     <ion-row class="ion-align-items-center ion-justify-content-center">
     </ion-row>    
   </ion-item>
   <ion-row class="ion-align-items-center ion-justify-content-center">
-    <ion-text color="danger" *ngIf="notificationToggle && editRequestForm.controls.nDate.hasError('required') && showErrors">
+    <ion-text color="danger" *ngIf="notificationToggle && editRequestForm.controls.NotificationDate.hasError('required') && showErrors">
       <p class="ion-no-margin">
         <ion-icon name="alert"></ion-icon> Please enter a reminder date.
       </p>
@@ -68,12 +68,12 @@
     
   <ion-item [disabled]="!notificationToggle" id="prayertime" lines="none">
     <ion-label class="bold">Time:</ion-label>
-    <ion-datetime placeholder="Select Time" displayFormat="hh:mm A" value={{myTime}} formControlName="nTime" [(ngModel)]="myTime" (ionchange)="timeChanged($event)"></ion-datetime>
+    <ion-datetime placeholder="Select Time" displayFormat="hh:mm A" value={{myTime}} formControlName="NotificationTime" [(ngModel)]="myTime" (ionchange)="timeChanged($event)"></ion-datetime>
     <ion-row class="ion-align-items-center ion-justify-content-center">
     </ion-row>    
   </ion-item>
   <!-- <ion-row class="ion-align-items-center ion-justify-content-center">
-    <ion-text color="danger" *ngIf="!nTime">
+    <ion-text color="danger" *ngIf="!NotificationTime">
       <p class="ion-no-margin">
         <ion-icon name="alert"></ion-icon> Please enter a reminder time.
       </p>
