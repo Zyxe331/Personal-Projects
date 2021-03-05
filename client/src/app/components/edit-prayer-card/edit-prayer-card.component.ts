@@ -39,7 +39,7 @@ export class EditPrayerCardComponent implements OnInit {
     this.tagService.getAllTagsAsObservable().subscribe(tags => {
       this.tags = tags
     })
-    if (this.request !== undefined) {
+    if (this.request != undefined) {
       this.prayerServices.getThisPrayersTagsAsObservable(this.request.Id).subscribe(tags => {
         this.prayerTags = tags
         tags.forEach(tag => {
@@ -111,7 +111,7 @@ export class EditPrayerCardComponent implements OnInit {
       this.showErrors = true;
       return
     }
-    if (this.request.Id === -1) { // If it's a new prayer request submit a new one
+    if (this.request.Id === undefined) { // If it's a new prayer request submit a new one
       try {
 
         // Send journal form values to the server to insert journal
