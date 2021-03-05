@@ -10,9 +10,9 @@ import { AddJournalPage } from '../add-journal/add-journal.page';
 import { Journal } from 'src/app/interfaces/journal';
 import { PrayerRequest } from 'src/app/interfaces/prayer-request';
 import { Tag } from 'src/app/interfaces/tag';
-import { async } from '@angular/core/testing';
 import { GlobalProviderService } from 'src/app/services/global-provider.service';
 import { EditPrayerCardComponent } from 'src/app/components/edit-prayer-card/edit-prayer-card.component';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -26,8 +26,9 @@ export class SectionPage implements OnInit {
   section: Section;
   contentCycleName: string;
   journals: Journal[] = [];
-  prayers: PrayerRequest[] = [];
   tag: Tag;
+  allPrayers$: Observable<PrayerRequest[]> = this.prayerService.fetchUsersPrayers()
+  filteredPrayers: PrayerRequest[]
 
   get showSpinner() {
     return this.globalServices.showSpinner;
@@ -69,26 +70,17 @@ export class SectionPage implements OnInit {
     thisPage.section = thisPage.contentCycleService.orderedSections[thisPage.sectionIndex];
     thisPage.contentCycleName = thisPage.contentCycleService.currentPlan.Title;
     thisPage.journals = thisPage.setJournals(thisPage.contentCycleService.sectionJournalsBySection[thisPage.section.Id]);
-    thisPage.prayers = thisPage.setPrayers(thisPage.contentCycleService.sectionPrayersBySection[thisPage.section.Id]);
     await thisPage.contentCycleService.updateUserHasPlan(thisPage.section.Id, thisPage.contentCycleService.userPlan.Times_Completed);
   }
 
-  async ngOnInit() {
-    
-  }
-
-  async getTags() {
-    //await this.tagService.get
-  }
-
-  setPrayers(passedInPrayers) {
-    if (passedInPrayers) {
-      passedInPrayers = this.prayerService.setPrayersDates(passedInPrayers);
-    } else {
-      passedInPrayers = [];
-    }
-
-    return passedInPrayers
+  ngOnInit() {
+    this.sectionIndex = +this.route.snapshot.paramMap.get('sectionNumber')
+    this.section = this.contentCycleService.orderedSections[this.sectionIndex]
+    this.prayerService.getThisUsersPrayersAsObservable().subscribe()
+    this.allPrayers$.subscribe(prayers => {
+      console.log('Prayers: ', prayers)
+      this.filteredPrayers = prayers.filter(prayer => prayer.Section_Id === this.section.Id)
+    })
   }
 
   setJournals(passedInJournals) {
@@ -192,6 +184,11 @@ export class SectionPage implements OnInit {
       //event: ev,
       translucent: false
     });
+    popover.onDidDismiss().then(data => {
+      if (data.data != undefined) {
+        this.prayerService.getThisUsersPrayersAsObservable().subscribe()
+      }
+    })
     return await popover.present();
   }
 
