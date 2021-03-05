@@ -75,9 +75,11 @@ This means that any custom styles need to go in a global stylesheet file. */
 }
 
 .generic-popup .popover-content {
-    min-width: 300px
+    width: 90%;
+    max-height: 90%;
 }
 
 .ios .generic-popup .popover-content {
-    min-width: 310px
+    width: 90%;
+    max-height: 90%;
 }
