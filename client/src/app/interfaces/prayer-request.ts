@@ -10,4 +10,5 @@ export class PrayerRequest {
     User_Id: number
     Prayer_Schedule_Id: number
     Frequency: string
+    Section_Id: number
 }

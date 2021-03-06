@@ -7,12 +7,14 @@ import { PrayerSchedule } from '../interfaces/prayer-schedule';
 import { Tag } from 'src/app/interfaces/tag';
 import { GlobalProviderService } from '../services/global-provider.service';
 import { PrayerTag } from '../interfaces/prayer-tag';
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PrayerRequestProviderService {
+  private userPrayers$: Subject<PrayerRequest[]> = new ReplaySubject<PrayerRequest[]>(1)
 
   constructor(
     private globalServices: GlobalProviderService,
@@ -49,6 +51,25 @@ export class PrayerRequestProviderService {
     })
   }
 
+  /**
+   * Returns all prayer requests for the current user as an observable
+   *
+   * @returns {Observable<PrayerRequest[]>}
+   * @memberof PrayerRequestProviderService
+   */
+  getThisUsersPrayersAsObservable(): Observable<void> { // Triggers prayer list to be updated and sent to the prayer subject.
+    // Call this function when a new prayer is added to the list.
+    let userId = this.userServices.currentUser.Id;
+    // Ask the server to get all prayers
+    return this.http.get<PrayerRequest[]>(SERVER_URL + 'prayer-requests/' + userId, {}).pipe(map((res: PrayerRequest[]) => {
+      this.userPrayers$.next(res)
+    }))
+  }
+
+  fetchUsersPrayers(): Observable<PrayerRequest[]> {
+    return this.userPrayers$.asObservable()
+  }
+
   async getThisPrayersTags(prayerId: number): Promise<PrayerTag[]> {
 
     let _this = this;
@@ -71,8 +92,8 @@ export class PrayerRequestProviderService {
   }
 
   getThisPrayersTagsAsObservable(prayerId: number): Observable<PrayerTag[]> {
-        // Ask the server to get all tags for the prayer
-        return this.http.get<PrayerTag[]>(SERVER_URL + 'tags/' + prayerId)
+    // Ask the server to get all tags for the prayer
+    return this.http.get<PrayerTag[]>(SERVER_URL + 'tags/' + prayerId)
   }
 
   /**

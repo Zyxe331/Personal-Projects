@@ -84,7 +84,7 @@
 
       <ion-card-content class="ion-text-center">
         <ion-list>
-          <ion-item lines="full" detail *ngFor="let prayer of prayers" (click)="goToPrayer(prayer)">
+          <ion-item lines="full" detail *ngFor="let prayer of filteredPrayers" (click)="goToPrayer(prayer)">
             <ion-text style="width: 15%;" color="medium" slot="start">{{prayer.ShortFormattedDate}}</ion-text>
             <ion-label>{{prayer.Title}}</ion-label>
           </ion-item>
