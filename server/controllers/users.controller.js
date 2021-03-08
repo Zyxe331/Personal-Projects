@@ -132,9 +132,33 @@ const updateUserController = async (request, response) => {
     }
 }
 
+const getuserGroups = async (request, response) => {
+    try{
+    let currentuserid = request.params.currentuserid;
+    
+    let userGroups = await userServices.getGroups(currentuserid);
+    // TODO: control responses for errors and what not
+    // TODO: return user groups to response
+    // If a user has no groups, return a 201
+        if (!userGroups || userGroups === undefined){
+            return response.status(201).send('You are not with any groups!');
+            
+        }
+        else{
+            // Success message
+            return response.status(200).send(userGroups);
+        
+        }
+    }catch (error) {
+        response.status(500).send('Something went wrong internally');
+    }
+
+}
+
 module.exports = {
     loginController: loginController,
     verifyAuthController: verifyAuthController,
     registerController: registerController,
-    updateUserController: updateUserController
+    updateUserController: updateUserController,
+    getuserGroups: getuserGroups
 }

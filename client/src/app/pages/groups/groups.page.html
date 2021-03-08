@@ -1,7 +1,7 @@
 <ion-header>
 <ion-toolbar>
     <ion-buttons slot="start">
-        <ion-button [routerLink]="'/add-journal'">
+        <ion-button [routerLink]="'/change-content-cycle'">
             <ion-icon slot="icon-only" name="add"></ion-icon>
         </ion-button>
     </ion-buttons>
@@ -13,8 +13,29 @@
 </ion-header>
 
 <ion-content>
-    <ion-searchbar animated placeholder="Search Groups"></ion-searchbar>
-    <ion-list>
+
+
+   <ion-grid *ngIf="showSpinner" class="height100">
+        <ion-row class="align-items-center height100">
+          <ion-col class="ion-align-self-center ion-text-center" size="12">
+            <ion-spinner name="dots" color="tertiary"></ion-spinner>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    
+      <div *ngIf="!showSpinner">
+        <ion-searchbar animated placeholder="Search Groups" [(ngModel)]="searchTerm"
+            (ionChange)="filterItems()"></ion-searchbar>
+        <ion-list>
+          <ion-item lines="full" detail *ngFor="let Group of filtered" (click)="goToPage(request)">
+            <ion-text style="width: 15%;" color="medium" slot="start">{{group.ShortFormattedDate}}</ion-text>
+            <ion-label>{{group.Name}}</ion-label>
+          </ion-item>
+        </ion-list>
+      </div> 
+
+<!--
+        <ion-list>
 
         <ion-item>
             <ion-avatar slot="start">
@@ -60,5 +81,5 @@
             </ion-label>
         </ion-item>
     </ion-list>
-
+-->
 </ion-content>
