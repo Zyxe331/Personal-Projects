@@ -72,6 +72,7 @@ export class EditPrayerCardComponent implements OnInit {
       this.request.ShortFormattedDate = this.globalServices.createShortFormattedDate(newDate)
       this.request.LongFormattedDate = this.globalServices.createLongFormattedDate(newDate)
       this.request.NotificationDate = this.globalServices.createShortFormattedDate(newDate)
+      this.request.IsPrivate = true
     }
 
     // Creates the edit prayer form with validators

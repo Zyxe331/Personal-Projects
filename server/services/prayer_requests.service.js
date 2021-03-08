@@ -14,7 +14,7 @@ const queryAllPrayerSchedules = async () => {
     return schedules;
 }
 
-const insertPrayer = async (title, body, isprivate, userid, frequency, NotificationDate, NotificationTime, sectionid) => {
+const insertPrayer = async (title, body, isprivate, resolved, CreatedDate, userid, NotificationDate, NotificationTime, frequency, sectionid) => {
     let now = utils.toMysqlFormat(new Date());
     title = title.replace('\'', '\'\'');
     body = body.replace('\'', '\'\'');
@@ -24,7 +24,7 @@ const insertPrayer = async (title, body, isprivate, userid, frequency, Notificat
     }
 
     const db = new Database();
-    let result = await db.query(`INSERT INTO PrayerRequest (Title, Body, IsPrivate, Resolved, CreatedDate, User_Id, Frequency, NotificationDate, NotificationTime, Section_Id ) VALUES ('${title}', '${body}', ${isprivate}, false, '${now}', ${userid}, ${frequency}, '${NotificationDate}', '${NotificationTime}', ${sectionid})`).catch(error => {
+    let result = await db.query(`INSERT INTO PrayerRequest (Title, Body, IsPrivate, Resolved, CreatedDate, User_Id, NotificationDate, NotificationTime, Frequency, Section_Id ) VALUES ('${title}', '${body}', ${isprivate}, false, '${now}', ${userid}, '${NotificationDate}', '${NotificationTime}', ${frequency}, ${sectionid})`).catch(error => {
         console.error(error);
         throw error;
     });

@@ -144,17 +144,17 @@ export class PrayerRequestProviderService {
     })
   }
 
-  addPrayerAsObservable(title: string, body: string, isprivate: boolean, tagIds: number[], sectionId: number, frequency?: number, NotificationDate?: string, NotificationTime?: string): Observable<PrayerRequest> {
+  addPrayerAsObservable(title: string, body: string, isprivate: boolean, tagIds: number[], sectionId: number, NotificationDate?: string, NotificationTime?: string, frequency?: number): Observable<PrayerRequest> {
     let requestBody = {
       title: title,
       body: body,
       isprivate: isprivate,
       userId: this.userServices.currentUser.Id,
       tagIds: tagIds,
-      sectionId: sectionId,
       NotificationDate: NotificationDate,
       NotificationTime: NotificationTime,
-      frequency: frequency
+      frequency: frequency,
+      sectionId: sectionId
     }
 
     console.log(sectionId);
