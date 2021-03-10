@@ -159,6 +159,7 @@ export class UserProviderService {
    */
   async logout() {
     await this.storage.set("ACCESS_TOKEN", '');
+    await this.storage.clear();
     this.router.navigate(['/login']);
   }
 
