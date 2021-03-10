@@ -135,25 +135,6 @@ export class SectionPage implements OnInit {
     return await modal.present();
   }
 
-  // DEPRECIATED
-  // async openCreatePrayerModal() {
-  //   const modal = await this.modalController.create({
-  //     component: AddPrayerRequestPage,
-  //     componentProps: {
-  //       'sectionId': this.section.Id,
-  //     }
-  //   });
-
-  //   let _this = this;
-  //   modal.onDidDismiss().then( async (dataReturned) => {
-  //     if (dataReturned !== null) {
-  //       await _this.globalServices.loadContent(_this, _this.getAndOrganizeData);
-  //     }
-  //   });
-
-  //   return await modal.present();
-  // }
-
   goToJournal(journal) {
     let navigationExtras: NavigationExtras = {
       state: {
