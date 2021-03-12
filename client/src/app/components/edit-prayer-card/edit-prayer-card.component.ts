@@ -7,7 +7,7 @@ import { GlobalProviderService } from 'src/app/services/global-provider.service'
 import { PrayerRequestProviderService } from 'src/app/services/prayer-request-provider.service';
 import { TagProviderService } from 'src/app/services/tag-provider.service';
 import { PrayerRequest } from '../../interfaces/prayer-request';
-import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import { ELocalNotificationTriggerUnit, LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { Timestamp } from 'rxjs/internal/operators/timestamp';
 
 @Component({
@@ -140,9 +140,17 @@ export class EditPrayerCardComponent implements OnInit {
     id: prayerID, 
      title: prayerTitle,
     text: prayerBody,
-    trigger: {at: new Date(notificationTime), every: freq}
+    trigger: {at: new Date(new Date(notificationTime).getTime()), every: freq}
     })
     console.log('Successfully scheduled notification');
+  }
+  scheduleNotificationNow() {
+    this.localNotifications.schedule({
+    id: 777, 
+     title: "Test notification",
+    text: "This is a test for an immediate notification",
+    trigger: { in: 5, unit: ELocalNotificationTriggerUnit.SECOND }
+    })
   }
 
   submit() {
