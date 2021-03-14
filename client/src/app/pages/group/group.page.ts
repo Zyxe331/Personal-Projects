@@ -3,11 +3,13 @@ import { Group } from 'src/app/interfaces/group';
 import { User } from 'src/app/interfaces/user';
 import { ChatProviderService } from 'src/app/services/chat-provider.service';
 import { UserProviderService } from 'src/app/services/user-provider.service';
-import { ToastController, AlertController } from '@ionic/angular';
+import { ToastController, AlertController, PopoverController } from '@ionic/angular';
 import { UserGroup } from 'src/app/interfaces/user-group';
 import { ContentCycleProviderService } from 'src/app/services/content-cycle-provider.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalProviderService } from 'src/app/services/global-provider.service';
+import { ChangeCyclePopoverComponent } from '../content-cycle/change-cycle-popover/change-cycle-popover.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-group',
@@ -39,7 +41,9 @@ export class GroupPage implements OnInit {
     private toastController: ToastController,
     public formBuilder: FormBuilder,
     private globalServices: GlobalProviderService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private popoverController: PopoverController,
+    private router: Router
   ) {
 
   }
@@ -204,5 +208,24 @@ export class GroupPage implements OnInit {
     } catch (e) {
       console.log(e);
     }
+  }
+
+  //Trigger confirmation popup
+  async presentPopover(ev: any, grpId) {
+    const popover = await this.popoverController.create({
+      component: ChangeCyclePopoverComponent,
+      componentProps: {
+        groupId: grpId
+      },
+      showBackdrop:true,
+      cssClass: 'change-cycle-popup',
+      event: ev,
+      translucent: false
+    });
+    return await popover.present();
+  }
+
+  joinNewGroup() {
+    this.router.navigate(['/change-content-cycle'])
   }
 }
