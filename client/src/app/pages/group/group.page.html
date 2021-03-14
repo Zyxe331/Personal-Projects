@@ -64,6 +64,7 @@
 
             </ion-item>
           </ion-list>
+          <ion-button fill="clear" class="changeCycleBtn" (click)="presentPopover($event)">Leave Group</ion-button>
         </ion-card-content>
       </ion-card>
     </div>
@@ -119,6 +120,9 @@
         </ion-card-content>
       </form>
     </ion-card>
+    <div class="ion-text-center joinGroup">
+      <ion-button fill="solid" color="primary" class="changeCycleBtn" (click)="presentPopover($event)">Join New Group</ion-button>
+    </div>
   </div>
 
 </ion-content>
