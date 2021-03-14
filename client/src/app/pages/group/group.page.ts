@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ComponentFactoryResolver, OnInit } from '@angular/core';
 import { Group } from 'src/app/interfaces/group';
 import { User } from 'src/app/interfaces/user';
 import { ChatProviderService } from 'src/app/services/chat-provider.service';
@@ -45,7 +45,17 @@ export class GroupPage implements OnInit {
   }
 
   ngOnInit() {
-    
+    this.groupServices.getCurrentGroupInformationAsObservable().subscribe(res => {
+      this.currentGroup = res.currentGroup;
+      this.groupMembers = res.groupUsers;
+      this.currentUserGroup = res.currentUserHasGroup;
+      this.currentUserPlanProgress = (this.cycleServices.currentSectionIndex / this.cycleServices.orderedSections.length) + this.cycleServices.userPlan.Times_Completed;
+      this.groupMembers.forEach(member => member.StopNudge = false);
+      this.createGroupMembers();
+      this.updateGroupForm = this.formBuilder.group({
+      name: [this.currentGroup.Name, Validators.compose([Validators.required])]
+      });
+    });
   }
 
   /**
@@ -64,17 +74,17 @@ export class GroupPage implements OnInit {
    * @memberof GroupPage
    */
   async getAndOrganizeData(thisPage) { 
-    await thisPage.groupServices.getCurrentGroupInformation();
-    thisPage.currentGroup = thisPage.groupServices.currentGroup;
-    thisPage.groupMembers = thisPage.groupServices.groupUsers;
-    thisPage.currentUserGroup = thisPage.groupServices.userGroup;
-    thisPage.currentUserPlanProgress = (thisPage.cycleServices.currentSectionIndex / thisPage.cycleServices.orderedSections.length) + thisPage.cycleServices.userPlan.Times_Completed;
+    // await thisPage.groupServices.getCurrentGroupInformation();
+    // thisPage.currentGroup = thisPage.groupServices.currentGroup;
+    // thisPage.groupMembers = thisPage.groupServices.groupUsers;
+    // thisPage.currentUserGroup = thisPage.groupServices.userGroup;
+    // thisPage.currentUserPlanProgress = (thisPage.cycleServices.currentSectionIndex / thisPage.cycleServices.orderedSections.length) + thisPage.cycleServices.userPlan.Times_Completed;
 
-    thisPage.groupMembers.forEach(member => member.StopNudge = false);
-    thisPage.createGroupMembers();
-    thisPage.updateGroupForm = thisPage.formBuilder.group({
-      name: [thisPage.currentGroup.Name, Validators.compose([Validators.required])]
-    });
+    // thisPage.groupMembers.forEach(member => member.StopNudge = false);
+    // thisPage.createGroupMembers();
+    // thisPage.updateGroupForm = thisPage.formBuilder.group({
+    //   name: [thisPage.currentGroup.Name, Validators.compose([Validators.required])]
+    // });
   }
 
   async nudgeUser(nudgedUser) {
