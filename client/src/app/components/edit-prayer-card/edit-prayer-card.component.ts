@@ -137,11 +137,12 @@ export class EditPrayerCardComponent implements OnInit {
     else if (notificationFrequency == 4) freq = {month:1}
     else if (notificationFrequency == 5) freq = {year:1}
     this.localNotifications.schedule({
-    id: prayerID, 
-     title: prayerTitle,
-    text: prayerBody,
-    trigger: {at: new Date(new Date(notificationTime).getTime()), every: freq}
+      id: prayerID, 
+      title: prayerTitle,
+      text: prayerBody,
+      trigger: { firstAt: new Date(notificationTime) } //, every: freq}
     })
+    console.log('Notification time used: ', new Date(notificationTime));
     console.log('Successfully scheduled notification');
   }
   scheduleNotificationNow() {
