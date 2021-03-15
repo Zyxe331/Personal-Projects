@@ -98,10 +98,6 @@ const officiallyJoinGroup = async (request, response) => {
             return response.status(200).send(true);
         }
 
-        await contentCycleServices.deactivateActiveUserHasPlans(requestingUserId);
-
-        await chatServices.deactivateActiveUserHasGroups(requestingUserId);
-
         let group = await chatServices.getCurrentGroup(groupNumber);
 
         let firstSection = await contentCycleServices.getFirstSectionOfPlan(group.Plan_Id);

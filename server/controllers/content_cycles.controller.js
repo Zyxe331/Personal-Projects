@@ -12,10 +12,6 @@ const subscribeToPlan = async (request, response) => {
 
     try {
 
-        await contentCycleServices.deactivateActiveUserHasPlans(userid);
-
-        await chatServices.deactivateActiveUserHasGroups(userid);
-
         let firstSection = await contentCycleServices.getFirstSectionOfPlan(plan.Id);
         console.log(firstSection);
 
@@ -111,6 +107,83 @@ const getCurrentUserPlanInformation = async (request, response) => {
 
         let sectionPrayersBySection = groupById(sectionPrayers);
         responseBody.sectionPrayersBySection = sectionPrayersBySection;
+
+        // Send success message
+        return response.status(200).send(responseBody);
+    } catch (error) {
+        console.log(error);
+        return response.status(500).send('Something went wrong internally');
+    }
+
+}
+
+const getAllUserActivePlans = async (request, response) => {
+
+    try {
+
+        let userid = request.params.userid;
+
+        function Plan(currentPlan, allSections, currentUserHasPlan, sectionJournalsBySection, sectionPrayersBySection, errorMessage) {
+            this.currentPlan = currentPlan
+            this.allSections = allSections
+            this.currentUserHasPlan = currentUserHasPlan
+            this.sectionJournalsBySection = sectionJournalsBySection
+            this.sectionPrayersBySection = sectionPrayersBySection
+            this.errorMessage = errorMessage
+        }
+
+        let userHasPlans = await contentCycleServices.getAllUserActivePlans(userid);
+        userHasPlans.forEach(async (plan) => {
+            let errorMessage = ''
+            if (!plan) {
+                errorMessage = 'User not connected to a plan';
+                return response.status(200).send(responseBody);
+            }
+    
+            let planInfo = await contentCycleServices.getCurrentPlan(userHasPlan.Plan_Id);
+            // responseBody.currentPlan = plan;
+    
+            if (!planInfo) {
+                errorMessage = 'Plan missing'
+                return response.status(204).send(responseBody);
+            }
+    
+            let sections = await contentCycleServices.getPlansSections(userHasPlan.Plan_Id);
+            // responseBody.allSections = sections;
+    
+            if (!sections || sections === undefined) {
+                errorMessage = 'Error finding sections'
+                return response.status(204).send(responseBody);
+            }
+
+            let sectionIds = Array.from(sections, item => item.Id);
+            const groupById = utils.groupBy('Section_Id');
+
+            let sectionTags = await tagServices.querySectionsTags(sectionIds);
+            let sectionTagsBySection = groupById(sectionTags);
+
+            let sectionJournals = await journalServices.querySectionsJournals(userid, sectionIds); 
+
+            if (!sectionJournals || sectionJournals === undefined) {
+                errorMessage = 'Error finding journals for sections'
+                return response.status(204).send(responseBody);
+            }
+
+            let sectionPrayers = await prayerServices.querySectionsPrayers(userid, sectionIds);
+
+            if (!sectionPrayers || sectionPrayers === undefined) {
+                errorMessage = 'Error finding prayers for sections'
+                return response.status(204).send(responseBody);
+            }
+
+            let sectionJournalsBySection = groupById(sectionJournals);
+            responseBody.sectionJournalsBySection = sectionJournalsBySection;
+
+            let sectionPrayersBySection = groupById(sectionPrayers);
+            responseBody.sectionPrayersBySection = sectionPrayersBySection;
+
+            let nfikorff = new Plan(planInfo, sections)
+        })
 
         // Send success message
         return response.status(200).send(responseBody);

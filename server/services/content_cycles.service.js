@@ -63,6 +63,29 @@ const getCurrentUserHasPlan = async (userid) => {
     return userHasPlan[0];
 }
 
+const getAllUserActivePlans = async (userid) => {
+    const db = new Database();
+    let userPlans = await db.query(`SELECT * FROM User_has_Plan WHERE User_Id = ${userid} AND Active = 1`).catch(error => {
+        console.error(error);
+        throw error;
+    });
+    // let planIdList = '('
+    // for(let i = 0; i < userPlans.length; i++) {
+    //     if( i == 0) {
+    //         planIdList = planIdList.concat(`'${plan.Plan_id}'`)
+    //     }
+    //     else {
+    //         planIdList = planIdList.concat(`, '${plan.Plan_id}'`)
+    //     }
+    // }
+    // planIdList = planIdList.concat(')')
+    // let planDetails = await db.query(`SELECT * FROM Plan WHERE Id IN ${planIdList}`)
+    // let planDetails = await db.query(`SELECT * FROM Plan WHERE Id IN ${planIdList}`)
+    db.close();
+
+    return userPlans;
+}
+
 const getCurrentPlan = async (planid) => {
     const db = new Database();
     let plan = await db.query(`SELECT * FROM Plan WHERE Id = ${planid}`).catch(error => {
@@ -102,6 +125,7 @@ module.exports = {
     getFirstSectionOfPlan: getFirstSectionOfPlan,
     createUserHasPlan: createUserHasPlan,
     getCurrentUserHasPlan: getCurrentUserHasPlan,
+    getAllUserActivePlans: getAllUserActivePlans,
     getCurrentPlan: getCurrentPlan,
     getPlansSections: getPlansSections,
     updateUserHasPlan: updateUserHasPlan
