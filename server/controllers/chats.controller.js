@@ -180,16 +180,14 @@ const updateGroupController = async (request, response) => {
 }
 
 const removeUserController = async (request, response) => {
-
     try {
         let removedUserId = request.params.userId;
         let groupId = request.params.groupId;
         let adminUserId = request.body.adminUserId;
 
-        await contentCycleServices.deactivateActiveUserHasPlans(removedUserId);
-        await chatServices.deactivateActiveUserHasGroups(removedUserId);
+        let removedUserGroup = await chatServices.deactivateActiveUserHasGroups(removedUserId, groupId);
+        let removedUserPlan = await contentCycleServices.deactivateActiveUserHasPlan(removedUserId, groupId);
         let group = await chatServices.getCurrentGroup(groupId);
-
         let title = `You have been removed from ${group.Name}`;
         let body = `You have been removed from your group ${group.Name}. Please contact the administor of this group to find out why.`;
         await chatServices.createNotification(title, body, adminUserId, removedUserId, notificationTypeIds.RemoveFromGroup, groupId);
