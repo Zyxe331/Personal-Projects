@@ -131,8 +131,9 @@ export class EditPrayerCardComponent implements OnInit {
 
   scheduleNotification(prayerID: any, prayerTitle: any, prayerBody: any, notificationDate: any, notificationTime: any, notificationFrequency: number) {
     let freq
+    let at = new Date(notificationTime)
     if(notificationFrequency == 1) freq = { second: 0 }// { hour: new Date(notificationTime).getHours(), minute: new Date(notificationTime).getMinutes() }
-    else if (notificationFrequency == 2) freq = {hour: new Date(notificationTime).getHours(), minute: new Date(notificationTime).getMinutes()}
+    else if (notificationFrequency == 2) freq = ELocalNotificationTriggerUnit.MINUTE
     else if (notificationFrequency == 3) freq = {day: new Date(notificationTime).getDay(), hour: new Date(notificationTime).getHours(), minute: new Date(notificationTime).getMinutes()}
     else if (notificationFrequency == 4) freq = {week: new Date(notificationTime).getDate(), hour: new Date(notificationTime).getHours(), minute: new Date(notificationTime).getMinutes()}
     else if (notificationFrequency == 5) freq = {month: new Date(notificationTime).getMonth(), day: new Date(notificationTime).getDate(), hour: new Date(notificationTime).getHours(), minute: new Date(notificationTime).getMinutes()}
@@ -140,7 +141,11 @@ export class EditPrayerCardComponent implements OnInit {
       id: prayerID, 
       title: prayerTitle,
       text: prayerBody,
-      trigger: { every: freq }
+      trigger: { 
+        firstAt: at,
+        every: freq,
+        count: 5
+      }
     })
     console.log('Notification time used: ', new Date(notificationTime));
     console.log('Successfully scheduled notification');
