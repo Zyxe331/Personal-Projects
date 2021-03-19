@@ -229,7 +229,8 @@ export class EditPrayerCardComponent implements OnInit {
             this.request = prayer;
             this.ClosePopover()
           }
-        })
+        }
+      })
 
       } catch (error) {
 
