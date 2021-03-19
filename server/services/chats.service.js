@@ -1,13 +1,19 @@
 const Database = require('../utils/database');
 const utils = require('../utils/general_utils.js');
 const jsStringEscape = require('js-string-escape');
-const deactivateActiveUserHasGroups = async (userid) => {
+const deactivateActiveUserHasGroups = async (userid, groupId) => {
     const db = new Database();
-    await db.query(`UPDATE User_has_Group INNER JOIN User_has_Plan ON User_has_Group.User_has_Plan_Id=User_has_Plan.Id SET User_has_Group.Active=0 WHERE User_has_Group.Active = 1 AND User_has_Plan.User_Id = ${userid}`).catch(error => {
+    let userHasGroup
+    try {
+        userHasGroup = await db.query(`Select * FROM User_has_Group INNER JOIN User_has_Plan ON User_has_Group.User_has_Plan_Id=User_has_Plan.Id WHERE User_has_Plan.User_Id = ${userid} AND Group_Id=${groupId}`)
+        await db.query(`UPDATE User_has_Group INNER JOIN User_has_Plan ON User_has_Group.User_has_Plan_Id=User_has_Plan.Id SET User_has_Group.Active=0 WHERE User_has_Group.Active = 1 AND User_has_Plan.User_Id = ${userid} AND Group_Id=${groupId}`)
+    }
+    catch (err) {
         console.error(error);
         throw error;
-    });
+    }
     db.close();
+    return userHasGroup
 }
 
 const createGroup = async (planName, planid) => {

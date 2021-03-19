@@ -1,5 +1,5 @@
 .contentcycle {
-    color: var(--ion-color-medium);
+    color: var(--ion-color-dark);
     font-style: italic;
 }
 
@@ -14,8 +14,15 @@
     height: 100%;
 }
 
-.sectiontitle {
+.sectionTitle {
     margin-bottom: 16px;
+    color: #262626;
+    text-decoration: underline;
+}
+
+.sectionCard {
+    color: #262626;
+    font-size: 16px;
 }
 
 .prayerrequest {

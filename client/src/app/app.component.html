@@ -12,7 +12,7 @@
                     <div id="username">{{currentUser.FirstName}} {{currentUser.LastName}}</div>
 
                     <!-- "Edit Profile"-->
-                    <ion-menu-toggle autohide="false">
+                    <ion-menu-toggle autoHide="false">
                         <div id="editprofile" routerDirection="root" [routerLink]="['/profile']" style="outline:none">
                             <b>EDIT PROFILE </b>
                             <ion-icon name="create"></ion-icon>
@@ -33,7 +33,7 @@
                                     <ion-grid>
                                         <ion-row>
                                             <ion-col size="9">
-                                                <div style="margin-left: 0px; font-size:4.5vw;"><b>{{p.title}}</b></div>
+                                                <div style="margin-left: 0px; font-size:40px;"><b>{{p.title}}</b></div>
                                             </ion-col>
                                             <ion-col size="3">
                                                 <div *ngIf="p.title == 'Notifications' && numberOfUnreadNotifications && !this.study != false" class="notifications"><b>{{numberOfUnreadNotifications}}</b></div>
@@ -50,7 +50,7 @@
                                 <ion-grid>
                                     <ion-row>
                                         <ion-col size="9">
-                                            <div style="margin-left: 0px; font-size:4.5vw;"><b>Logout </b></div>
+                                            <div style="margin-left: 0px; font-size:40px;"><b>Logout </b></div>
                                         </ion-col>
                                         <ion-col size= "3"></ion-col>
                                     </ion-row>

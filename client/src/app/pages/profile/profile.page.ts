@@ -60,7 +60,14 @@ export class ProfilePage implements OnInit {
    * @memberof ProfilePage
    */
   async getAndOrganizeData(thisPage) {
-    thisPage.currentPlan = thisPage.contentCycleServce.currentPlan;
+    thisPage.currentPlan = await thisPage.contentCycleServce.getCurrentPlanInformation();
+    if (!thisPage.currentPlan){
+      thisPage.currentPlan = {
+        Id : 0,
+        Title : "No Enrolled Plan",
+        CreatedDate : null
+      }
+    }
   }
 
   ngOnInit() {

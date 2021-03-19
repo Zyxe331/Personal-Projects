@@ -55,6 +55,14 @@ const getAllPrayersForUserController = async (request, response) => {
         // Get userid and query prayers for that user
         let userid = request.params.userid;
         let prayers = await prayerRequestServices.queryUserPrayers(userid);
+        for(i = 0; i < prayers.length; i++) {
+            prayers[i] = {
+                ...prayers[i],
+                ShortFormattedDate: new Date(Date.parse(prayers[i].CreatedDate)).toLocaleDateString("en-US", { month: 'short', day: 'numeric' }),  // Should be changed based on preference
+                LongFormattedDate: new Date(Date.parse(prayers[i].CreatedDate)).toLocaleDateString("en-US", { month: 'long', day: 'numeric', year: 'numeric' }) // Should be changed based on preference
+                // Also, these dates are not based on local time. They are ZULU time.
+            }
+        }
 
         let prayerIds = Array.from(prayers, item => item.Id);
         const groupById = utils.groupBy('Prayer_Id');
