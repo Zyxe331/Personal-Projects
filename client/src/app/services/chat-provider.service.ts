@@ -10,6 +10,8 @@ import { Notification } from '../interfaces/notification';
 import { GlobalProviderService } from './global-provider.service';
 import { not } from '@angular/compiler/src/output/output_ast';
 import { UserPlan } from '../interfaces/user-plan';
+import { GroupedObservable, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -62,6 +64,23 @@ export class ChatProviderService {
         reject(error.error);
       }
     })
+  }
+
+  /**
+   * Querys all information for a group as an obervable
+   *
+   * @returns {Observable<GroupInformation>}
+   * @memberof ChatProviderService
+   */
+   getCurrentGroupInformationAsObservable(): Observable<GroupInformation> {
+        // Ask the server to try and get all prayer schedule possibilities
+        return this.http.get<GroupInformation>(SERVER_URL + 'chats/' + this.userServices.getUserFromStorage().Id).pipe(map((res: GroupInformation) => {
+          this.userGroup = res.currentUserHasGroup;
+          this.currentGroup = res.currentGroup;
+          this.groupUsers = res.groupUsers;
+          this.userHasPlans = res.userHasPlans;
+          return res
+        }));
   }
 
   /**
