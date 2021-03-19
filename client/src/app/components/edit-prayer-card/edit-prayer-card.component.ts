@@ -128,25 +128,35 @@ export class EditPrayerCardComponent implements OnInit {
     this.menu.enable(true, 'repeat');
     this.menu.open('repeat');
   }
-
   scheduleNotification(prayerID: any, prayerTitle: any, prayerBody: any, notificationDate: any, notificationTime: any, notificationFrequency: number) {
     let freq
     let at = new Date(notificationTime)
-    if(notificationFrequency == 1) freq = { second: 0 }// { hour: new Date(notificationTime).getHours(), minute: new Date(notificationTime).getMinutes() }
-    else if (notificationFrequency == 2) freq = ELocalNotificationTriggerUnit.MINUTE
-    else if (notificationFrequency == 3) freq = {day: new Date(notificationTime).getDay(), hour: new Date(notificationTime).getHours(), minute: new Date(notificationTime).getMinutes()}
-    else if (notificationFrequency == 4) freq = {week: new Date(notificationTime).getDate(), hour: new Date(notificationTime).getHours(), minute: new Date(notificationTime).getMinutes()}
-    else if (notificationFrequency == 5) freq = {month: new Date(notificationTime).getMonth(), day: new Date(notificationTime).getDate(), hour: new Date(notificationTime).getHours(), minute: new Date(notificationTime).getMinutes()}
-    this.localNotifications.schedule({
-      id: prayerID, 
+    if(notificationFrequency == 1) freq = { }
+    else if (notificationFrequency == 2) freq = ELocalNotificationTriggerUnit.MINUTE // Daily
+    else if (notificationFrequency == 3) freq = ELocalNotificationTriggerUnit.WEEK
+    else if (notificationFrequency == 4) freq = ELocalNotificationTriggerUnit.MONTH
+    else if (notificationFrequency == 5) freq = ELocalNotificationTriggerUnit.YEAR
+
+    this.localNotifications.schedule({ // Scheduling first prayer notification
+      id: prayerID, // ID is prayerID
       title: prayerTitle,
       text: prayerBody,
-      trigger: { 
-        firstAt: at,
-        every: freq,
-        count: 5
-      }
-    })
+      trigger: { at: new Date(notificationTime) }
+      })
+
+    if(notificationFrequency > 1) {
+      this.localNotifications.schedule({ // Scheduling recurring notifications 
+        id: prayerID + 1000, // ID is prayer ID
+        title: prayerTitle,
+        text: prayerBody,
+        trigger: { 
+          firstAt: at,
+          every: freq,
+          count: 5 // Some large constant for number of notifications. Must be included due to a cordova bug when not included
+        }
+      })
+    }
+
     console.log('Notification time used: ', new Date(notificationTime));
     console.log('Successfully scheduled notification');
   }
@@ -202,19 +212,17 @@ export class EditPrayerCardComponent implements OnInit {
         console.log(formValues);
         this.prayerServices.updatePrayerAsObservable(this.request.Id, formValues.title, formValues.body, formValues.private, formValues.frequency, formValues.formTags, formValues.NotificationDate, formValues.NotificationTime).subscribe(prayer => {
           if (prayer) {
-            if (this.notificationToggle) { // If notification is toggled on, check if notification exists. If it does, update. If not, create new notification
+            if (this.notificationToggle) { // If notification is toggled on, update notification by overwriting previous, or create new notification
               if (this.localNotifications.isPresent(prayer.Id)) {
-                let notification;
-                notification = this.localNotifications.get(prayer.Id);
-                this.localNotifications.update(notification);
-              }
-              else {
                 this.scheduleNotification(prayer.Id, prayer.Title, prayer.Body, formValues.NotificationDate, formValues.NotificationTime, formValues.frequency) // Add validation if notification is toggled on (date, time, freq required)
               }
             }
             else { // If toggled off, check if it exists. If it does, delete it
               if (this.localNotifications.isPresent(prayer.Id)) {
                 this.localNotifications.clear(prayer.Id);
+                let repeatingID = prayer.Id + 1000; // Constant used for repeating notification ID
+                if (this.localNotifications.isPresent(repeatingID)) {
+                  this.localNotifications.clear(repeatingID);
               }
             }
             this.globalServices.sendSuccessToast(`You successfully updated prayer request "${prayer.Title}"`);
