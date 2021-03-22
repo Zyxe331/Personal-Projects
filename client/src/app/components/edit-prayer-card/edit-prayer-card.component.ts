@@ -132,7 +132,7 @@ export class EditPrayerCardComponent implements OnInit {
     let freq
     let at = new Date(notificationTime)
     if(notificationFrequency == 1) freq = { }
-    else if (notificationFrequency == 2) freq = ELocalNotificationTriggerUnit.MINUTE // Daily
+    else if (notificationFrequency == 2) freq = ELocalNotificationTriggerUnit.DAY
     else if (notificationFrequency == 3) freq = ELocalNotificationTriggerUnit.WEEK
     else if (notificationFrequency == 4) freq = ELocalNotificationTriggerUnit.MONTH
     else if (notificationFrequency == 5) freq = ELocalNotificationTriggerUnit.YEAR
@@ -152,21 +152,12 @@ export class EditPrayerCardComponent implements OnInit {
         trigger: { 
           firstAt: at,
           every: freq,
-          count: 5 // Some large constant for number of notifications. Must be included due to a cordova bug when not included
+          count: 1000 // Some large constant for number of notifications. Must be included due to a cordova bug when not included
         }
       })
     }
 
-    console.log('Notification time used: ', new Date(notificationTime));
     console.log('Successfully scheduled notification');
-  }
-  scheduleNotificationNow() {
-    this.localNotifications.schedule({
-    id: 777, 
-     title: "Test notification",
-    text: "This is a test for an immediate notification",
-    trigger: { in: 5, unit: ELocalNotificationTriggerUnit.SECOND }
-    })
   }
 
   submit() {
