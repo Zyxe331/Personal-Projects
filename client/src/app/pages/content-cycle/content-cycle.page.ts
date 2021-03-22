@@ -81,6 +81,9 @@ export class ContentCyclePage implements OnInit {
   async presentPopover(ev: any) {
     const popover = await this.popoverController.create({
       component: ChangeCyclePopoverComponent,
+      componentProps: {
+        groupId: this.currentGroup.Id
+      },
       showBackdrop:true,
       cssClass: 'change-cycle-popup',
       event: ev,

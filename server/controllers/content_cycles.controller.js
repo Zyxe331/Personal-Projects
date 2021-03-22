@@ -12,10 +12,6 @@ const subscribeToPlan = async (request, response) => {
 
     try {
 
-        await contentCycleServices.deactivateActiveUserHasPlans(userid);
-
-        await chatServices.deactivateActiveUserHasGroups(userid);
-
         let firstSection = await contentCycleServices.getFirstSectionOfPlan(plan.Id);
         console.log(firstSection);
 
