@@ -62,7 +62,18 @@ const canEditUser = ({ currentAdmin }) => {
 
 const adminBro = new AdminBro({
 	resources: [
-		{ resource: db.User, options: { parent: sidebarGroups.developer}}, 
+		{ resource: db.User, 
+			options: { 
+				parent: sidebarGroups.developer,
+				actions: {
+					export: {
+						actionType: 'resource',
+						icon: 'Export',
+						isVisible: true,
+						handler: async (request, response, data) => {console.log("here")},
+						component: AdminBro.bundle('./export')},
+				  },
+				}},
 		{ resource: db.Role, options: { parent: sidebarGroups.developer}},
 		{ resource: db.ContentCycle, options: { parent: sidebarGroups.admin}},
 		{ resource: db.Group, options: { parent: sidebarGroups.admin}},
@@ -80,8 +91,18 @@ const adminBro = new AdminBro({
 		{ resource: db.User_has_Group, options: { parent: sidebarGroups.developer}},
 		{ resource: db.User_has_Plan, options: { parent: sidebarGroups.developer}}
 	],
-	rootPath: '/admin'
+	rootPath: '/admin',
+	branding: {
+		companyName: "VitaPrayer",
+		softwareBrothers: false
+	}
 })
+
+function exportToCSV(request, response, data) {
+	console.log(request);
+	console.log(response);
+	console.log(data);
+}
 
 // Adminbro login authentication
 const router = AdminBroExpressjs.buildAuthenticatedRouter(adminBro, {
