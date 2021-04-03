@@ -60,6 +60,7 @@ const canEditUser = ({ currentAdmin }) => {
 	return currentAdmin && currentAdmin.Role_Id === 1
 }
 
+// AdminBro tables and their settings
 const adminBro = new AdminBro({
 	resources: [
 		{ resource: db.User, options: { parent: sidebarGroups.developer}}, 
