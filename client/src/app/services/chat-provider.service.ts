@@ -82,6 +82,15 @@ export class ChatProviderService {
           return res
         }));
   }
+  /**
+   * Querys all groups a user is a part of as an obervable
+   *
+   * @returns {Observable<Group[]>}
+   * @memberof ChatProviderService
+   */
+   getUsersGroups(): Observable<Group[]> {
+    return this.http.get<Group[]>(SERVER_URL + 'chats/userGroups/' + this.userServices.getUserFromStorage().Id)
+}
 
   /**
    * Querys all notifications for this User

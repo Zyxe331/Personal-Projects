@@ -17,10 +17,8 @@ import { GlobalProviderService } from 'src/app/services/global-provider.service'
 })
 export class ContentCyclePage implements OnInit {
 
-  currentPlan: Plan;
-  currentGroup: Group;
-  userHasPlan: UserPlan;
-  currentGroupMembers: User[] = [];
+  plans: Plan[];
+  groups: Group[];
   planProgress;
   cycleProgress;
 
@@ -36,8 +34,15 @@ export class ContentCyclePage implements OnInit {
     public popoverController: PopoverController
   ) { }
 
-  async ngOnInit() {
+  ngOnInit() {
+    this.contentCycleService.getUsersPlans().subscribe(plans => {
+      this.plans = plans
+      console.log(plans)
+    })
 
+    this.chatService.getUsersGroups().subscribe(groups => {
+      this.groups = groups
+    })
   }
 
   /**
@@ -57,20 +62,24 @@ export class ContentCyclePage implements OnInit {
    * @memberof ContentCyclePage
    */
   async getAndOrganizeData(thisPage) {
+    // removed since data should be retrived in angular lifecycle
+    // thisPage.currentPlan = await thisPage.contentCycleService.getCurrentPlanInformation();
+    // thisPage.userHasPlan = thisPage.contentCycleService.userPlan;
+    // if (!thisPage.currentPlan) {
+    //   return;
+    // }
 
-    thisPage.currentPlan = await thisPage.contentCycleService.getCurrentPlanInformation();
-    thisPage.userHasPlan = thisPage.contentCycleService.userPlan;
-    if (!thisPage.currentPlan) {
-      return;
-    }
+    // let currentGroupInformation = await thisPage.chatService.getCurrentGroupInformation();
+    // thisPage.currentGroup = currentGroupInformation.currentGroup;
+    // thisPage.currentGroupMembers = currentGroupInformation.groupUsers;
 
-    let currentGroupInformation = await thisPage.chatService.getCurrentGroupInformation();
-    thisPage.currentGroup = currentGroupInformation.currentGroup;
-    thisPage.currentGroupMembers = currentGroupInformation.groupUsers;
+    // thisPage.planProgress = thisPage.contentCycleService.currentSectionIndex / thisPage.contentCycleService.orderedSections.length;
+    // let currentSection = thisPage.contentCycleService.orderedSections[thisPage.contentCycleService.currentSectionIndex];
+    // thisPage.cycleProgress = (currentSection.Order - 1) / (thisPage.contentCycleService.sectionsByCycleId[currentSection.ContentCycle_Id].length - 1);
+  }
 
-    thisPage.planProgress = thisPage.contentCycleService.currentSectionIndex / thisPage.contentCycleService.orderedSections.length;
-    let currentSection = thisPage.contentCycleService.orderedSections[thisPage.contentCycleService.currentSectionIndex];
-    thisPage.cycleProgress = (currentSection.Order - 1) / (thisPage.contentCycleService.sectionsByCycleId[currentSection.ContentCycle_Id].length - 1);
+  groupById(id): Group {
+    return this.groups.find(group => group.Id == id)
   }
 
   goToNextSection() {
@@ -78,11 +87,11 @@ export class ContentCyclePage implements OnInit {
   }
 
   //Trigger confirmation popup
-  async presentPopover(ev: any) {
+  async presentPopover(ev: any, groupId) {
     const popover = await this.popoverController.create({
       component: ChangeCyclePopoverComponent,
       componentProps: {
-        groupId: this.currentGroup.Id
+        groupId: groupId
       },
       showBackdrop:true,
       cssClass: 'change-cycle-popup',

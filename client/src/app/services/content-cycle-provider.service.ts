@@ -9,6 +9,7 @@ import { Plan } from 'src/app/interfaces/plan';
 import { Tag } from 'src/app/interfaces/tag';
 import { SERVER_URL } from '../../environments/environment';
 import { Group } from '../interfaces/group';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -103,6 +104,14 @@ export class ContentCycleProviderService {
   }
 
   /**
+   * This function returns all the plans for the current user. No information about their enrollment, just the plan information, and the group Id it belongs to.
+   * @returns Observable<Plan[]>
+   */
+   getUsersPlans(): Observable<Plan[]> {
+    return this.http.get<Plan[]>(SERVER_URL + 'content-cycles/' + this.userServices.getUserFromStorage().Id)
+  }
+
+  /**
    * Gets all the information for the current users current plan
    *
    * @returns {Promise<Plan>}
@@ -143,11 +152,7 @@ export class ContentCycleProviderService {
             _this.currentSectionIndex = _this.orderedSections.findIndex(item => item.Id == _this.userPlan.Current_Section_Id);
           } else {
             //If the user does not have a plan, generate stand-in plan data
-            _this.currentPlan = {
-                Id: 0,
-                CreatedDate: null,
-                Title: "No enrolled plan"
-            }
+            _this.currentPlan = new Plan()
           }
           resolve(response.currentPlan);
 
