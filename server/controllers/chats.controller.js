@@ -30,7 +30,7 @@ const getCurrentUserGroupInformation = async (request, response) => {
         let group = await chatServices.getCurrentGroup(userHasGroup.Group_Id);
         responseBody.currentGroup = group;
 
-        let userHasGroups = await chatServices.getUserGroups(group.Id, userid);
+        let userHasGroups = await chatServices.getUserGroups(userid);
         
         if (userHasGroups.length == 0 ) {
             return response.status(200).send(responseBody);
@@ -51,6 +51,16 @@ const getCurrentUserGroupInformation = async (request, response) => {
     } catch (error) {
         console.log(error);
         return response.status(500).send('Something went wrong internally');
+    }
+}
+
+const getCurrentUsersGroupsController = async (req, res) => {
+    try {
+        let groups = await chatServices.getUsersGroups(req.params.userid)
+        res.status(200).send(groups)
+    }
+    catch (err) {
+        res.status(500).send(`Something went wrong getting a user's plans: ${err.message}`)
     }
 }
 
@@ -218,6 +228,7 @@ const readNotificationsController = async (request, response) => {
 
 module.exports = {
     getCurrentUserGroupInformation: getCurrentUserGroupInformation,
+    getCurrentUsersGroupsController: getCurrentUsersGroupsController,
     requestJoinGroupController: requestJoinGroupController,
     getCurrentUserNotifications: getCurrentUserNotifications,
     officiallyJoinGroup: officiallyJoinGroup,

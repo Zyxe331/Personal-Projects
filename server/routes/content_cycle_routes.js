@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/', utils.simpleAuthCheck, contentCycleController.getAllPlans);
 router.post('/subscribe', utils.simpleAuthCheck, contentCycleController.subscribeToPlan)
-router.get('/:userid', utils.simpleAuthCheck, contentCycleController.getCurrentUserPlanInformation);
+router.get('/:userid', utils.simpleAuthCheck, contentCycleController.getUsersPlansController);
 router.patch('/user-has-plan/:userPlanId', utils.simpleAuthCheck, contentCycleController.updateUserHasPlanController);
 
 module.exports = router;

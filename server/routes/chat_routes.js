@@ -5,6 +5,7 @@ const utils = require('../utils/general_utils.js');
 const router = express.Router();
 
 router.get('/:userid', utils.simpleAuthCheck, chatController.getCurrentUserGroupInformation);
+router.get('/userGroups/:userid', utils.simpleAuthCheck, chatController.getCurrentUsersGroupsController)
 router.get('/notifications/:userid', utils.simpleAuthCheck, chatController.getCurrentUserNotifications);
 router.post('/joinGroup/:groupNumber', utils.simpleAuthCheck, chatController.requestJoinGroupController);
 router.post('/manageGroup/:groupNumber', utils.simpleAuthCheck, chatController.officiallyJoinGroup);

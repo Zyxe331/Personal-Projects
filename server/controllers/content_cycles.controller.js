@@ -4,6 +4,7 @@ const journalServices = require('../services/journals.service');
 const prayerServices = require('../services/prayer_requests.service');
 const tagServices = require('../services/tags.service');
 const utils = require('../utils/general_utils');
+const chatsService = require('../services/chats.service');
 
 const subscribeToPlan = async (request, response) => {
     const plan = request.body.plan;
@@ -41,6 +42,41 @@ const getAllPlans = async (request, response) => {
         return response.status(500).send('Something went wrong internally');
     }
 
+}
+
+const getUsersPlansController = async (req, res) => {
+    const userId = req.params.userid
+    let userHasPlans
+    let userHasGroups
+    let plans = []
+    try {
+        userHasPlans = await contentCycleServices.getUsersPlans(userId)
+    } catch (err) {
+        res.status(500).send(`There was an error retriving the users plans: ${err.message}`)
+    }
+    try {
+        userHasGroups = await chatsService.getUsersGroups(userId)
+    } catch (err) {
+        res.status(500).send(`There was an error retriving the users groups: ${err.message}`)
+    }
+    try {
+        for (let plan of userHasPlans) {
+            let foundPlan = await contentCycleServices.getCurrentPlan(plan.Plan_Id)
+            let planSections = await contentCycleServices.getPlansSections(plan.Plan_Id)
+            let groupId = userHasGroups.find(hasGroup => hasGroup.User_has_Plan_Id == plan.Id).Id
+            console.log(`groupID: ${groupId}`)
+            plans.push({
+                Id: plan.Id,
+                GroupId: groupId,
+                Title: foundPlan.Title,
+                CreatedDate: foundPlan.CreatedDate,
+                sections: planSections
+            })
+        }
+        res.status(200).send(plans)
+    } catch (err) {
+        res.status(500).send(`There was an error retriving information for plans: ${err.message}`)
+    }
 }
 
 const getCurrentUserPlanInformation = async (request, response) => {
@@ -88,7 +124,7 @@ const getCurrentUserPlanInformation = async (request, response) => {
         let sectionTags = await tagServices.querySectionsTags(sectionIds);
         let sectionTagsBySection = groupById(sectionTags);
 
-        let sectionJournals = await journalServices.querySectionsJournals(userid, sectionIds); 
+        let sectionJournals = await journalServices.querySectionsJournals(userid, sectionIds);
 
         if (!sectionJournals || sectionJournals === undefined) {
             responseBody.errorMessage = 'Error finding journals for sections'
@@ -136,6 +172,7 @@ const updateUserHasPlanController = async (request, response) => {
 module.exports = {
     subscribeToPlan: subscribeToPlan,
     getAllPlans: getAllPlans,
+    getUsersPlansController: getUsersPlansController,
     getCurrentUserPlanInformation: getCurrentUserPlanInformation,
     updateUserHasPlanController: updateUserHasPlanController
 }
