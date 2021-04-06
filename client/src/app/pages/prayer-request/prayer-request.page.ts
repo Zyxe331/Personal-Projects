@@ -1,3 +1,11 @@
+/**
+ * prayer-request.page.ts - 
+ * This page is for displaying information specific to an individual prayer. Information is passed to this component from a route telling the component
+ * what prayer to load. If the component is navigated to without route data, then a redirect will automatically happen.
+ * 
+ * A prayer can be edited on this page using the EditPrayerCardComponent, and should update the information dynamically using rxjs standards.
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -56,7 +64,7 @@ export class PrayerRequestPage implements OnInit {
     this.setNotificationTime();
   }
 
-  //Trigger prayer creation popup
+  //Trigger prayer edit popup
   async startEdit(ev: any) {
     const popover = await this.popoverController.create({
       component: EditPrayerCardComponent,
@@ -68,7 +76,7 @@ export class PrayerRequestPage implements OnInit {
       //event: ev,
       translucent: false
     });
-    popover.onDidDismiss().then(data => {
+    popover.onDidDismiss().then(data => { // Update prayer when edting finishes
       if (data.data != undefined) {
         this.request = data.data.request
         this.prayerTags = data.data.tags
