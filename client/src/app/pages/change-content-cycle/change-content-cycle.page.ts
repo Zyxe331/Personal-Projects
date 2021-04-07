@@ -1,3 +1,11 @@
+/**
+ * change-content-cycle.page.ts
+ * The change-content-cycle page is used to display the list of content cycles that the user can enroll/subscribe in
+ * as well as the ability to join an already existent content cycle via a group join number.
+ * 
+ * Routing is utilized when a user subscribes to a plan in order to assign the proper information to the content-cycle page.
+ * If subscribing to the plan fails, an error toast will appear and the user will be directed to the content-cycle page.
+ */
 import { Component, OnInit } from '@angular/core';
 import { Plan } from 'src/app/interfaces/plan';
 import { Router } from '@angular/router';
