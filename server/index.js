@@ -70,8 +70,9 @@ const adminBro = new AdminBro({
 						actionType: 'resource',
 						icon: 'Export',
 						isVisible: true,
-						handler: async (request, response, data) => {console.log("here")},
-						component: AdminBro.bundle('./export')},
+						handler: async (request, response, data) => {exportToCSV(data)},
+						component: false
+					}
 				  },
 				}},
 		{ resource: db.Role, options: { parent: sidebarGroups.developer}},
@@ -98,10 +99,13 @@ const adminBro = new AdminBro({
 	}
 })
 
-function exportToCSV(request, response, data) {
-	console.log(request);
-	console.log(response);
-	console.log(data);
+function exportToCSV(data) {
+	const table = data.resource.SequelizeModel;
+	const fields = table.rawAttributes;
+	console.log(fields);
+	for (const f in fields) {
+		console.log(f);
+	}
 }
 
 // Adminbro login authentication
