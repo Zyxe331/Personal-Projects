@@ -1,3 +1,11 @@
+/**
+ * journal.page.ts
+ * The journal page displays the specific information associated with a specific journal.
+ * 
+ * Routing tells what journal to load, grabs the information, and loads the information into the journal component.
+ * 
+ * If the component fails to recieve any information, it will automatically redirect the user back to the journals page.
+ */
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Journal } from 'src/app/interfaces/journal';
