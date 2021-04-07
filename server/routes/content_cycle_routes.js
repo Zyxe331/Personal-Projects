@@ -4,7 +4,7 @@ const contentCycleController = require('../controllers/content_cycles.controller
 
 const router = express.Router();
 
-// Handles getting all the available content cycles
+//Handles getting all the available content cycles
 router.get('/', utils.simpleAuthCheck, contentCycleController.getAllPlans);
 
 // Handles subcribing the user to a new content cyles
