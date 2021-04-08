@@ -38,6 +38,7 @@ export class GroupsPage implements OnInit {
 
   // async getAndOrganizeData(thisPage) {
   //   thisPage.allGroups = await thisPage.groupService.getThisUsersGroups();
+  //   thisPage.allGroups = thisPage.groupService.setGroupsDates(thisPage.allGroups);
   //   thisPage.filteredGroups = JSON.parse(JSON.stringify(thisPage.allGroups));
   // }
 

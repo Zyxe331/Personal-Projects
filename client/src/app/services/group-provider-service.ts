@@ -29,9 +29,25 @@ export class GroupProviderService {
     getThisUsersGroups(): Observable<Group[]> {
        let userId = this.userServices.currentUser.Id;
        let _this = this;
-       return _this.http.get<Group[]>(SERVER_URL + 'groups/' + userId, {})
+       return _this.http.get<Group[]>(SERVER_URL + 'chats/' + userId, {})
 
     }
+
+  /**
+   * Sets fake date fields on groups that are better formatted on a list of groups
+   *
+   * @param {Group[]} groups
+   * @returns {Group[]}
+   * @memberof GroupProviderService
+   */
+   setGroupsDates(groups: Group[]): Group[] {
+
+    for (let i = 0; i < groups.length; i++) {
+      this.setGroupDates(groups[i]);
+    }
+
+    return groups;
+  }
 
     /**
      * 
