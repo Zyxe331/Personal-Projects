@@ -10,7 +10,10 @@ const methodOverride = require('method-override')
 const cors = require('cors');
 const routes = require('./routes');
 const dotenv = require('dotenv');
-var fs = require('fs')
+const mysql = require("mysql");
+const Json2csvParser = require("json2csv").Parser;
+const fastcsv = require("fast-csv");
+const fs = require('fs');
 var https = require('https')
 const UsersService = require('./services/users.service')
 const sidebarGroups = {
@@ -26,6 +29,13 @@ const sidebarGroups = {
 
 // Set up environment file
 dotenv.config();
+
+const connection = mysql.createPool({
+	host: process.env.DATABASE_HOST,
+    user: process.env.DATABASE_USERNAME,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME
+});
 
 //create the models in ./models
 // var auto = new SequelizeAuto(process.env.DATABASE_NAME, process.env.DATABASE_USERNAME, process.env.DATABASE_PASSWORD, {
@@ -53,6 +63,7 @@ AdminBro.registerAdapter(AdminBroSequelize);
 const app = express();
 
 const db = require('./models');
+const { response } = require('express');
 
 // RBAC functions
 const canEditUser = ({ currentAdmin }) => {
@@ -62,9 +73,8 @@ const canEditUser = ({ currentAdmin }) => {
 
 const adminBro = new AdminBro({
 	resources: [
-		{ resource: db.User, 
-			options: { 
-				parent: sidebarGroups.developer,
+		{ resource: db.User, options: { 
+			parent: sidebarGroups.developer,
 				actions: {
 					export: {
 						actionType: 'resource',
@@ -73,18 +83,128 @@ const adminBro = new AdminBro({
 						handler: async (request, response, data) => {exportToCSV(data)},
 						component: false
 					}
-				  },
-				}},
-		{ resource: db.Role, options: { parent: sidebarGroups.developer}},
-		{ resource: db.ContentCycle, options: { parent: sidebarGroups.admin}},
-		{ resource: db.Group, options: { parent: sidebarGroups.admin}},
-		{ resource: db.GroupRole, options: { parent: sidebarGroups.developer}},
-		{ resource: db.Journal, options: { parent: sidebarGroups.developer}},
-		{ resource: db.Message, options: { parent: sidebarGroups.developer}},
-		{ resource: db.Notification, options: { parent: sidebarGroups.developer}},
-		{ resource: db.Notification_Type, options: { parent: sidebarGroups.developer}},
-		{ resource: db.Plan, options: { parent: sidebarGroups.admin}},
-		{ resource: db.Prayer_has_Tag, options: { parent: sidebarGroups.developer}},
+				},
+			}},
+		{ resource: db.Role, options: { 
+			parent: sidebarGroups.developer,
+				actions: {
+					export: {
+						actionType: 'resource',
+						icon: 'Export',
+						isVisible: true,
+						handler: async (request, response, data) => {exportToCSV(data)},
+						component: false
+					}
+				},
+			}},
+		{ resource: db.ContentCycle, options: { 
+			parent: sidebarGroups.admin,
+				actions: {
+					export: {
+						actionType: 'resource',
+						icon: 'Export',
+						isVisible: true,
+						handler: async (request, response, data) => {exportToCSV(data)},
+						component: false
+					}
+				},
+			}},
+		{ resource: db.Group, options: { 
+			parent: sidebarGroups.admin,
+				actions: {
+					export: {
+						actionType: 'resource',
+						icon: 'Export',
+						isVisible: true,
+						handler: async (request, response, data) => {exportToCSV(data)},
+						component: false
+					}
+				},
+			}},
+		{ resource: db.GroupRole, options: { 
+			parent: sidebarGroups.developer,
+				actions: {
+					export: {
+						actionType: 'resource',
+						icon: 'Export',
+						isVisible: true,
+						handler: async (request, response, data) => {exportToCSV(data)},
+						component: false
+					}
+				},
+			}},
+		{ resource: db.Journal, options: { 
+			parent: sidebarGroups.developer,
+				actions: {
+					export: {
+						actionType: 'resource',
+						icon: 'Export',
+						isVisible: true,
+						handler: async (request, response, data) => {exportToCSV(data)},
+						component: false
+					}
+				},
+			}},
+		{ resource: db.Message, options: { 
+			parent: sidebarGroups.developer,
+				actions: {
+					export: {
+						actionType: 'resource',
+						icon: 'Export',
+						isVisible: true,
+						handler: async (request, response, data) => {exportToCSV(data)},
+						component: false
+					}
+				},
+			}},
+		{ resource: db.Notification, options: { 
+			parent: sidebarGroups.developer,
+				actions: {
+					export: {
+						actionType: 'resource',
+						icon: 'Export',
+						isVisible: true,
+						handler: async (request, response, data) => {exportToCSV(data)},
+						component: false
+					}
+				},
+			}},
+		{ resource: db.Notification_Type, options: { 
+			parent: sidebarGroups.developer,
+				actions: {
+					export: {
+						actionType: 'resource',
+						icon: 'Export',
+						isVisible: true,
+						handler: async (request, response, data) => {exportToCSV(data)},
+						component: false
+					}
+				},
+			}},
+		{ resource: db.Plan, options: { 
+			parent: sidebarGroups.admin,
+				actions: {
+					export: {
+						actionType: 'resource',
+						icon: 'Export',
+						isVisible: true,
+						handler: async (request, response, data) => {exportToCSV(data)},
+						component: false
+					}
+				},
+			}},
+		{ resource: db.Prayer_has_Tag, options: { 
+			parent: sidebarGroups.developer,
+				actions: {
+					export: {
+						actionType: 'resource',
+						icon: 'Export',
+						isVisible: true,
+						handler: async (request, response, data) => {exportToCSV(data)},
+						component: false
+					}
+				},
+			}},
 		{ resource: db.PrayerRequest, options: {parent: sidebarGroups.developer}},
 		{ resource: db.Section_has_Tag, options: { parent: sidebarGroups.admin}},
 		{ resource: db.Section, options: { parent: sidebarGroups.admin}},
@@ -100,12 +220,19 @@ const adminBro = new AdminBro({
 })
 
 function exportToCSV(data) {
-	const table = data.resource.SequelizeModel;
-	const fields = table.rawAttributes;
-	console.log(fields);
-	for (const f in fields) {
-		console.log(f);
-	}
+	const table = data.resource.SequelizeModel.name;
+	const ws = fs.createWriteStream(table + '.csv');
+	connection.query('SELECT * FROM ' + table, function(error, data, fields) {
+		if (error) throw error;
+	
+		const jsonData = JSON.parse(JSON.stringify(data));
+		fastcsv
+			.write(jsonData, { headers: true })
+			.on("finish", function() {
+				console.log("Success!");
+			})
+			.pipe(ws);
+	});
 }
 
 // Adminbro login authentication
