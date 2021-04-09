@@ -44,6 +44,9 @@
             <ion-icon name="alert"></ion-icon> Please enter a journal.
           </p>
         </ion-text>
+        <ion-row class="ion-align-items-end ion-justify-content-end ion-padding-end">
+          <ion-text>{{updateJournalForm.controls.body.value != null ? updateJournalForm.controls.body.value.length : 0}}/255</ion-text>
+        </ion-row>
         <ion-grid>
           <ion-row class="ion-justify-content-center ion-align-items-center">
             <ion-button color="danger" (click)="cancel()">Cancel</ion-button>

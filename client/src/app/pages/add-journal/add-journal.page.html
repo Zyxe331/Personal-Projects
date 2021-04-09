@@ -52,6 +52,9 @@
                 </p>
             </ion-text>
         </ion-item>
+        <ion-row class="ion-align-items-end ion-justify-content-end ion-padding-end">
+            <ion-text>{{addJournalForm.controls.body.value != null ? addJournalForm.controls.body.value.length : 0}}/255</ion-text>
+          </ion-row>
 
         <ion-grid>
             <ion-row class="ion-justify-content-center ion-align-items-center">

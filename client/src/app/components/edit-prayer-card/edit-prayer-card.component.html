@@ -25,6 +25,9 @@
       autocapitalize=sentences>
     </ion-textarea>
   </ion-item>
+  <ion-row class="ion-align-items-end ion-justify-content-end ion-padding-end">
+    <ion-text>{{editRequestForm.controls.body.value != null ? editRequestForm.controls.body.value.length : 0}}/255</ion-text>
+  </ion-row>
   <ion-row class="ion-align-items-center ion-justify-content-center">
     <ion-text color="danger" *ngIf="editRequestForm.controls.body.hasError('required') && showErrors">
       <p class="ion-no-margin">
