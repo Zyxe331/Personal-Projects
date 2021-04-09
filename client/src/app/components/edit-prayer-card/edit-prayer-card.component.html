@@ -3,7 +3,7 @@
 
   <!--Prayer Title-->
   <ion-item class="title" lines="none">
-    <ion-input type="text" color="dark" placeholder="Prayer Request Title" formControlName="title" autocapitalize=words>
+    <ion-input type="text" color="dark" placeholder="Prayer Request Title" formControlName="title" autocapitalize=words maxlength="45">
     </ion-input>
   </ion-item>
   <ion-row class="ion-align-items-center ion-justify-content-center">
@@ -21,7 +21,7 @@
 
   <!--Prayer Body-->
   <ion-item id="textarea" lines="none" color="">
-    <ion-textarea rows="10" id="body" formControlName="body" placeholder="Your Prayer" spellcheck="true"
+    <ion-textarea rows="10" id="body" formControlName="body" placeholder="Enter details about your prayer here" spellcheck="true" maxlength="255"
       autocapitalize=sentences>
     </ion-textarea>
   </ion-item>
