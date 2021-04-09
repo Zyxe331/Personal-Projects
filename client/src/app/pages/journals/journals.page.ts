@@ -1,3 +1,10 @@
+/**
+ * journals.page.ts
+ * The journals page displays all of the journals created by the active user for them to view.
+ * The journals page also has a search bar at the top of the page that allows the user to search for any journal based on the title.
+ *
+ *
+ */
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
 import { Journal } from 'src/app/interfaces/journal';
@@ -39,6 +46,8 @@ export class JournalsPage implements OnInit {
     thisPage.filteredJournals = JSON.parse(JSON.stringify(thisPage.allJournals));
   }
 
+  //Function used to navigate to the specific Journal page that the user selects in the Journals page.
+  //NavigtionExtras serves as an interface that holds the necessary information for the required Journal page.
   goToPage(journal) {
     let navigationExtras: NavigationExtras = {
       state: {
@@ -48,6 +57,7 @@ export class JournalsPage implements OnInit {
     this.router.navigate(['/journal'], navigationExtras);
   }
 
+  //Functionality that filters the user's journals
   filterItems() {
     let searchTerm = this.searchTerm;
     this.filteredJournals = JSON.parse(JSON.stringify(this.allJournals));
