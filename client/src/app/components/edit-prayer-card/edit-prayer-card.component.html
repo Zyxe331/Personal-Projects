@@ -3,7 +3,7 @@
 
   <!--Prayer Title-->
   <ion-item class="title" lines="none">
-    <ion-input type="text" color="dark" placeholder="Prayer Request Title" formControlName="title" autocapitalize=words>
+    <ion-input type="text" color="dark" placeholder="Prayer Request Title" formControlName="title" autocapitalize=words maxlength="45">
     </ion-input>
   </ion-item>
   <ion-row class="ion-align-items-center ion-justify-content-center">
@@ -21,10 +21,13 @@
 
   <!--Prayer Body-->
   <ion-item id="textarea" lines="none" color="">
-    <ion-textarea rows="10" id="body" formControlName="body" placeholder="Your Prayer" spellcheck="true"
+    <ion-textarea rows="10" id="body" formControlName="body" placeholder="Enter details about your prayer here" spellcheck="true" maxlength="255"
       autocapitalize=sentences>
     </ion-textarea>
   </ion-item>
+  <ion-row class="ion-align-items-end ion-justify-content-end ion-padding-end">
+    <ion-text>{{editRequestForm.controls.body.value != null ? editRequestForm.controls.body.value.length : 0}}/255</ion-text>
+  </ion-row>
   <ion-row class="ion-align-items-center ion-justify-content-center">
     <ion-text color="danger" *ngIf="editRequestForm.controls.body.hasError('required') && showErrors">
       <p class="ion-no-margin">
@@ -43,18 +46,63 @@
   </ion-item>
   <ion-button (click)="newTag()">New Tag</ion-button>
 
-  <!--Prayer Schedule-->
-  <ion-item class=" bold tagformatting" lines="none">
-    <ion-label>Prayer Schedule:</ion-label>
-    <ion-input formControlName="frequency" type="number"></ion-input>
+
+  <!--Prayer Notification Toggle-->
+  <ion-item id="prayernotificationtoggle" lines="none">
+    <ion-label class="bold">Prayer Notification:</ion-label>
+    <ion-toggle (ionChange)="changeNotificationToggle()" checked={{notificationToggle}}>Prayer Reminder</ion-toggle>
+  </ion-item>
+  
+  
+  <!--Prayer Reminder-->
+  <ion-item [disabled]="!notificationToggle" id="prayerdate" lines="none">
+    <ion-label class="bold">Date:</ion-label>
+    <ion-datetime placeholder="Select Date" displayFormat="DD / MMM / YYYY" value={{myDate}} formControlName="NotificationDate" [(ngModel)]="myDate" (ionchange)="dateChanged($event)" [min]="minDate" [max]="maxDate"></ion-datetime>     
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+    </ion-row>    
   </ion-item>
   <ion-row class="ion-align-items-center ion-justify-content-center">
-    <ion-text color="danger" *ngIf="editRequestForm.controls.frequency.hasError('required') && showErrors">
+    <ion-text color="danger" *ngIf="notificationToggle && editRequestForm.controls.NotificationDate.hasError('required') && showErrors">
       <p class="ion-no-margin">
-        <ion-icon name="alert"></ion-icon> Please select a prayer schedule.
+        <ion-icon name="alert"></ion-icon> Please enter a reminder date.
       </p>
     </ion-text>
   </ion-row>
+    
+  <ion-item [disabled]="!notificationToggle" id="prayertime" lines="none">
+    <ion-label class="bold">Time:</ion-label>
+    <ion-datetime placeholder="Select Time" displayFormat="hh:mm A" value={{myTime}} formControlName="NotificationTime" [(ngModel)]="myTime" (ionchange)="timeChanged($event)"></ion-datetime>
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+    </ion-row>    
+  </ion-item>
+  <!-- <ion-row class="ion-align-items-center ion-justify-content-center">
+    <ion-text color="danger" *ngIf="!NotificationTime">
+      <p class="ion-no-margin">
+        <ion-icon name="alert"></ion-icon> Please enter a reminder time.
+      </p>
+    </ion-text>
+  </ion-row>-->
+
+  <ion-item  [disabled]="!notificationToggle" id="prayerrepeat" lines="none">
+    <ion-label class="bold">Repeat:</ion-label>
+    <ion-select formControlName="frequency" value={{myFrequency}} placeholder="Select One">
+      <ion-select-option value=1>
+        Never
+      </ion-select-option>
+      <ion-select-option value=2>
+        Daily
+      </ion-select-option>
+      <ion-select-option value=3>
+        Weekly
+      </ion-select-option>
+      <ion-select-option value=4>
+        Monthly
+      </ion-select-option>
+      <ion-select-option value=5>
+        Yearly
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
 
   <!--Is Private checkbox-->
   <ion-item class="bold tagformatting" lines="none">

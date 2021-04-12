@@ -1,3 +1,11 @@
+/**
+ * prayer-request.page.ts - 
+ * This page is for displaying information specific to an individual prayer. Information is passed to this component from a route telling the component
+ * what prayer to load. If the component is navigated to without route data, then a redirect will automatically happen.
+ * 
+ * A prayer can be edited on this page using the EditPrayerCardComponent, and should update the information dynamically using rxjs standards.
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -8,6 +16,7 @@ import { PrayerTag } from 'src/app/interfaces/prayer-tag';
 import { PopoverController } from '@ionic/angular';
 import { EditPrayerCardComponent } from 'src/app/components/edit-prayer-card/edit-prayer-card.component';
 import { PrayerRequestProviderService } from 'src/app/services/prayer-request-provider.service';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 @Component({
   selector: 'app-prayer-request',
@@ -23,13 +32,15 @@ export class PrayerRequestPage implements OnInit {
   showErrors: boolean = false;
   serverErrors: boolean = false;
   serverError: string;
+  notifDate: any;
+  notifTime: any;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     public formBuilder: FormBuilder,
     private prayerServices: PrayerRequestProviderService,
-    public popoverController: PopoverController
+    public popoverController: PopoverController,
   ) { }
 
   public prayerstate: boolean = true;
@@ -49,10 +60,11 @@ export class PrayerRequestPage implements OnInit {
         this.router.navigate(['/prayer-requests'])
       }
     })
-    
+    this.setNotificationDate();
+    this.setNotificationTime();
   }
 
-  //Trigger prayer creation popup
+  //Trigger prayer edit popup
   async startEdit(ev: any) {
     const popover = await this.popoverController.create({
       component: EditPrayerCardComponent,
@@ -64,7 +76,7 @@ export class PrayerRequestPage implements OnInit {
       //event: ev,
       translucent: false
     });
-    popover.onDidDismiss().then(data => {
+    popover.onDidDismiss().then(data => { // Update prayer when edting finishes
       if (data.data != undefined) {
         this.request = data.data.request
         this.prayerTags = data.data.tags
@@ -73,4 +85,14 @@ export class PrayerRequestPage implements OnInit {
     return await popover.present();
   }
 
+  setNotificationDate() {
+    console.log('Getting date');
+    console.log(this.request.NotificationDate);
+    this.notifDate = new Date(this.request.NotificationDate).toLocaleDateString("en-US", { month: 'long', day: 'numeric', year: 'numeric' })
+  }
+
+  setNotificationTime() {
+    this.notifTime = new Date(this.request.NotificationTime).toLocaleTimeString("en-US")
+  }
+  
 }

@@ -1,13 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ComponentFactoryResolver, OnInit } from '@angular/core';
 import { Group } from 'src/app/interfaces/group';
 import { User } from 'src/app/interfaces/user';
 import { ChatProviderService } from 'src/app/services/chat-provider.service';
 import { UserProviderService } from 'src/app/services/user-provider.service';
-import { ToastController, AlertController } from '@ionic/angular';
+import { ToastController, AlertController, PopoverController } from '@ionic/angular';
 import { UserGroup } from 'src/app/interfaces/user-group';
 import { ContentCycleProviderService } from 'src/app/services/content-cycle-provider.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalProviderService } from 'src/app/services/global-provider.service';
+import { ChangeCyclePopoverComponent } from '../content-cycle/change-cycle-popover/change-cycle-popover.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-group',
@@ -39,13 +41,25 @@ export class GroupPage implements OnInit {
     private toastController: ToastController,
     public formBuilder: FormBuilder,
     private globalServices: GlobalProviderService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private popoverController: PopoverController,
+    private router: Router
   ) {
 
   }
 
   ngOnInit() {
-    
+    this.groupServices.getCurrentGroupInformationAsObservable().subscribe(res => {
+      this.currentGroup = res.currentGroup;
+      this.groupMembers = res.groupUsers;
+      this.currentUserGroup = res.currentUserHasGroup;
+      this.currentUserPlanProgress = (this.cycleServices.currentSectionIndex / this.cycleServices.orderedSections.length) + this.cycleServices.userPlan.Times_Completed;
+      this.groupMembers.forEach(member => member.StopNudge = false);
+      this.createGroupMembers();
+      this.updateGroupForm = this.formBuilder.group({
+      name: [this.currentGroup.Name, Validators.compose([Validators.required])]
+      });
+    });
   }
 
   /**
@@ -64,17 +78,17 @@ export class GroupPage implements OnInit {
    * @memberof GroupPage
    */
   async getAndOrganizeData(thisPage) { 
-    await thisPage.groupServices.getCurrentGroupInformation();
-    thisPage.currentGroup = thisPage.groupServices.currentGroup;
-    thisPage.groupMembers = thisPage.groupServices.groupUsers;
-    thisPage.currentUserGroup = thisPage.groupServices.userGroup;
-    thisPage.currentUserPlanProgress = (thisPage.cycleServices.currentSectionIndex / thisPage.cycleServices.orderedSections.length) + thisPage.cycleServices.userPlan.Times_Completed;
+    // await thisPage.groupServices.getCurrentGroupInformation();
+    // thisPage.currentGroup = thisPage.groupServices.currentGroup;
+    // thisPage.groupMembers = thisPage.groupServices.groupUsers;
+    // thisPage.currentUserGroup = thisPage.groupServices.userGroup;
+    // thisPage.currentUserPlanProgress = (thisPage.cycleServices.currentSectionIndex / thisPage.cycleServices.orderedSections.length) + thisPage.cycleServices.userPlan.Times_Completed;
 
-    thisPage.groupMembers.forEach(member => member.StopNudge = false);
-    thisPage.createGroupMembers();
-    thisPage.updateGroupForm = thisPage.formBuilder.group({
-      name: [thisPage.currentGroup.Name, Validators.compose([Validators.required])]
-    });
+    // thisPage.groupMembers.forEach(member => member.StopNudge = false);
+    // thisPage.createGroupMembers();
+    // thisPage.updateGroupForm = thisPage.formBuilder.group({
+    //   name: [thisPage.currentGroup.Name, Validators.compose([Validators.required])]
+    // });
   }
 
   async nudgeUser(nudgedUser) {
@@ -194,5 +208,24 @@ export class GroupPage implements OnInit {
     } catch (e) {
       console.log(e);
     }
+  }
+
+  //Trigger confirmation popup
+  async presentPopover(ev: any, grpId) {
+    const popover = await this.popoverController.create({
+      component: ChangeCyclePopoverComponent,
+      componentProps: {
+        groupId: grpId
+      },
+      showBackdrop:true,
+      cssClass: 'change-cycle-popup',
+      event: ev,
+      translucent: false
+    });
+    return await popover.present();
+  }
+
+  joinNewGroup() {
+    this.router.navigate(['/change-content-cycle'])
   }
 }

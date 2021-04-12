@@ -24,6 +24,15 @@ export class UserProviderService {
     }
   }
 
+  getUserFromStorage() { // This function goes around the storage module to return the user syncronously.
+    let user = localStorage.getItem(Object.keys(localStorage).find(key => key.includes("USER")))
+    if (!user) {
+      this.logout()
+      return null
+    }
+    else return JSON.parse(user)
+  }
+
   set currentUser(newCurrentUser: User) {
     this._currentUser = newCurrentUser;
     this.events.publish('setUser');

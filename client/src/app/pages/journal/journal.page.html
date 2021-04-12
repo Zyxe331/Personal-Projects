@@ -29,7 +29,7 @@
   <ion-card *ngIf="editMode">
     <form [formGroup]="updateJournalForm" (ngSubmit)="save()">
       <ion-card-header>
-        <ion-input value="{{journal.Title}}" formControlName="title" id="edittitle"></ion-input>
+        <ion-input value="{{journal.Title}}" formControlName="title" id="edittitle" maxlength="45"></ion-input>
         <ion-text color="danger" *ngIf="updateJournalForm.controls.title.hasError('required') && showErrors">
           <p class="ion-no-margin ion-margin-top">
             <ion-icon name="alert"></ion-icon> Please enter a title.
@@ -38,12 +38,15 @@
       </ion-card-header>
 
       <ion-card-content>
-        <ion-textarea rows="10" value="{{journal.Body}}" formControlName="body" id="editbody"></ion-textarea>
+        <ion-textarea rows="10" value="{{journal.Body}}" formControlName="body" id="editbody" maxlength="255"></ion-textarea>
         <ion-text color="danger" *ngIf="updateJournalForm.controls.body.hasError('required') && showErrors">
           <p class="ion-no-margin ion-margin-top">
             <ion-icon name="alert"></ion-icon> Please enter a journal.
           </p>
         </ion-text>
+        <ion-row class="ion-align-items-end ion-justify-content-end ion-padding-end">
+          <ion-text>{{updateJournalForm.controls.body.value != null ? updateJournalForm.controls.body.value.length : 0}}/255</ion-text>
+        </ion-row>
         <ion-grid>
           <ion-row class="ion-justify-content-center ion-align-items-center">
             <ion-button color="danger" (click)="cancel()">Cancel</ion-button>

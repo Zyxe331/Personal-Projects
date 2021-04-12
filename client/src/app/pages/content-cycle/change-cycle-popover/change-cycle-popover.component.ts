@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {PopoverController} from '@ionic/angular';
+import { ChatProviderService } from 'src/app/services/chat-provider.service';
+import { UserProviderService } from 'src/app/services/user-provider.service';
 
 
 @Component({
@@ -9,8 +11,8 @@ import {PopoverController} from '@ionic/angular';
   styleUrls: ['./change-cycle-popover.component.scss'],
 })
 export class ChangeCyclePopoverComponent implements OnInit {
-
-  constructor(private router: Router, private popover: PopoverController) {}
+  @Input() groupId: number
+  constructor(private router: Router, private popover: PopoverController, private chatService: ChatProviderService, private userService: UserProviderService ) {}
 
   ngOnInit() {}
 
@@ -20,7 +22,10 @@ export class ChangeCyclePopoverComponent implements OnInit {
 
   ClosePopoverAndNav() {
     this.popover.dismiss()
-    this.router.navigate(['/change-content-cycle'])
+    let userId = this.userService.getUserFromStorage().Id
+    this.chatService.removeUser(this.groupId, userId).then(res => {
+      location.reload() // This is kind of a hack to get the content to reload, replace this with some subjects to get the content to reload.
+    })
   }
 
 }
