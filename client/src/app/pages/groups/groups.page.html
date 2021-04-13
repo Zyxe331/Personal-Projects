@@ -14,7 +14,6 @@
 
 <ion-content>
 
-
    <ion-grid *ngIf="showSpinner" class="height100">
         <ion-row class="align-items-center height100">
           <ion-col class="ion-align-self-center ion-text-center" size="12">
@@ -24,62 +23,12 @@
       </ion-grid>
     
       <div *ngIf="!showSpinner">
-        <ion-searchbar animated placeholder="Search Groups" [(ngModel)]="searchTerm"
-            (ionChange)="filterItems()"></ion-searchbar>
         <ion-list>
-          <ion-item lines="full" detail *ngFor="let Group of filtered" (click)="goToPage(request)">
-            <ion-text style="width: 15%;" color="medium" slot="start">{{group.ShortFormattedDate}}</ion-text>
+          <ion-item lines="full" detail *ngFor="let group of filteredGroups" (click)="goToPage(group)">
+            <ion-text style="width: 15%;" color="medium" slot="start">{{group.Name}}</ion-text>
             <ion-label>{{group.Name}}</ion-label>
           </ion-item>
         </ion-list>
       </div> 
 
-<!--
-        <ion-list>
-
-        <ion-item>
-            <ion-avatar slot="start">
-                <img src="https://png.pngtree.com/svg/20150918/icon_group_avatar_183029.png">
-            </ion-avatar>
-            <ion-label>
-                <h2><b>Group1</b></h2>
-                <h3>MEMBER1, MEMBER2, MEMBER3</h3>
-                <p>Last post mentioned in the conversation here...</p>
-            </ion-label>
-        </ion-item>
-
-        <ion-item>
-            <ion-avatar slot="start">
-                <img src="https://png.pngtree.com/svg/20150918/icon_group_avatar_183029.png">
-            </ion-avatar>
-            <ion-label>
-                <h2><b>Group2</b></h2>
-                <h3>MEMBER6, MEMBER2, MEMBER4</h3>
-                <p>Last post mentioned in the conversation here...</p>
-            </ion-label>
-        </ion-item>
-
-        <ion-item>
-            <ion-avatar slot="start">
-                <img src="https://png.pngtree.com/svg/20150918/icon_group_avatar_183029.png">
-            </ion-avatar>
-            <ion-label>
-                <h2><b>Group3</b></h2>
-                <h3>MEMBER1, MEMBER3, MEMBER8</h3>
-                <p>Last post mentioned in the conversation here...</p>
-            </ion-label>
-        </ion-item>
-
-        <ion-item>
-            <ion-avatar slot="start">
-                <img src="https://png.pngtree.com/svg/20150918/icon_group_avatar_183029.png">
-            </ion-avatar>
-            <ion-label>
-                <h2><b>Group4</b></h2>
-                <h3>MEMBER2, MEMBER6, MEMBER2</h3>
-                <p>Last post mentioned in the conversation here...</p>
-            </ion-label>
-        </ion-item>
-    </ion-list>
--->
 </ion-content>

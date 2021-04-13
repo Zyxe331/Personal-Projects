@@ -25,22 +25,28 @@ export class GroupsPage implements OnInit {
     private globalServices: GlobalProviderService
   ) { }
 
-  ngOnInit() {
-    this.groupService.getThisUsersGroups().subscribe(groups => {
-      this.allGroups = groups
-      this.filteredGroups = JSON.parse(JSON.stringify(groups));
-    })
+  // ngOnInit() {
+  //   this.groupService.getThisUsersGroups().subscribe(groups => {
+  //     this.allGroups = groups;
+  //     console.log(this.allGroups);
+  //     this.filteredGroups = JSON.parse(JSON.stringify(this.allGroups));
+  //     console.log(this.filteredGroups);
+  //   })
+  // }
+
+  async ionViewWillEnter() {
+    await this.globalServices.loadContent(this, this.getAndOrganizeData);
   }
 
-  // async ionViewWillEnter() {
-  //   await this.globalServices.loadContent(this, this.getAndOrganizeData);
-  // }
-
-  // async getAndOrganizeData(thisPage) {
-  //   thisPage.allGroups = await thisPage.groupService.getThisUsersGroups();
-  //   thisPage.allGroups = thisPage.groupService.setGroupsDates(thisPage.allGroups);
-  //   thisPage.filteredGroups = JSON.parse(JSON.stringify(thisPage.allGroups));
-  // }
+  async getAndOrganizeData(thisPage) {
+    thisPage.allGroups = await thisPage.groupService.getThisUsersGroups();
+    console.log(thisPage.allGroups);
+    thisPage.allGroups = thisPage.groupService.setGroupsDates(thisPage.allGroups);
+    console.log(thisPage.allGroups);
+    thisPage.filteredGroups = JSON.parse(JSON.stringify(thisPage.allGroups));
+    console.log("Filtered groups");
+    console.log(thisPage.filteredGroups);
+  }
 
   goToPage(group) {
     let navigationExtras: NavigationExtras = {
@@ -54,6 +60,7 @@ export class GroupsPage implements OnInit {
   filterItems() {
     let searchTerm = this.searchTerm;
     this.filteredGroups = JSON.parse(JSON.stringify(this.allGroups));
+    console.log(this.filteredGroups);
     this.filteredGroups =  this.filteredGroups.filter(group => {
       return group.Name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
     });

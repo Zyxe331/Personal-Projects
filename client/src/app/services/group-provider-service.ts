@@ -26,10 +26,27 @@ export class GroupProviderService {
        * @memberof GroupProviderService
        */
 
-    getThisUsersGroups(): Observable<Group[]> {
+    getThisUsersGroups(): Promise<Group[]> {
        let userId = this.userServices.currentUser.Id;
        let _this = this;
-       return _this.http.get<Group[]>(SERVER_URL + 'chats/' + userId, {})
+       return new Promise(async function (resolve, reject) {
+        try {
+  
+          // Ask the server to get all groups
+          let groups = await _this.http.patch<Group[]>(SERVER_URL + 'chats/groups/' + 10, {}).toPromise();
+          console.log("Await");
+  
+          // Fail if no groups is found
+          if (!groups) {
+            throw "Groups failed to be found"
+          }
+  
+          resolve(groups);
+  
+        } catch (error) {
+          reject(error.error);
+        }
+      })
 
     }
 
