@@ -137,9 +137,7 @@ const getuserGroups = async (request, response) => {
     let currentuserid = request.params.currentuserid;
     
     let userGroups = await userServices.getGroups(currentuserid);
-    // TODO: control responses for errors and what not
-    // TODO: return user groups to response
-    // If a user has no groups, return a 201
+
         if (!userGroups || userGroups === undefined){
             return response.status(201).send('You are not with any groups!');
             

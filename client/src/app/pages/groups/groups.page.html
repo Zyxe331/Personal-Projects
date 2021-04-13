@@ -27,7 +27,7 @@
         <ion-searchbar animated placeholder="Search Groups" [(ngModel)]="searchTerm"
             (ionChange)="filterItems()"></ion-searchbar>
         <ion-list>
-          <ion-item lines="full" detail *ngFor="let Group of filtered" (click)="goToPage(request)">
+          <ion-item lines="full" detail *ngFor="let Group of filteredGroups" (click)="goToPage(group)">
             <ion-text style="width: 15%;" color="medium" slot="start">{{group.ShortFormattedDate}}</ion-text>
             <ion-label>{{group.Name}}</ion-label>
           </ion-item>
