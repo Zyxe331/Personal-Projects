@@ -1,4 +1,15 @@
+/**
+ * groups.page.ts
+ * The groups page displays all of the groups created by the active user for them to view.
+ * The groups page also has a search bar at the top of the page that allows the user to search for any group based on the title.
+ *
+ *
+ */
 import { Component, OnInit } from '@angular/core';
+import { Router, NavigationExtras } from '@angular/router';
+import { Group } from 'src/app/interfaces/group';
+import { GroupProviderService } from '../../services/group-provider.service';
+import { GlobalProviderService } from 'src/app/services/global-provider.service';
 
 @Component({
   selector: 'app-groups',
@@ -7,9 +18,51 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GroupsPage implements OnInit {
 
-  constructor() { }
+  allGroups: Group[];
+  filteredGroups: Group[];
+  searchTerm: string;
+
+  get showSpinner() {
+    return this.globalServices.showSpinner;
+  } 
+
+  constructor(
+    private journalService: GroupProviderService,
+    private router: Router,
+    private globalServices: GlobalProviderService
+  ) { }
 
   ngOnInit() {
+
   }
 
+  async ionViewWillEnter() {
+    await this.globalServices.loadContent(this, this.getAndOrganizeData);
+  }
+
+  async getAndOrganizeData(thisPage) {
+    thisPage.allGroups = await thisPage.groupService.getThisUsersGroups();
+    thisPage.allGroups = thisPage.groupService.setGroupsDates(thisPage.allGroups);
+    thisPage.filteredGroups = JSON.parse(JSON.stringify(thisPage.allGroups));
+  }
+
+  //Function used to navigate to the specific Group page that the user selects in the Groups page.
+  //NavigtionExtras serves as an interface that holds the necessary information for the required Group page.
+  goToPage(group) {
+    let navigationExtras: NavigationExtras = {
+      state: {
+        group: group
+      }
+    }
+    this.router.navigate(['/group'], navigationExtras);
+  }
+
+  //Functionality that filters the user's groups
+  filterItems() {
+    let searchTerm = this.searchTerm;
+    this.filteredGroups = JSON.parse(JSON.stringify(this.allGroups));
+    this.filteredGroups =  this.filteredGroups.filter(group => {
+      return group.Name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
+    });
+  }
 }

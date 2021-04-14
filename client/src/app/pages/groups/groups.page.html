@@ -1,7 +1,7 @@
 <ion-header>
 <ion-toolbar>
     <ion-buttons slot="start">
-        <ion-button [routerLink]="'/add-journal'">
+        <ion-button [routerLink]="'/change-content-cycle'">
             <ion-icon slot="icon-only" name="add"></ion-icon>
         </ion-button>
     </ion-buttons>
@@ -27,7 +27,7 @@
         <ion-list >
           <ion-item lines="full" detail *ngFor="let group of filteredGroups" (click)="goToPage(journal)">
             <ion-text style="width: 15%;" color="medium" slot="start">{{group.ShortFormattedDate}}</ion-text>
-            <ion-label>{{group.Title}}</ion-label>
+            <ion-label>{{group.Name}}</ion-label>
           </ion-item>
         </ion-list>
       </div>

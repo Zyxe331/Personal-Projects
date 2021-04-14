@@ -148,6 +148,24 @@ const updateUser = async (userid, email, firstname, lastname, phone) => {
     return user;
 }
 
+const getGroups = async (currentuserid) => {
+    // TODO: query DB for user groups
+    let user;
+    try{
+        const db = new Database();
+        let rows = await db.query(`SELECT User_has_Plan_Id, User_has_Plan.User_Id FROM User_has_Group INNER JOIN User_has_Plan ON User_has_Group.User_has_Plan_Id = User_has_Plan.Id WHERE User_has_Plan.User_Id = ${currentuserid} AND User_has_Group.Active = 1`)
+
+        db.close();
+        if (rows.length === 1) {
+            user = rows[0];
+        }
+        console.log(user)
+    } catch (error) {
+        console.error(error);
+    }
+    return user;
+}
+
 module.exports = {
     findUserByEmail: findUserByEmail,
     findUserById: findUserById,
@@ -156,5 +174,6 @@ module.exports = {
     updateUser: updateUser,
     findAdminUserForGroup: findAdminUserForGroup,
     getPasswordFromEmail: getPasswordFromEmail,
-    getUserRoleId: getUserRoleId
+    getUserRoleId: getUserRoleId,
+    getGroups: getGroups
 }
