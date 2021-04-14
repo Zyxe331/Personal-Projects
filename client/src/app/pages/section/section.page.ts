@@ -1,3 +1,12 @@
+/**
+ * section.page.ts
+ * The section page displays the specific information created for the designated section number.
+ * 
+ * The information for the section number is determined by retrieving the current plan information and then retrieving the section index number.
+ * 
+ * 
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { NavController, ModalController, PopoverController } from '@ionic/angular'
 import { ActivatedRoute, Router, NavigationExtras, NavigationEnd } from '@angular/router';
