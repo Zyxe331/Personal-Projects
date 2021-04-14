@@ -25,14 +25,14 @@ export class GroupsPage implements OnInit {
     private globalServices: GlobalProviderService
   ) { }
 
-  // ngOnInit() {
-  //   this.groupService.getThisUsersGroups().subscribe(groups => {
-  //     this.allGroups = groups;
-  //     console.log(this.allGroups);
-  //     this.filteredGroups = JSON.parse(JSON.stringify(this.allGroups));
-  //     console.log(this.filteredGroups);
-  //   })
-  // }
+  ngOnInit() {
+    // this.groupService.getThisUsersGroups().subscribe(groups => {
+    //   this.allGroups = groups;
+    //   console.log(this.allGroups);
+    //   this.filteredGroups = JSON.parse(JSON.stringify(this.allGroups));
+    //   console.log(this.filteredGroups);
+    // })
+  }
 
   async ionViewWillEnter() {
     await this.globalServices.loadContent(this, this.getAndOrganizeData);
