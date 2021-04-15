@@ -181,7 +181,7 @@ export class SectionPage implements OnInit {
     })
     return await popover.present();
   }
-
+//Functionality
   goToContentCycle() {
     this.navCtrl.navigateBack(['/content-cycle/']);
   }
