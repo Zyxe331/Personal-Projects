@@ -26,12 +26,12 @@ export class GroupsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-  //   this.groupService.getThisUsersGroups().subscribe(groups => {
-  //     this.allGroups = groups;
-  //     console.log(this.allGroups);
-  //     this.filteredGroups = JSON.parse(JSON.stringify(this.allGroups));
-  //     console.log(this.filteredGroups);
-  //   })
+    // this.groupService.getThisUsersGroups().subscribe(groups => {
+    //   this.allGroups = groups;
+    //   console.log(this.allGroups);
+    //   this.filteredGroups = JSON.parse(JSON.stringify(this.allGroups));
+    //   console.log(this.filteredGroups);
+    // })
   }
 
   async ionViewWillEnter() {
