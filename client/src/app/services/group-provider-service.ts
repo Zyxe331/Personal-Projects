@@ -33,7 +33,7 @@ export class GroupProviderService {
         try {
   
           // Ask the server to get all groups
-          let groups = await _this.http.patch<Group[]>(SERVER_URL + 'chats/groups/' + 10, {}).toPromise();
+          let groups = await _this.http.get<Group[]>(SERVER_URL + 'chats/groups/' + userId, {}).toPromise();
           console.log("Await");
   
           // Fail if no groups is found

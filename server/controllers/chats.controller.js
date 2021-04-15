@@ -30,7 +30,7 @@ const getCurrentUserGroupInformation = async (request, response) => {
         let group = await chatServices.getCurrentGroup(userHasGroup.Group_Id);
         responseBody.currentGroup = group;
 
-        let userHasGroups = await chatServices.getUserGroups(group.Id, userid);
+        let userHasGroups = await chatServices.getUserGroups(userid);
         console.log(userHasGroups);
         if (userHasGroups.length == 0 ) {
             return response.status(200).send(responseBody);
@@ -179,6 +179,22 @@ const updateGroupController = async (request, response) => {
     }
 }
 
+const getGroupController = async (request, response) => {
+    try {
+        let userId = request.params.userId;
+        let name = request.body.name;
+        let groups = await chatServices.getUserGroups(userId);
+
+        if (groups) {
+            // Send success message
+            return response.status(200).send(groups);
+
+        }
+    } catch (error) {
+        return response.status(500).send('Something went wrong internally')
+    }
+}
+
 const removeUserController = async (request, response) => {
     try {
         let removedUserId = request.params.userId;
@@ -224,6 +240,7 @@ module.exports = {
     updateNotificationController: updateNotificationController,
     nudgeUserController: nudgeUserController,
     updateGroupController: updateGroupController,
+    getGroupController: getGroupController,
     removeUserController: removeUserController,
     readNotificationsController: readNotificationsController
 }

@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get('/:userid', utils.simpleAuthCheck, chatController.getCurrentUserGroupInformation);
 router.get('/notifications/:userid', utils.simpleAuthCheck, chatController.getCurrentUserNotifications);
+router.get('/groups/:userId', utils.simpleAuthCheck, chatController.getGroupController);
 router.post('/joinGroup/:groupNumber', utils.simpleAuthCheck, chatController.requestJoinGroupController);
 router.post('/manageGroup/:groupNumber', utils.simpleAuthCheck, chatController.officiallyJoinGroup);
 router.post('/notifications/:notificationId', utils.simpleAuthCheck, chatController.updateNotificationController);

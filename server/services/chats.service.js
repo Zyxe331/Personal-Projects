@@ -66,22 +66,6 @@ const getCurrentGroup = async (groupid, currentUserId) => {
     return group[0];
 }
 
-//let rows = await db.query(`SELECT User_has_Plan_Id, User_has_Plan.User_Id FROM User_has_Group INNER JOIN User_has_Plan ON User_has_Group.User_has_Plan_Id = User_has_Plan.Id WHERE User_has_Plan.User_Id = ${currentuserid} AND User_has_Group.Active = 1`)
-
-
-const getUserGroups = async (groupid, currentuserid) => {
-    const db = new Database();
-    //let userHasGroups = await db.query(`SELECT User_has_Plan_Id, User_has_Plan.User_Id FROM User_has_Group INNER JOIN User_has_Plan ON User_has_Group.User_has_Plan_Id = User_has_Plan.Id WHERE User_has_Plan.User_Id = ${currentuserid} AND User_has_Group.Group_Id = ${groupid} AND User_has_Group.Active = 1`).catch(error => {
-    let userHasGroups = await db.query(`SELECT User_has_Plan_Id, User_has_Plan.User_Id FROM User_has_Group INNER JOIN User_has_Plan ON User_has_Group.User_has_Plan_Id = User_has_Plan.Id WHERE User_has_Plan.User_Id = ${currentuserid} AND User_has_Group.Active = 1`).catch(error => {
-
-    console.error(error);
-        throw error;
-    });
-    db.close();
-
-    return userHasGroups;
-}
-
 const getUsers = async (userIds) => {
     const db = new Database();
     let users = await db.query(`SELECT * FROM User WHERE Id IN (${userIds})`).catch(error => {
@@ -180,6 +164,19 @@ const updateGroup = async (groupId, name) => {
     }
 
     return group;
+}
+
+const getUserGroups = async(userId) => {
+    let result;
+    try {
+        const db = new Database();
+        result = await db.query(`SELECT \`Group\`.* FROM \`Group\`, User_has_Plan, User_has_Group WHERE User_has_Plan.User_Id = '${userId}' AND User_has_Plan.Id = User_has_Group.User_has_Plan_Id AND  User_has_Group.Active = 1 AND \`Group\`.Id = User_has_Group.Group_Id;`);
+        db.close();
+    } catch (error) {
+        console.error(error);
+    }
+
+    return result;
 }
 
 module.exports = {
