@@ -3,7 +3,6 @@
  * 
  * The journals controller encompasses the JavaScript logic that controls the journals page.
  * 
- * 
  */
 
 const journalServices = require('../services/journals.service.js');
