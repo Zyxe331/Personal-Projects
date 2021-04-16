@@ -76,8 +76,14 @@ export class SectionPage implements OnInit {
   async getAndOrganizeData(thisPage) {
     thisPage.sectionIndex = +thisPage.route.snapshot.paramMap.get('sectionNumber');
     await thisPage.contentCycleService.getCurrentPlanInformation();
+    
+    //Assigns the page section based on the given Content Cycle's list of sections and the current section index.
     thisPage.section = thisPage.contentCycleService.orderedSections[thisPage.sectionIndex];
+    
+    //Assigns the name of the Content Cycle based on the title of the plan that the user subcribed to.
     thisPage.contentCycleName = thisPage.contentCycleService.currentPlan.Title;
+    
+    //Any journals made on that specific section of the Content Cycle will be populated in with the section when navigated back to it.
     thisPage.journals = thisPage.setJournals(thisPage.contentCycleService.sectionJournalsBySection[thisPage.section.Id]);
     await thisPage.contentCycleService.updateUserHasPlan(thisPage.section.Id, thisPage.contentCycleService.userPlan.Times_Completed);
   }
@@ -92,6 +98,7 @@ export class SectionPage implements OnInit {
     })
   }
 
+  //If a user has journals written in a section, pass the journals into the section and use the journal provider service to set their dates in the list.
   setJournals(passedInJournals) {
     if (passedInJournals) {
       passedInJournals = this.journalService.setJournalsDates(passedInJournals);
