@@ -109,6 +109,7 @@ const verifyAuthController = (request, response) => {
 
 }
 
+//Request information from a user when they edit their profile that utilizes a query to update whatever information they changed or added.
 const updateUserController = async (request, response) => {
     try {
 
