@@ -131,7 +131,7 @@ const getCurrentUserPlanInformation = async (request, response) => {
 
 const updateUserHasPlanController = async (request, response) => {
     try {
-
+        //Request information for the plan the user is in and utilize a query that updates information for the plan.
         let userPlanId = request.params.userPlanId;
         let sectionId = request.body.sectionId;
         let timesCompleted = request.body.timesCompleted;
