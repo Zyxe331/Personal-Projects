@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { GroupPage } from './group.page';
 
@@ -7,7 +7,7 @@ describe('GroupPage', () => {
   let component: GroupPage;
   let fixture: ComponentFixture<GroupPage>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ GroupPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],

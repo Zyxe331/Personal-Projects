@@ -29,7 +29,7 @@ export class SectionPage implements OnInit {
   tag: Tag;
   allPrayers$: Observable<PrayerRequest[]> = this.prayerService.fetchUsersPrayers()
   filteredPrayers: PrayerRequest[]
-  @ViewChild('app-section:not(.ion-page-hidden) ion-content', {static: false}) contentRef: ElementRef;
+  @ViewChild('app-section:not(.ion-page-hidden) ion-content') contentRef: ElementRef;
 
   get showSpinner() {
     return this.globalServices.showSpinner;
