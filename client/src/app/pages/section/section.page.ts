@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { NavController, ModalController, PopoverController } from '@ionic/angular'
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { NavController, ModalController, PopoverController, Gesture, GestureController  } from '@ionic/angular'
 import { ActivatedRoute, Router, NavigationExtras, NavigationEnd } from '@angular/router';
 import { ContentCycleProviderService } from '../../services/content-cycle-provider.service';
 import { JournalProviderService } from '../../services/journal-provider.service';
@@ -29,6 +29,7 @@ export class SectionPage implements OnInit {
   tag: Tag;
   allPrayers$: Observable<PrayerRequest[]> = this.prayerService.fetchUsersPrayers()
   filteredPrayers: PrayerRequest[]
+  @ViewChild('app-section:not(.ion-page-hidden) ion-content', {static: false}) contentRef: ElementRef;
 
   get showSpinner() {
     return this.globalServices.showSpinner;
@@ -44,10 +45,9 @@ export class SectionPage implements OnInit {
     private contentCycleService: ContentCycleProviderService,
     private globalServices: GlobalProviderService,
     private navCtrl: NavController,
-    public popoverController: PopoverController
-  ) {
-
-  }
+    public popoverController: PopoverController,
+    private gestureCtrl: GestureController
+  ) { }
 
   /**
    * Standard ionic function that runs everytime we go to this page
@@ -81,6 +81,17 @@ export class SectionPage implements OnInit {
       console.log('Prayers: ', prayers)
       this.filteredPrayers = prayers.filter(prayer => prayer.Section_Id === this.section.Id)
     })
+  }
+
+  AfterViewInit() {
+    // create gesture for swiping to next section
+    const gesture: Gesture = this.gestureCtrl.create({
+      el: this.contentRef.nativeElement,
+      threshold: 0,
+      gestureName: 'swipe-next-section',
+      onMove: ev => this.goToNextSection()
+    }, true);
+    gesture.enable(true)
   }
 
   setJournals(passedInJournals) {
