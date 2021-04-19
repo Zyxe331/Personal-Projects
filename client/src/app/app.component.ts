@@ -66,24 +66,22 @@ export class AppComponent {
         private statusBar: StatusBar,
         private userService: UserProviderService,
         private router: Router,
-        private events: Events,
         private storage: Storage,
         private chatService: ChatProviderService,
         private cycleServices: ContentCycleProviderService,
         private tagServices: TagProviderService
     ) {
-        this.initializeApp();
 
         let _this = this;
-        this.events.subscribe('setUser', () => {
-            _this.currentUser = _this.userService.currentUser;
+        this.userService.getSetUserSubject().subscribe(user => {
+            _this.currentUser = user;
         });
 
         
     }
 
-    initializeApp() {
-        this.storage.get('USER').then(user => {
+    ngOnInit() {
+        this.userService.getUserFromStorage().subscribe(user => {
             this.userService.currentUser = user
             this.platform.ready().then(() => {
                 this.statusBar.styleDefault();
@@ -91,10 +89,6 @@ export class AppComponent {
             });  
         })
     }
-
-    async ngOnInit() {
-        await this.storage.create();
-      }
 
     async logout() {
         await this.userService.logout();

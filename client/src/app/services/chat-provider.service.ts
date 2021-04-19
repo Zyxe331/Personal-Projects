@@ -8,10 +8,9 @@ import { UserGroup } from '../interfaces/user-group';
 import { User } from '../interfaces/user';
 import { Notification } from '../interfaces/notification';
 import { GlobalProviderService } from './global-provider.service';
-import { not } from '@angular/compiler/src/output/output_ast';
 import { UserPlan } from '../interfaces/user-plan';
 import { GroupedObservable, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -74,13 +73,15 @@ export class ChatProviderService {
    */
    getCurrentGroupInformationAsObservable(): Observable<GroupInformation> {
         // Ask the server to try and get all prayer schedule possibilities
-        return this.http.get<GroupInformation>(SERVER_URL + 'chats/' + this.userServices.getUserFromStorage().Id).pipe(map((res: GroupInformation) => {
-          this.userGroup = res.currentUserHasGroup;
-          this.currentGroup = res.currentGroup;
-          this.groupUsers = res.groupUsers;
-          this.userHasPlans = res.userHasPlans;
-          return res
-        }));
+        return this.userServices.getUserFromStorage().pipe(switchMap(user => {
+          return this.http.get<GroupInformation>(SERVER_URL + 'chats/' + user.Id).pipe(map((res: GroupInformation) => {
+            this.userGroup = res.currentUserHasGroup;
+            this.currentGroup = res.currentGroup;
+            this.groupUsers = res.groupUsers;
+            this.userHasPlans = res.userHasPlans;
+            return res
+          }));
+        }))
   }
 
   /**
