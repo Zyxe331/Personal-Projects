@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Platform, Events } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
+import { Platform } from '@ionic/angular';
+import { Storage } from '@ionic/storage-angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { UserProviderService } from './services/user-provider.service';
@@ -91,6 +91,10 @@ export class AppComponent {
             });  
         })
     }
+
+    async ngOnInit() {
+        await this.storage.create();
+      }
 
     async logout() {
         await this.userService.logout();

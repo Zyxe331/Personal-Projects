@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { tap, catchError, first } from 'rxjs/operators';
 import { AuthResponse } from '../interfaces/auth-response';
 import { User } from '../interfaces/user';
-import { Storage } from '@ionic/storage';
+import { Storage } from '@ionic/storage-angular';
 import { Router } from '@angular/router';
 import { Events } from '@ionic/angular';
 
@@ -31,6 +31,14 @@ export class UserProviderService {
       return null
     }
     else return JSON.parse(user)
+  }
+
+  getJWTFromLocalStorage(): string {
+    let token = localStorage.getItem(Object.keys(localStorage).find(key => key.includes("ACCESS_TOKEN")))
+    if (!token) {
+      return null
+    }
+    else return JSON.parse(token)
   }
 
   set currentUser(newCurrentUser: User) {
