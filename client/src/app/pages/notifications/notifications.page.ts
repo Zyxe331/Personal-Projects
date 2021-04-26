@@ -3,6 +3,7 @@ import { Notification } from '../../interfaces/notification';
 import { ChatProviderService } from 'src/app/services/chat-provider.service';
 import { Router, NavigationExtras  } from '@angular/router';
 import { GlobalProviderService } from 'src/app/services/global-provider.service';
+import { PrayerRequestProviderService } from 'src/app/services/prayer-request-provider.service';
 
 @Component({
   selector: 'app-notifications',
@@ -20,7 +21,8 @@ export class NotificationsPage implements OnInit {
   constructor(
     private chatServices: ChatProviderService,
     private globalServices: GlobalProviderService,
-    private router: Router
+    private router: Router,
+    private prayerServices: PrayerRequestProviderService
   ) { }
 
   ngOnInit() {
@@ -33,6 +35,7 @@ export class NotificationsPage implements OnInit {
    * @memberof NotificationsPage
    */
   async ionViewWillEnter() {
+    await this.globalServices.loadContent(this, this.getPrayerRequestNotifications) // Get peayer request notifications every time user loads notifications page
     await this.globalServices.loadContent(this, this.getAndOrganizeData);
   }
 
@@ -71,4 +74,16 @@ export class NotificationsPage implements OnInit {
     await this.chatServices.markNotificationsAsRead(unreadNotificationIds);
     await this.globalServices.loadContent(this, this.getAndOrganizeData);
   }
+
+  async getPrayerRequestNotifications(thisPage) {
+    // Call function to create notifications for necessary requests
+    thisPage.notifications = await thisPage.prayerServices.getPrayerRequestNotifications();
+    // Handle notification color if not read
+    for (let i = 0; i < thisPage.notifications.length; i++) {
+      if (!thisPage.notifications[i].Read) {
+        thisPage.notifications[i].Color = 'light';
+      }
+    }
+  }
+
 }

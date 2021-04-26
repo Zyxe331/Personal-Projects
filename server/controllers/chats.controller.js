@@ -7,7 +7,8 @@ const notificationTypeIds = {
     'AcceptToGroup': 2,
     'DeclineToGroup': 3,
     'Nudge': 4,
-    'RemoveFromGroup': 5
+    'RemoveFromGroup': 5,
+    'Prayer': 6
 }
 
 const getCurrentUserGroupInformation = async (request, response) => {

@@ -1,6 +1,7 @@
 const prayerRequestServices = require('../services/prayer_requests.service.js');
 const utils = require('../utils/general_utils');
 const tagServices = require('../services/tags.service');
+const chatServices = require('../services/chats.service.js');
 
 const getAllPrayerSchedules = async (request, response) => {
     try {
@@ -94,7 +95,7 @@ const updatePrayerController = async (request, response) => {
         tagids = request.body.tagIds;
 
         console.log(tagids);
-        let prayer = await prayerRequestServices.updatePrayer(prayerid, title, body, isprivate, frequency, NotificationDate, NotificationTime);
+        let prayer = await prayerRequestServices.updatePrayer(prayerid, title, body, isprivate, frequency, NotificationDate, NotificationTime, Notification_Id);
         let prayerTags = await tagServices.updatePrayerTags(prayerid, tagids);
 
         if (prayer) {
@@ -108,9 +109,48 @@ const updatePrayerController = async (request, response) => {
     }
 }
 
+const prayerRequestNotificationController = async (request, response) => {
+    try {
+        let userID = request.params.userid;
+        let prayers = await prayerRequestServices.queryUserScheduledPrayers(userID);
+        for (i = 0; i < prayers.length; i++) { // Loop to get all scheduled prayers
+            var notiDate = new Date(prayers[i].NotificationTime);
+
+            if (prayers[i].Notification_Id && prayers[i].Frequency == 1) { // If a notification was already created, and its not repreating then do nothing
+
+            }
+            else if (prayers[i].Notification_Id && prayers[i].Frequency > 1) { // If the prayer has a notification ID (notification already created) & its repeating
+                let notiId = prayers[i].Notification_Id;
+                let newNotification = await chatServices.getNotification(notiId);
+                
+                if (newNotification[0].Read == 1 && newNotification.LastTriggered < Date.now()) { // If the notification is already read, && when it should trigger next (as stored in the DB) is in the past
+                    let notificiationID = await chatServices.createNotification(prayers[i].Title, prayers[i].Body, userID, userID, 6, null);
+                    let updatedPrayer = await prayerRequestServices.updatePrayer(prayers[i].Id, prayers[i].Title, prayers[i].Body, prayers[i].IsPrivate, prayers[i].Frequency, prayers[i].NotificationDate, prayers[i].NotificationTime, notificiationID);
+                    let nextTrigger = prayerRequestServices.getNextTriggerDate(prayers[i].NotificationTime, prayers[i].Frequency)
+                    let notiUpdate = await chatServices.updateNotificationTriggeredDate(notificiationID, nextTrigger);
+                }
+
+            }
+            else if (notiDate < Date.now()) { // If prayer does not already have a notification & date is in the past, then create that notification
+                let notificiationID = await chatServices.createNotification(prayers[i].Title, prayers[i].Body, userID, userID, 6, null);
+                let updatedPrayer = await prayerRequestServices.updatePrayer(prayers[i].Id, prayers[i].Title, prayers[i].Body, prayers[i].IsPrivate, prayers[i].Frequency, prayers[i].NotificationDate, prayers[i].NotificationTime, notificiationID);
+
+
+                let notiUpdate = await chatServices.updateNotificationTriggerDate(notificiationID, nextTrigger);
+            }
+        }
+
+        // Send success message
+        return response.status(200).send({});
+    } catch (error) {
+        return response.status(500).send('Something went wrong internally');
+    }
+}
+
 module.exports = {
     getAllPrayerSchedules: getAllPrayerSchedules,
     createPrayerController: createPrayerController,
     getAllPrayersForUserController: getAllPrayersForUserController,
-    updatePrayerController: updatePrayerController
+    updatePrayerController: updatePrayerController,
+    prayerRequestNotificationController: prayerRequestNotificationController
 }

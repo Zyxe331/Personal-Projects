@@ -437,6 +437,8 @@ INSERT INTO `vets_database`.`Notification_Type` (`Id`, `Name`, `Ion_Icon`) VALUE
 INSERT INTO `vets_database`.`Notification_Type` (`Id`, `Name`, `Ion_Icon`) VALUES (3, 'Rejected from Group', 'close');
 INSERT INTO `vets_database`.`Notification_Type` (`Id`, `Name`, `Ion_Icon`) VALUES (4, 'Nudge', 'alert');
 INSERT INTO `vets_database`.`Notification_Type` (`Id`, `Name`, `Ion_Icon`) VALUES (5, 'Removed from Group', 'close');
+INSERT INTO `vets_database`.`Notification_Type` (`Id`, `Name`, `Ion_Icon`) VALUES (6, 'Prayer', 'alert');
+
 
 COMMIT;
 

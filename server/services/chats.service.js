@@ -176,6 +176,32 @@ const updateGroup = async (groupId, name) => {
     return group;
 }
 
+const getNotification = async (notificationId) => { // Returns notification data given a notificationId
+    let notification;
+    try {
+        const db = new Database();
+        notification = await db.query(
+            `SELECT n.Title, n.Body, n.Completed, n.Read, n.CreatedDate, n.LastTriggered, n.To_User_Id, n.From_User_Id, n.Notification_Type_Id, n.Group_Id FROM \`Notification\` n WHERE Id = ${notificationId}`);
+        db.close();
+    } catch (error) {
+        console.error(error);       
+    }
+    return notification;
+}
+
+const updateNotificationTriggerDate = async (notificationId, triggeredDate) => { // Updates the LastTriggered value in the database to keep track of notification trigger times
+
+    try {
+        const db = new Database();
+        let result = await db.query(`UPDATE \`Notification\` SET LastTriggered = ${triggeredDate}, WHERE Id = ${notificationId}`);
+        db.close();
+
+    } catch (error) {
+        console.error(error);
+    }
+
+}
+
 module.exports = {
     deactivateActiveUserHasGroups: deactivateActiveUserHasGroups,
     createGroup: createGroup,
@@ -189,5 +215,7 @@ module.exports = {
     getUsers: getUsers,
     getUserPlans: getUserPlans,
     updateGroup: updateGroup,
-    updateNotifications: updateNotifications
+    updateNotifications: updateNotifications,
+    getNotification: getNotification,
+    updateNotificationTriggerDate: updateNotificationTriggerDate
 }
