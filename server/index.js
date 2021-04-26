@@ -71,211 +71,87 @@ const canEditUser = ({ currentAdmin }) => {
 	return currentAdmin && currentAdmin.Role_Id === 1
 }
 
+const exportTable = { //export action for adminbro resources
+	actionType: 'resource',
+	icon: 'Export',
+	isVisible: true,
+	handler: async (request, response, data) => {return exportToCSV(response, data)},
+	after: async (originalResponse, request, context) => {
+		console.log(originalResponse)
+		console.log(context)
+	},
+	component: false
+}
+
 const adminBro = new AdminBro({
 	resources: [
 		{ resource: db.User, options: { 
 			parent: sidebarGroups.developer,
-			actions: {
-				export: {
-					actionType: 'resource',
-					icon: 'Export',
-					isVisible: true,
-					handler: async (request, response, data) => {exportToCSV(response, data)},
-					component: false
-				}
-			},
+			actions: { exportTable },
 		}},
 		{ resource: db.Role, options: { 
 			parent: sidebarGroups.developer,
-			actions: {
-				export: {
-					actionType: 'resource',
-					icon: 'Export',
-					isVisible: true,
-					handler: async (request, response, data) => {exportToCSV(response, data)},
-					component: false
-				}
-			},
+			actions: { exportTable },
 		}},
 		{ resource: db.ContentCycle, options: { 
 			parent: sidebarGroups.admin,
-			actions: {
-				export: {
-					actionType: 'resource',
-					icon: 'Export',
-					isVisible: true,
-					handler: async (request, response, data) => {exportToCSV(response, data)},
-					component: false
-				}
-			},
+			actions: { exportTable },
 		}},
 		{ resource: db.Group, options: { 
 			parent: sidebarGroups.admin,
-			actions: {
-				export: {
-					actionType: 'resource',
-					icon: 'Export',
-					isVisible: true,
-					handler: async (request, response, data) => {exportToCSV(response, data)},
-					component: false
-				}
-			},
+			actions: { exportTable },
 		}},
 		{ resource: db.GroupRole, options: { 
 			parent: sidebarGroups.developer,
-			actions: {
-				export: {
-					actionType: 'resource',
-					icon: 'Export',
-					isVisible: true,
-					handler: async (request, response, data) => {exportToCSV(response, data)},
-					component: false
-				}
-			},
+			actions: { exportTable },
 		}},
 		{ resource: db.Journal, options: { 
 			parent: sidebarGroups.developer,
-			actions: {
-				export: {
-					actionType: 'resource',
-					icon: 'Export',
-					isVisible: true,
-					handler: async (request, response, data) => {exportToCSV(response, data)},
-					component: false
-				}
-			},
+			actions: { exportTable },
 		}},
 		{ resource: db.Message, options: { 
 			parent: sidebarGroups.developer,
-			actions: {
-				export: {
-					actionType: 'resource',
-					icon: 'Export',
-					isVisible: true,
-					handler: async (request, response, data) => {exportToCSV(response, data)},
-					component: false
-				}
-			},
+			actions: { exportTable },
 		}},
 		{ resource: db.Notification, options: { 
 			parent: sidebarGroups.developer,
-			actions: {
-				export: {
-					actionType: 'resource',
-					icon: 'Export',
-					isVisible: true,
-					handler: async (request, response, data) => {exportToCSV(response, data)},
-					component: false
-				}
-			},
+			actions: { exportTable },
 		}},
 		{ resource: db.Notification_Type, options: { 
 			parent: sidebarGroups.developer,
-			actions: {
-				export: {
-					actionType: 'resource',
-					icon: 'Export',
-					isVisible: true,
-					handler: async (request, response, data) => {exportToCSV(response, data)},
-					component: false
-				}
-			},
+			actions: { exportTable },
 		}},
 		{ resource: db.Plan, options: { 
 			parent: sidebarGroups.admin,
-			actions: {
-				export: {
-					actionType: 'resource',
-					icon: 'Export',
-					isVisible: true,
-					handler: async (request, response, data) => {exportToCSV(response, data)},
-					component: false
-				}
-			},
+			actions: { exportTable },
 		}},
 		{ resource: db.Prayer_has_Tag, options: { 
 			parent: sidebarGroups.developer,
-			actions: {
-				export: {
-					actionType: 'resource',
-					icon: 'Export',
-					isVisible: true,
-					handler: async (request, response, data) => {exportToCSV(response, data)},
-					component: false
-				}
-			},
+			actions: { exportTable },
 		}},
 		{ resource: db.PrayerRequest, options: {
 			parent: sidebarGroups.developer,
-			actions: {
-				export: {
-					actionType: 'resource',
-					icon: 'Export',
-					isVisible: true,
-					handler: async (request, response, data) => {exportToCSV(response, data)},
-					component: false
-				}
-			},
+			actions: { exportTable },
 		}},
 		{ resource: db.Section_has_Tag, options: { 
 			parent: sidebarGroups.admin,
-			actions: {
-				export: {
-					actionType: 'resource',
-					icon: 'Export',
-					isVisible: true,
-					handler: async (request, response, data) => {exportToCSV(response, data)},
-					component: false
-				}
-			},
+			actions: { exportTable },
 		}},
 		{ resource: db.Section, options: { 
 			parent: sidebarGroups.admin,
-			actions: {
-				export: {
-					actionType: 'resource',
-					icon: 'Export',
-					isVisible: true,
-					handler: async (request, response, data) => {exportToCSV(response, data)},
-					component: false
-				}
-			},
+			actions: { exportTable },
 		}},
 		{ resource: db.Tag, options: { 
 			parent: sidebarGroups.admin,
-			actions: {
-				export: {
-					actionType: 'resource',
-					icon: 'Export',
-					isVisible: true,
-					handler: async (request, response, data) => {exportToCSV(response, data)},
-					component: false
-				}
-			},
+			actions: { exportTable },
 		}},
 		{ resource: db.User_has_Group, options: { 
 			parent: sidebarGroups.developer,
-			actions: {
-				export: {
-					actionType: 'resource',
-					icon: 'Export',
-					isVisible: true,
-					handler: async (request, response, data) => {exportToCSV(response, data)},
-					component: false
-				}
-			},
+			actions: { exportTable },
 		}},
 		{ resource: db.User_has_Plan, options: { 
 			parent: sidebarGroups.developer,
-			actions: {
-				export: {
-					actionType: 'resource',
-					icon: 'Export',
-					isVisible: true,
-					handler: async (request, response, data) => {exportToCSV(response, data)},
-					component: false
-				}
-			},
+			actions: { exportTable },
 		}}
 	],
 	rootPath: '/admin',
@@ -288,10 +164,10 @@ const adminBro = new AdminBro({
 function exportToCSV(response, data) {
 	const table = data.resource.SequelizeModel.name;
 	const ws = fs.createWriteStream(table + '.csv');
-	connection.query('SELECT * FROM ' + table, function(error, data, fields) {
+	connection.query('SELECT * FROM ' + table, function(error, dbData, fields) {
 		if (error) throw error;
 	
-		const jsonData = JSON.parse(JSON.stringify(data));
+		const jsonData = JSON.parse(JSON.stringify(dbData));
 		const json2csvParser = new Json2csvParser({ header: true});
 		const csv = json2csvParser.parse(jsonData);
 
@@ -299,9 +175,17 @@ function exportToCSV(response, data) {
 		if (error) throw error;
 		console.log("Success!");
 		});
-		response.attachment(table + '.csv');
-		response.status(200).send(csv);
+		response.status(200).attachment(table + '.csv').send(csv);
+		// response.download('./'+ table + ".csv") 
+		// response.set('Content-disposition', 'attachment; filename=' + table + ".csv");
+  		// response.set('Content-Type', 'text/plain');
+		// response.charset = 'UTF-8';
+		// response.write(csv);
+		// response.end()
 	});
+	return {
+			notice: table + ' table should be downloading!'
+		}
 }
 
 function importFromCSV(data) {
