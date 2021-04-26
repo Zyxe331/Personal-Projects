@@ -30,7 +30,6 @@ export class SectionPage implements OnInit, AfterViewInit {
   allPrayers$: Observable<PrayerRequest[]> = this.prayerService.fetchUsersPrayers()
   filteredPrayers: PrayerRequest[]
   @ViewChild('sectionContent', {read: ElementRef, static: true }) contentRef: ElementRef;
-  private MAX_TRANSLATE: number = 400;
 
   get showSpinner() {
     return this.globalServices.showSpinner;
@@ -86,11 +85,6 @@ export class SectionPage implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // // create gesture animation
-    // const animation = this.animationCtrl.create()
-    // .addElement(this.contentRef.nativeElement)
-    // .duration(1000)
-    // .fromTo('transform', 'translateX(0)', `translateX(${this.MAX_TRANSLATE}px)`);
 
     // create gesture for swiping to next section
     const gesture: Gesture = this.gestureCtrl.create({
