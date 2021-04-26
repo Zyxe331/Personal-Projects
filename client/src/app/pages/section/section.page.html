@@ -13,7 +13,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content #sectionContent>
   
   <ion-grid *ngIf="showSpinner" class="height100">
     <ion-row class="align-items-center height100">
@@ -61,7 +61,7 @@
       </ion-card-content>
     </ion-card>
 
-    <ion-card>
+    <ion-card id="journalsCard">
       <ion-card-header>
         <ion-card-title>Journals</ion-card-title>
       </ion-card-header>

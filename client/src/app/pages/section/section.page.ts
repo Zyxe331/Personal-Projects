@@ -1,5 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { NavController, ModalController, PopoverController, Gesture, GestureController  } from '@ionic/angular'
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { NavController, ModalController, PopoverController, Gesture, GestureController, AnimationController  } from '@ionic/angular'
 import { ActivatedRoute, Router, NavigationExtras, NavigationEnd } from '@angular/router';
 import { ContentCycleProviderService } from '../../services/content-cycle-provider.service';
 import { JournalProviderService } from '../../services/journal-provider.service';
@@ -20,7 +20,7 @@ import { Observable } from 'rxjs';
   templateUrl: './section.page.html',
   styleUrls: ['./section.page.scss'],
 })
-export class SectionPage implements OnInit {
+export class SectionPage implements OnInit, AfterViewInit {
 
   sectionIndex: number;
   section: Section;
@@ -29,7 +29,8 @@ export class SectionPage implements OnInit {
   tag: Tag;
   allPrayers$: Observable<PrayerRequest[]> = this.prayerService.fetchUsersPrayers()
   filteredPrayers: PrayerRequest[]
-  @ViewChild('app-section:not(.ion-page-hidden) ion-content') contentRef: ElementRef;
+  @ViewChild('sectionContent', {read: ElementRef, static: true }) contentRef: ElementRef;
+  private MAX_TRANSLATE: number = 400;
 
   get showSpinner() {
     return this.globalServices.showSpinner;
@@ -46,6 +47,7 @@ export class SectionPage implements OnInit {
     private globalServices: GlobalProviderService,
     private navCtrl: NavController,
     public popoverController: PopoverController,
+    private animationCtrl: AnimationController,
     private gestureCtrl: GestureController
   ) { }
 
@@ -83,13 +85,39 @@ export class SectionPage implements OnInit {
     })
   }
 
-  AfterViewInit() {
+  ngAfterViewInit() {
+    // // create gesture animation
+    // const animation = this.animationCtrl.create()
+    // .addElement(this.contentRef.nativeElement)
+    // .duration(1000)
+    // .fromTo('transform', 'translateX(0)', `translateX(${this.MAX_TRANSLATE}px)`);
+
     // create gesture for swiping to next section
     const gesture: Gesture = this.gestureCtrl.create({
       el: this.contentRef.nativeElement,
-      threshold: 0,
+      gesturePriority: 100,
+      threshold: 5,
       gestureName: 'swipe-next-section',
-      onMove: ev => this.goToNextSection()
+      onStart: () => {
+        this.contentRef.nativeElement.style.transition = "none";
+      },
+      onMove: detail => {
+        this.contentRef.nativeElement.style.transform = `translateX(${detail.deltaX}px)`
+      },
+      onEnd: (detail) => {
+        const style = this.contentRef.nativeElement.style
+        style.transition = "0.3s ease-out";
+        if(detail.deltaX > window.innerWidth/2){
+          style.transform = `translateX(${window.innerWidth * 1.5}px)`;
+          this.goToPreviousSection();
+          style.transform = ''
+        } else if (detail.deltaX < -window.innerWidth/2){
+          style.transform = `translateX(-${window.innerWidth * 1.5}px)`;
+          this.goToNextSection();
+        } else {
+          style.transform = ''
+        }
+      }
     }, true);
     gesture.enable(true)
   }
@@ -125,7 +153,7 @@ export class SectionPage implements OnInit {
   goToPreviousSection() {
     if (this.sectionIndex !== 0) {
       let previousIndex = this.sectionIndex - 1;
-      this.navCtrl.navigateBack(['/section/' + previousIndex]);
+      this.navCtrl.navigateForward(['/section/' + previousIndex]); //was navigateBack but it broke
     }
   }
 
