@@ -147,6 +147,8 @@ CREATE TABLE IF NOT EXISTS `vets_database`.`PrayerRequest` (
   `IsPrivate` TINYINT NULL,
   `CreatedDate` DATETIME NULL,
   `User_Id` INT NOT NULL,
+  `NotificationDate` varchar(40) DEFAULT NULL,
+  `NotificationTime` varchar(40) DEFAULT NULL,
   `Frequency` INT NULL,
   `Section_Id` INT NULL,
   PRIMARY KEY (`Id`),

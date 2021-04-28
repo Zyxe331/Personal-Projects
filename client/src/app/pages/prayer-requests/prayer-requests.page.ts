@@ -1,3 +1,9 @@
+/**
+ * prayer-requests-page.ts - 
+ * This page displays all prayers for the active user, and also offers the ability to filter by specific properties. 
+ * Creating a prayer on this page using the EditPrayerCardComponent will update the page to show the new prayer.
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
 import { PrayerRequestProviderService } from '../../services/prayer-request-provider.service';
@@ -40,12 +46,12 @@ export class PrayerRequestsPage implements OnInit {
   }
 
   /**
-   * Function used to setup all data for this page asynchronously
+   * Function used to setup all data for this page asynchronously **DEPRECIATED: This function is likely to help with ionic lifecycle updates, but using ngOnInit is cleaner and better practice.**
    *
    * @param {*} thisPage Acts as "this" normally would but since we call it from the global class it has to use a variable
    * @memberof PrayerRequestsPage
    */
-  async getAndOrganizeData(thisPage) {
+  async getAndOrganizeData(thisPage) { // Do not use! Use ngOnInit.
     // thisPage.allRequests$.subscribe(requests => {
     //   thisPage.filteredRequests = JSON.parse(JSON.stringify(requests))
     // })
@@ -75,7 +81,7 @@ export class PrayerRequestsPage implements OnInit {
     return await popover.present();
   }
 
-  goToPage(request) {
+  goToPage(request) { //This is the required way to navigate to a prayer page since the required information is in the navigation extras.
     let navigationExtras: NavigationExtras = {
       state: {
         request: request
@@ -84,7 +90,7 @@ export class PrayerRequestsPage implements OnInit {
     this.router.navigate(['/prayer-request'], navigationExtras);
   }
 
-  filterItems() {
+  filterItems() { // Allow the user to filter prayers by title
     this.allRequests$.subscribe(requests => {
       this.filteredRequests = requests.filter(prayer => {
         return prayer.Title.toLowerCase().includes(this.searchTerm.toLowerCase())

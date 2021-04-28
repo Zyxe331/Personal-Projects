@@ -1,3 +1,11 @@
+/**
+ * content-cycle.page.ts
+ * The content-cycle page is used to display base information of any content cycle(s) that the user is currently enrolled in.
+ * 
+ * A a user can choose to leave a content cycle on this page through the change-cycle-popover component that is located in the content-cycle component.
+ * 
+ * A user can also utilize the page to enter the last visited section of the specific content cycle they choose.
+ */
 import { Component, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { ChangeCyclePopoverComponent } from './change-cycle-popover/change-cycle-popover.component'
@@ -101,7 +109,7 @@ export class ContentCyclePage implements OnInit {
     return await popover.present();
   }
 
-
+//Allows the user to navigate to the "change-content-cycle" page, which is really just the page that allows you to enroll in another content cycle.
   goToChangeCycle() {
     this.router.navigate(['/change-content-cycle']);
   }
