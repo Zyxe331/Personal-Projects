@@ -193,6 +193,28 @@ const getUserGroups = async(userId) => {
     return result;
 }
 
+const getUserHasGroupForGivenGroup = async (groupId) => {
+    const db = new Database();
+    let userHasGroups = await db.query(`SELECT User_has_Group.* FROM User_has_Group INNER JOIN User_has_Plan ON User_has_Group.User_has_Plan_Id=User_has_Plan.Id WHERE User_has_Group.Group_Id = ${groupId} AND User_has_Group.Active=1`).catch(error => {
+        console.error(error);
+        throw error;
+    });
+    db.close();
+
+    return userHasGroups;
+}
+
+const getUsersOfGroup = async (groupId) => {
+    const db = new Database();
+    let userHasGroups = await db.query(`SELECT user.Id as Id, user.FirstName as FirstName, user.LastName as LastName, user.Username as username, user.email as email FROM user INNER JOIN user_has_plan ON user.Id = user_has_plan.User_Id INNER JOIN user_has_group on user_has_plan.Id = user_has_group.User_has_Plan_Id WHERE User_has_Group.Group_Id = ${groupId} AND User_has_Group.Active=1`).catch(error => {
+        console.error(error);
+        throw error;
+    });
+    db.close();
+
+    return userHasGroups;
+}
+
 module.exports = {
     deactivateActiveUserHasGroups: deactivateActiveUserHasGroups,
     createGroup: createGroup,
@@ -201,6 +223,8 @@ module.exports = {
     getCurrentGroup: getCurrentGroup,
     getUsersGroups: getUsersGroups,
     getUserGroups: getUserGroups,
+    getUserHasGroupForGivenGroup: getUserHasGroupForGivenGroup,
+    getUsersOfGroup: getUsersOfGroup,
     createNotification: createNotification,
     queryUserNotifications: queryUserNotifications,
     updateNotification: updateNotification,

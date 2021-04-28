@@ -71,10 +71,10 @@ export class ChatProviderService {
    * @returns {Observable<GroupInformation>}
    * @memberof ChatProviderService
    */
-  getCurrentGroupInformationAsObservable(): Observable<GroupInformation> {
+  getCurrentGroupInformationAsObservable(groupId: number): Observable<GroupInformation> {
     // Ask the server to try and get all prayer schedule possibilities
     return this.userServices.getUserFromStorage().pipe(switchMap(user => {
-      return this.http.get<GroupInformation>(SERVER_URL + 'chats/' + user.Id).pipe(map((res: GroupInformation) => {
+      return this.http.get<GroupInformation>(SERVER_URL + 'chats/usersgroupInfo/' + user.Id + '/' + groupId).pipe(map((res: GroupInformation) => {
         this.userGroup = res.currentUserHasGroup;
         this.currentGroup = res.currentGroup;
         this.groupUsers = res.groupUsers;

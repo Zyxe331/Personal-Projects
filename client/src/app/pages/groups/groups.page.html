@@ -24,9 +24,9 @@
     
       <div *ngIf="!showSpinner">
         <ion-list>
-          <ion-item lines="full" detail *ngFor="let Group of filteredGroups" (click)="goToPage(group)">
-            <ion-text style="width: 15%;" color="medium" slot="start">{{group.ShortFormattedDate}}</ion-text>
-            <ion-label>{{group.Name}}</ion-label>
+          <ion-item lines="full" detail *ngFor="let Group of filteredGroups" (click)="goToPage(Group)">
+            <ion-text style="width: 15%;" color="medium" slot="start">{{Group.ShortFormattedDate}}</ion-text>
+            <ion-label>{{Group.Name}}</ion-label>
           </ion-item>
         </ion-list>
       </div> 

@@ -5,6 +5,7 @@ const utils = require('../utils/general_utils.js');
 const router = express.Router();
 
 router.get('/:userid', utils.simpleAuthCheck, chatController.getCurrentUserGroupInformation);
+router.get('/usersgroupInfo/:userid/:groupId', utils.simpleAuthCheck, chatController.getCurrentUserGroupInformation);
 router.get('/userGroups/:userid', utils.simpleAuthCheck, chatController.getCurrentUsersGroupsController)
 router.get('/notifications/:userid', utils.simpleAuthCheck, chatController.getCurrentUserNotifications);
 router.get('/groups/:userId', utils.simpleAuthCheck, chatController.getGroupController);

@@ -49,17 +49,23 @@ export class GroupPage implements OnInit {
   }
 
   ngOnInit() {
-    this.groupServices.getCurrentGroupInformationAsObservable().subscribe(res => {
-      this.currentGroup = res.currentGroup;
-      this.groupMembers = res.groupUsers;
-      this.currentUserGroup = res.currentUserHasGroup;
-      this.currentUserPlanProgress = (this.cycleServices.currentSectionIndex / this.cycleServices.orderedSections.length) + this.cycleServices.userPlan.Times_Completed;
-      this.groupMembers.forEach(member => member.StopNudge = false);
-      this.createGroupMembers();
-      this.updateGroupForm = this.formBuilder.group({
-      name: [this.currentGroup.Name, Validators.compose([Validators.required])]
+    if (this.router.getCurrentNavigation().extras.state) {
+      let groupId = this.router.getCurrentNavigation().extras.state.group.Id
+      this.groupServices.getCurrentGroupInformationAsObservable(groupId).subscribe(res => {
+        this.currentGroup = res.currentGroup;
+        this.groupMembers = res.groupUsers;
+        this.currentUserGroup = res.currentUserHasGroup;
+        this.currentUserPlanProgress = (this.cycleServices.currentSectionIndex / this.cycleServices.orderedSections.length) + this.cycleServices.userPlan.Times_Completed;
+        this.groupMembers.forEach(member => member.StopNudge = false);
+        this.createGroupMembers();
+        this.updateGroupForm = this.formBuilder.group({
+          name: [this.currentGroup.Name, Validators.compose([Validators.required])]
+        });
       });
-    });
+    }
+    else {
+      this.router.navigate(['/groups'])
+    }
   }
 
   /**
@@ -77,7 +83,7 @@ export class GroupPage implements OnInit {
    * @param {*} thisPage Acts as "this" normally would but since we call it from the global class it has to use a variable
    * @memberof GroupPage
    */
-  async getAndOrganizeData(thisPage) { 
+  async getAndOrganizeData(thisPage) {
     // await thisPage.groupServices.getCurrentGroupInformation();
     // thisPage.currentGroup = thisPage.groupServices.currentGroup;
     // thisPage.groupMembers = thisPage.groupServices.groupUsers;
@@ -217,7 +223,7 @@ export class GroupPage implements OnInit {
       componentProps: {
         groupId: grpId
       },
-      showBackdrop:true,
+      showBackdrop: true,
       cssClass: 'change-cycle-popup',
       event: ev,
       translucent: false
