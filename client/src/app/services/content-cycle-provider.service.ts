@@ -10,6 +10,7 @@ import { Tag } from 'src/app/interfaces/tag';
 import { SERVER_URL } from '../../environments/environment';
 import { Group } from '../interfaces/group';
 import { Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,7 @@ export class ContentCycleProviderService {
   public sectionsByCycleId: object;
 
   constructor(
-    private http: HttpClient, 
+    private http: HttpClient,
     private userServices: UserProviderService
   ) { }
 
@@ -107,8 +108,10 @@ export class ContentCycleProviderService {
    * This function returns all the plans for the current user. No information about their enrollment, just the plan information, and the group Id it belongs to.
    * @returns Observable<Plan[]>
    */
-   getUsersPlans(): Observable<Plan[]> {
-    return this.http.get<Plan[]>(SERVER_URL + 'content-cycles/' + this.userServices.getUserFromStorage().Id)
+  getUsersPlans(): Observable<Plan[]> {
+    return this.userServices.getUserFromStorage().pipe(switchMap(user => {
+      return this.http.get<Plan[]>(SERVER_URL + 'content-cycles/' + user.Id)
+    }))
   }
 
   /**

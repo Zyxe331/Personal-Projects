@@ -22,9 +22,10 @@ export class ChangeCyclePopoverComponent implements OnInit {
 
   ClosePopoverAndNav() {
     this.popover.dismiss()
-    let userId = this.userService.getUserFromStorage().Id
-    this.chatService.removeUser(this.groupId, userId).then(res => {
-      location.reload() // This is kind of a hack to get the content to reload, replace this with some subjects to get the content to reload.
+    this.userService.getUserFromStorage().subscribe(user => {
+      this.chatService.removeUser(this.groupId, user.Id).then(res => {
+        location.reload() // This is kind of a hack to get the content to reload, replace this with some subjects to get the content to reload.
+      })
     })
   }
 
