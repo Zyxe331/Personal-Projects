@@ -24,8 +24,8 @@ export class AppComponent {
             icon: 'home'
         },
         {
-            title: 'Group',
-            url: '/group',
+            title: 'Groups',
+            url: '/groups',
             icon: 'list'
         },
         {
