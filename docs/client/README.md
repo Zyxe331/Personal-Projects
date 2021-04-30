@@ -1,4 +1,8 @@
 # Client Documentation
+Any information associated with the client aspect of the application will be located in this given file. Be sure to utlize any and all links given below to help bring you up to speed on what we learned and used during our year of developing the project.
+
+## Building for Android
+
 Use the following steps to get your build environment set up. The following are good references for when you encounter issues: 
 
 - https://ionicframework.com/docs/cli/commands/cordova-compile 
@@ -42,4 +46,3 @@ The compiling process will take a good 5 minutes if successful.
 In your first run you are likely to have a few libraries missing. Googling the error should identify what is missing. 
 
 You could use ANT or even the Android workbench as different pathways to compile but the those will have to require your own research. 
-## Building for Android
