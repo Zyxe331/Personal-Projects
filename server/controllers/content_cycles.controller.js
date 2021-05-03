@@ -66,7 +66,7 @@ const getUsersPlansController = async (req, res) => {
             let groupId = userHasGroups.find(hasGroup => hasGroup.User_has_Plan_Id == plan.Id).Id
             console.log(`groupID: ${groupId}`)
             plans.push({
-                Id: plan.Id,
+                Id: plan.Plan_Id,
                 GroupId: groupId,
                 Title: foundPlan.Title,
                 CreatedDate: foundPlan.CreatedDate,
@@ -75,6 +75,17 @@ const getUsersPlansController = async (req, res) => {
         }
         res.status(200).send(plans)
     } catch (err) {
+        res.status(500).send(`There was an error retriving information for plans: ${err.message}`)
+    }
+}
+
+const getUsersPlansInfoController = async (req, res) => {
+    const userId = req.params.userid
+    try {
+        let userHasPlans = await contentCycleServices.getUsersPlans(userId)
+        res.status(200).send(userHasPlans)
+    }
+    catch(err) {
         res.status(500).send(`There was an error retriving information for plans: ${err.message}`)
     }
 }
@@ -173,6 +184,7 @@ module.exports = {
     subscribeToPlan: subscribeToPlan,
     getAllPlans: getAllPlans,
     getUsersPlansController: getUsersPlansController,
+    getUsersPlansInfoController: getUsersPlansInfoController,
     getCurrentUserPlanInformation: getCurrentUserPlanInformation,
     updateUserHasPlanController: updateUserHasPlanController
 }
