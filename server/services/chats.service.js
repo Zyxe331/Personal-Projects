@@ -54,7 +54,7 @@ const getCurrentUserHasGroup = async (userid) => {
     return userHasGroup[0];
 }
 
-const getCurrentGroup = async (groupid, currentUserId) => {
+const getCurrentGroup = async (groupid) => {
     const db = new Database();
     let group = await db.query(`SELECT * FROM \`Group\` WHERE Id = ${groupid}`).catch(error => {
     //let group = await db.query(`SELECT User_has_Plan_Id, User_has_Plan.User_Id FROM User_has_Group INNER JOIN User_has_Plan ON User_has_Group.User_has_Plan_Id = User_has_Plan.Id WHERE User_has_Plan.User_Id = ${currentUserId} AND User_has_Group.Active = 1`).catch(error => {   

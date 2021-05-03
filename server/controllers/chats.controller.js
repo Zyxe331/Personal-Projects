@@ -17,6 +17,7 @@ const getCurrentUserGroupInformation = async (request, response) => {
         let groupId = request.params.groupId
         let responseBody = {
             currentUserHasGroup: null,
+            currentUserHasPlan: null,
             currentGroup: null,
             userHasPlans: [],
             groupUsers: []
@@ -38,10 +39,11 @@ const getCurrentUserGroupInformation = async (request, response) => {
         let userHasPlanIds = userHasGroups.map(userHasGroup => userHasGroup.User_has_Plan_Id);
 
         let groupUsers = await chatServices.getUsersOfGroup(groupId);
-        responseBody.groupUsers = groupUsers.filter(user => {user.Id !== userid}); //remove current user from list of members
+        responseBody.groupUsers = groupUsers.filter(user => user.Id != userid); //remove current user from list of members
 
         let userHasPlans = await chatServices.getUserPlans(userHasPlanIds);
         responseBody.userHasPlans = userHasPlans;
+        responseBody.currentUserHasPlan = userHasPlans.find(hasPlan => hasPlan.User_Id == userid)
 
         // Send success message
         return response.status(200).send(responseBody);

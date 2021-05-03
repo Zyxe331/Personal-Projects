@@ -31,4 +31,10 @@
         </ion-list>
       </div> 
 
+      <div class="ion-text-center joinGroup" *ngIf="filteredGroups == ''">
+        <ion-button fill="solid" color="primary" class="changeCycleBtn" (click)="joinNewGroup()">
+          <ion-icon slot="start" name="add"></ion-icon>
+          Join New Group</ion-button>
+      </div>
+
 </ion-content>

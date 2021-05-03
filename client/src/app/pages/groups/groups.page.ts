@@ -62,4 +62,8 @@ export class GroupsPage implements OnInit {
     });
   }
 
+  joinNewGroup() {
+    this.router.navigate(['/change-content-cycle'])
+  }
+
 }
