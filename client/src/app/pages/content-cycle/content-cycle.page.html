@@ -32,13 +32,12 @@
           <ion-grid style="padding-top: 0;" class="ion-padding-bottom">
             <ion-row class="ion-padding-horizontal ion-padding-bottom">
               <ion-col size="9" class="ion-align-self-center ion-text-center">
-                <p class="smallitalic" color="medium">working through with</p>
                 <p class="subheader" color="dark">{{groupById(plan.GroupId).Name}}</p>
-                <!-- Commented out until this portion works -->
-                <!-- <ion-text *ngFor="let member of currentGroupMembers; last as isLast">
+                <p class="smallitalic" color="medium" *ngIf="groupInfoById(plan.GroupId).groupUsers.length != 0">working through with</p>
+                <ion-text *ngFor="let member of groupInfoById(plan.GroupId).groupUsers; last as isLast">
                     <span *ngIf="!isLast">{{member.FirstName}}, </span>
                     <span *ngIf="isLast">{{member.FirstName}}</span>
-                  </ion-text> -->
+                  </ion-text>
               </ion-col>
               <ion-col size="3" class="ion-align-self-center ion-text-center">
                 <ion-avatar>
@@ -51,25 +50,25 @@
                 <ion-label>
                   Full Plan Progress
                   <!--  -->
-                  <span *ngIf="3 > 0">
+                  <span *ngIf="UserHasPlanById(plan.Id).Times_Completed > 0">
                     <ion-icon color="warning" name="star"></ion-icon>
-                    {{"times completed(WIP)"}}
+                    {{UserHasPlanById(plan.Id).Times_Completed}}
                   </span>
                 </ion-label>
-                <ion-progress-bar class="progressbar" color="success" value={{planProgress}}>
+                <ion-progress-bar class="progressbar" color="success" value={{calcPlanProgress(plan.Id)}}>
                 </ion-progress-bar>
               </ion-col>
             </ion-row>
             <ion-row>
               <ion-col size="12">
                 <ion-label>Current Cycle Progress</ion-label>
-                <ion-progress-bar class="progressbar" color="success" value={{cycleProgress}}>
+                <ion-progress-bar class="progressbar" color="success" value={{calcCycleProgress(plan.Id)}}>
                 </ion-progress-bar>
               </ion-col>
             </ion-row>
           </ion-grid>
         </ion-item>
-        <ion-button class="nextSectionBtn" color="success" fill="solid" (click)="goToNextSection()">
+        <ion-button class="nextSectionBtn" color="success" fill="solid" (click)="goToNextSection(plan)">
           Continue to next section
           <ion-icon name="md-arrow-dropright"></ion-icon>
         </ion-button>
@@ -80,7 +79,7 @@
 
     </ion-card>
 
-    <ion-card *ngIf="!plans" class="noGroupCard">
+    <ion-card *ngIf="!plans || plans == ''" class="noGroupCard">
       <ion-card-content>
         <ion-grid>
           <ion-row align-items-center justify-content-center>

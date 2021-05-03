@@ -17,6 +17,7 @@ import { Group } from 'src/app/interfaces/group';
 import { User } from 'src/app/interfaces/user';
 import { UserPlan } from 'src/app/interfaces/user-plan';
 import { GlobalProviderService } from 'src/app/services/global-provider.service';
+import { GroupInformation } from 'src/app/interfaces/group-information';
 
 @Component({
   selector: 'app-content-cycle',
@@ -26,7 +27,9 @@ import { GlobalProviderService } from 'src/app/services/global-provider.service'
 export class ContentCyclePage implements OnInit {
 
   plans: Plan[];
+  userHasPlans: UserPlan[];
   groups: Group[];
+  groupInfos: GroupInformation[] = [];
   planProgress;
   cycleProgress;
 
@@ -45,11 +48,19 @@ export class ContentCyclePage implements OnInit {
   ngOnInit() {
     this.contentCycleService.getUsersPlans().subscribe(plans => {
       this.plans = plans
-      console.log(plans)
+    })
+
+    this.contentCycleService.getUsersPlanInformation().subscribe(userHasPlans => {
+      this.userHasPlans = userHasPlans
     })
 
     this.chatService.getUsersGroups().subscribe(groups => {
       this.groups = groups
+      for(let group of groups) {
+        this.chatService.getCurrentGroupInformationAsObservable(group.Id).subscribe(info => {
+          this.groupInfos.push(info)
+        })
+      }
     })
   }
 
@@ -71,7 +82,7 @@ export class ContentCyclePage implements OnInit {
    */
   async getAndOrganizeData(thisPage) {
     // removed since data should be retrived in angular lifecycle
-    // thisPage.currentPlan = await thisPage.contentCycleService.getCurrentPlanInformation();
+    // thisPage.currentPlan = await thisPage.contentCycleService.getUsersPlanInformation();
     // thisPage.userHasPlan = thisPage.contentCycleService.userPlan;
     // if (!thisPage.currentPlan) {
     //   return;
@@ -86,12 +97,42 @@ export class ContentCyclePage implements OnInit {
     // thisPage.cycleProgress = (currentSection.Order - 1) / (thisPage.contentCycleService.sectionsByCycleId[currentSection.ContentCycle_Id].length - 1);
   }
 
+  UserHasPlanById(id): UserPlan {
+    return this.userHasPlans.find(plan => plan.Plan_Id == id)
+  }
+
   groupById(id): Group {
     return this.groups.find(group => group.Id == id)
   }
 
-  goToNextSection() {
-    this.router.navigate(['/section/' + this.contentCycleService.currentSectionIndex]);
+  groupInfoById(id): GroupInformation {
+    return this.groupInfos.find(info => info.currentGroup.Id == id)
+  }
+
+  calcPlanProgress(planId) {
+    let userHasPlan = this.userHasPlans.find(plan => plan.Plan_Id == planId)
+    let plan = this.plans.find(plan => plan.Id == planId)
+    let progress = (userHasPlan.Current_Section_Id - plan.sections[0].Id) / (plan.sections.length - 1);
+    return progress
+  }
+
+  calcCycleProgress(planId) {
+    let userHasPlan = this.userHasPlans.find(plan => plan.Plan_Id == planId)
+    let plan = this.plans.find(plan => plan.Id == planId)
+    let currentSection = plan.sections.find(section => section.Id = userHasPlan.Current_Section_Id)
+    // return (currentSection.Order - 1) / (this.contentCycleService.sectionsByCycleId[currentSection.ContentCycle_Id].length - 1);
+    return .3 //WIP
+
+  }
+
+  goToNextSection(plan) {
+    let navigationExtras: NavigationExtras = {
+      state: {
+        plan: plan,
+        userHasPlan: this.userHasPlans.find(userHasPlan => userHasPlan.Plan_Id == plan.Id)
+      }
+    }
+    this.router.navigate(['/section/' + this.userHasPlans.find(userHasPlan => userHasPlan.Plan_Id == plan.Id).Current_Section_Id], navigationExtras);
   }
 
   //Trigger confirmation popup

@@ -120,53 +120,10 @@ export class ContentCycleProviderService {
    * @returns {Promise<Plan>}
    * @memberof ContentCycleProviderService
    */
-  async getCurrentPlanInformation(): Promise<Plan> {
-
-    let _this = this;
-    return new Promise(async function (resolve, reject) {
-
-      try {
-
-        // Ask the server to try and get all prayer schedule possibilities
-        let response = await _this.http.get<PlanInformation>(SERVER_URL + 'content-cycles/' + _this.userServices.currentUser.Id).toPromise();
-        console.log(response);
-        console.log('test');
-
-        // As long as something returned then resolved it
-        if (response) {
-          console.log(response);
-
-          _this.userPlan = response.currentUserHasPlan;
-          _this.currentPlan = response.currentPlan;
-          _this.orderedSections = response.allSections;
-          _this.sectionTagsBySection = response.sectionTagsBySection;
-          _this.sectionJournalsBySection = response.sectionJournalsBySection;
-          _this.sectionPrayersBySection = response.sectionPrayersBySection
-          _this.sectionsByCycleId = {};
-
-          if (_this.userPlan) {
-            for (let i = 0; i < _this.orderedSections.length; i++) {
-              if (_this.orderedSections[i].ContentCycle_Id in _this.sectionsByCycleId) {
-                _this.sectionsByCycleId[_this.orderedSections[i].ContentCycle_Id].push(_this.orderedSections[i]);
-              } else {
-                _this.sectionsByCycleId[_this.orderedSections[i].ContentCycle_Id] = [_this.orderedSections[i]];
-              }
-            }
-            _this.currentSectionIndex = _this.orderedSections.findIndex(item => item.Id == _this.userPlan.Current_Section_Id);
-          } else {
-            //If the user does not have a plan, generate stand-in plan data
-            _this.currentPlan = new Plan()
-          }
-          resolve(response.currentPlan);
-
-        }
-
-      } catch (error) {
-        console.log('returned error')
-        console.log(error);
-        reject(error.error);
-      }
-    })
+  getUsersPlanInformation(): Observable<UserPlan[]> {
+    return this.userServices.getUserFromStorage().pipe(switchMap(user => {
+      return this.http.get<UserPlan[]>(SERVER_URL + 'content-cycles/info/' + user.Id)
+    }))
   }
 
   /**
@@ -177,30 +134,12 @@ export class ContentCycleProviderService {
    * @returns
    * @memberof ContentCycleProviderService
    */
-  async updateUserHasPlan(sectionId: number, timesCompleted: number): Promise<boolean> {
-    let _this = this;
-    return new Promise(async function (resolve, reject) {
-
-      let request = {
-        sectionId: sectionId,
-        timesCompleted: timesCompleted
-      }
-
-      try {
-
-        // Ask the server to try and get all prayer schedule possibilities
-        let response = await _this.http.patch(SERVER_URL + 'content-cycles/user-has-plan/' + _this.userPlan.Id, request).toPromise();
-
-        // As long as something returned then resolved it
-        if (response) {
-
-          resolve(true);
-
-        }
-      } catch (error) {
-        reject(error.error);
-      }
-    })
+  updateUserHasPlan(userPlanId: number, sectionId: number, timesCompleted: number): Observable<boolean> {
+    let request = {
+      sectionId: sectionId,
+      timesCompleted: timesCompleted
+    }
+    return this.http.patch<boolean>(SERVER_URL + 'content-cycles/user-has-plan/' + userPlanId, request)
   }
 
   clearProperties() {

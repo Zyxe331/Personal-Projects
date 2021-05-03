@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { NavController, ModalController, PopoverController, Gesture, GestureController, AnimationController  } from '@ionic/angular'
+import { NavController, ModalController, PopoverController, Gesture, GestureController, AnimationController } from '@ionic/angular'
 import { ActivatedRoute, Router, NavigationExtras, NavigationEnd } from '@angular/router';
 import { ContentCycleProviderService } from '../../services/content-cycle-provider.service';
 import { JournalProviderService } from '../../services/journal-provider.service';
@@ -13,6 +13,8 @@ import { Tag } from 'src/app/interfaces/tag';
 import { GlobalProviderService } from 'src/app/services/global-provider.service';
 import { EditPrayerCardComponent } from 'src/app/components/edit-prayer-card/edit-prayer-card.component';
 import { Observable } from 'rxjs';
+import { Plan } from 'src/app/interfaces/plan';
+import { UserPlan } from 'src/app/interfaces/user-plan';
 
 
 @Component({
@@ -21,15 +23,17 @@ import { Observable } from 'rxjs';
   styleUrls: ['./section.page.scss'],
 })
 export class SectionPage implements OnInit, AfterViewInit {
-
+  plan: Plan
+  userHasPlan: UserPlan
   sectionIndex: number;
   section: Section;
   contentCycleName: string;
-  journals: Journal[] = [];
+  allJournals$: Observable<Journal[]> = this.journalService.fetchUsersJournals()
+  filteredJournals: Journal[]
   tag: Tag;
   allPrayers$: Observable<PrayerRequest[]> = this.prayerService.fetchUsersPrayers()
   filteredPrayers: PrayerRequest[]
-  @ViewChild('sectionContent', {read: ElementRef, static: true }) contentRef: ElementRef;
+  @ViewChild('sectionContent', { read: ElementRef, static: true }) contentRef: ElementRef;
 
   get showSpinner() {
     return this.globalServices.showSpinner;
@@ -66,21 +70,33 @@ export class SectionPage implements OnInit, AfterViewInit {
    * @memberof SectionPage
    */
   async getAndOrganizeData(thisPage) {
-    thisPage.sectionIndex = +thisPage.route.snapshot.paramMap.get('sectionNumber');
-    await thisPage.contentCycleService.getCurrentPlanInformation();
-    thisPage.section = thisPage.contentCycleService.orderedSections[thisPage.sectionIndex];
-    thisPage.contentCycleName = thisPage.contentCycleService.currentPlan.Title;
-    thisPage.journals = thisPage.setJournals(thisPage.contentCycleService.sectionJournalsBySection[thisPage.section.Id]);
-    await thisPage.contentCycleService.updateUserHasPlan(thisPage.section.Id, thisPage.contentCycleService.userPlan.Times_Completed);
+    // await thisPage.contentCycleService.getUsersPlanInformation();
+    // thisPage.contentCycleName = thisPage.contentCycleService.currentPlan.Title;
+    // thisPage.journals = thisPage.setJournals(thisPage.contentCycleService.sectionJournalsBySection[thisPage.section.Id]);
+    // await thisPage.contentCycleService.updateUserHasPlan(thisPage.section.Id, thisPage.contentCycleService.userPlan.Times_Completed);
   }
 
   ngOnInit() {
-    this.sectionIndex = +this.route.snapshot.paramMap.get('sectionNumber')
-    this.section = this.contentCycleService.orderedSections[this.sectionIndex]
-    this.prayerService.getThisUsersPrayersAsObservable().subscribe()
-    this.allPrayers$.subscribe(prayers => {
-      console.log('Prayers: ', prayers)
-      this.filteredPrayers = prayers.filter(prayer => prayer.Section_Id === this.section.Id)
+    this.route.queryParams.subscribe(params => {
+      if (this.router.getCurrentNavigation().extras.state) {
+        this.plan = this.router.getCurrentNavigation().extras.state.plan;
+        this.userHasPlan = this.router.getCurrentNavigation().extras.state.userHasPlan;
+        this.sectionIndex = +this.route.snapshot.paramMap.get('sectionNumber')
+        this.section = this.plan.sections.find(section => section.Id == this.sectionIndex)
+        this.contentCycleName = this.section.Title
+        this.prayerService.getThisUsersPrayersAsObservable().subscribe()
+        this.allPrayers$.subscribe(prayers => {
+          this.filteredPrayers = prayers.filter(prayer => prayer.Section_Id === this.section.Id)
+        })
+        this.journalService.getThisUsersJournalsAsObservable().subscribe()
+        this.allJournals$.subscribe(journals => {
+          this.filteredJournals = this.setJournals(journals.filter(journal => journal.Section_Id === this.section.Id))
+        })
+        this.contentCycleService.updateUserHasPlan(this.userHasPlan.Id, this.section.Id, this.userHasPlan.Times_Completed).subscribe()
+      }
+      else {
+        this.router.navigate(['/content-cycle'])
+      }
     })
   }
 
@@ -101,12 +117,14 @@ export class SectionPage implements OnInit, AfterViewInit {
       onEnd: (detail) => {
         const style = this.contentRef.nativeElement.style
         style.transition = "0.3s ease-out";
-        if(detail.deltaX > window.innerWidth/2){
+        if (detail.deltaX > window.innerWidth / 2) {
           style.transform = `translateX(${window.innerWidth * 1.5}px)`;
+          console.log('go back')
           this.goToPreviousSection();
           style.transform = ''
-        } else if (detail.deltaX < -window.innerWidth/2){
+        } else if (detail.deltaX < -window.innerWidth / 2) {
           style.transform = `translateX(-${window.innerWidth * 1.5}px)`;
+          console.log('go forward')
           this.goToNextSection();
         } else {
           style.transform = ''
@@ -128,26 +146,37 @@ export class SectionPage implements OnInit, AfterViewInit {
 
   goToNextSection() {
     let nextIndex;
-    if (this.sectionIndex !== this.contentCycleService.orderedSections.length - 1) {
+    if (this.sectionIndex !== this.plan.sections[this.plan.sections.length - 1].Id) {
       nextIndex = this.sectionIndex + 1;
     } else {
       nextIndex = 0;
     }
 
-    let nextSection = this.contentCycleService.orderedSections[nextIndex];
+    let nextSection = this.plan.sections.find(section => section.Id == nextIndex);
     if (nextSection.Order === 1 && nextSection.ContentCycle_Number === 1) {
       this.globalServices.sendSuccessToast(`Wow you did it! You finished the plan! Feel free to start over and continue!`);
-      this.contentCycleService.userPlan.Times_Completed++;
+      this.userHasPlan.Times_Completed++;
     } else if (nextSection.Order === 1) {
       this.globalServices.sendSuccessToast(`Nice job! You just finished a cycle! Make sure to stay diligent so you can finish the plan. `);
     }
-
-    this.navCtrl.navigateForward(['/section/' + nextIndex]);
+    let navigationExtras: NavigationExtras = {
+      state: {
+        plan: this.plan,
+        userHasPlan: this.userHasPlan
+      }
+    }
+    this.navCtrl.navigateForward(['/section/' + nextIndex], navigationExtras);
   }
   goToPreviousSection() {
-    if (this.sectionIndex !== 0) {
+    let navigationExtras: NavigationExtras = {
+      state: {
+        plan: this.plan,
+        userHasPlan: this.userHasPlan
+      }
+    }
+    if (this.sectionIndex !== this.plan.sections[0].Id) {
       let previousIndex = this.sectionIndex - 1;
-      this.navCtrl.navigateForward(['/section/' + previousIndex]); //was navigateBack but it broke
+      this.navCtrl.navigateBack(['/section/' + previousIndex], navigationExtras); //was navigateBack but it broke
     }
   }
 
@@ -193,7 +222,7 @@ export class SectionPage implements OnInit, AfterViewInit {
       componentProps: {
         'sectionId': this.section.Id,
       },
-      showBackdrop:true,
+      showBackdrop: true,
       cssClass: 'generic-popup',
       //event: ev,
       translucent: false
