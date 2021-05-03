@@ -1,6 +1,19 @@
 # Client Documentation
 Any information associated with the client aspect of the application will be located in this given file. Be sure to utlize any and all links given below to help bring you up to speed on what we learned and used during our year of developing the project.
 
+## Helpful Links:
+https://www.youtube.com/watch?v=Fdf5aTYRW0E <~ Anguar Crash Course Video
+
+https://ionic.io/resources/articles/ionic-react-vs-react-native 
+
+https://ionicframework.com/docs/api/datetime 
+
+https://ionicframework.com/docs/native/date-picker 
+
+https://medium.com/angular-in-depth/read-your-production-angular-errors-like-a-pro-32c3df34bdae 
+
+https://www.youtube.com/channel/UCSJbGtTlrDami-tDGPUV9-w 
+
 ## Building for Android
 
 Use the following steps to get your build environment set up. The following are good references for when you encounter issues: 
