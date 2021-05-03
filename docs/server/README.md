@@ -12,4 +12,6 @@ https://www.openshift.com/blog/private-git-repositories-part-2a-repository-ssh-k
 
 https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html
 
+Any additonal links and helpful information can be found in the [Deployment Documentation](https://github.com/LU-CS-Capstone/Vet-20-21/tree/develop/docs/deployment#deployment-documentation)
+
 ## AWS
