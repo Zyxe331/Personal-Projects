@@ -6,7 +6,7 @@ https://test.vitaprayer.com/login <~ Instance of VtaPrayer
 
 https://test.vitaprayer.com/admin/login ~ AdminBro login page
 
-https://www.dropbox.com/sh/2w5m3c6y5il54zn/AABnK85R0ODdB0J0iUxENQCoa?dl=0 <~ Scrpts of the older versions of the database
+https://www.dropbox.com/sh/2w5m3c6y5il54zn/AABnK85R0ODdB0J0iUxENQCoa?dl=0 <~ Scripts of the older versions of the database
 
 https://www.openshift.com/blog/private-git-repositories-part-2a-repository-ssh-keys
 
