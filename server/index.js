@@ -14,7 +14,10 @@ const mysql = require("mysql");
 const Json2csvParser = require("json2csv").Parser;
 const fastcsv = require("fast-csv");
 const fs = require('fs');
-var https = require('https')
+const prompt = require('prompt');
+const http = require('http');
+var https = require('https');
+var formidable = require('formidable');
 const UsersService = require('./services/users.service')
 const sidebarGroups = {
 	admin: {
@@ -38,6 +41,7 @@ const connection = mysql.createPool({
 });
 
 //create the models in ./models
+
 // var auto = new SequelizeAuto(process.env.DATABASE_NAME, process.env.DATABASE_USERNAME, process.env.DATABASE_PASSWORD, {
 // 	host: 'localhost',
 // 	port: '3306',
@@ -82,6 +86,13 @@ const adminBro = new AdminBro({
 					isVisible: true,
 					handler: async (request, response, data) => {exportToCSV(response, data)},
 					component: false
+				},
+				import: {
+					actionType: 'resource',
+					icon: "Download",
+					isVisible: true,
+					component: AdminBro.bundle('./importFromCSV'),
+					handler: async(request, response, data) => {},
 				}
 			},
 		}},
@@ -304,10 +315,6 @@ function exportToCSV(response, data) {
 	});
 }
 
-function importFromCSV(data) {
-	console.log("Hello");
-}
-
 // Adminbro login authentication
 const router = AdminBroExpressjs.buildAuthenticatedRouter(adminBro, {
 	authenticate: async (email, password) => {
@@ -317,7 +324,7 @@ const router = AdminBroExpressjs.buildAuthenticatedRouter(adminBro, {
 		const matched = await UsersService.checkPassword(password, userPassword);
 		const userRoleID = await UsersService.getUserRoleId(email);
 		if (matched && (userRoleID == 1 || userRoleID == 3)) {
-		  return user
+		  return user;
 		}
 	  }
 	  return false
