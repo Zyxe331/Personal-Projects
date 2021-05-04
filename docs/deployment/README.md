@@ -5,6 +5,7 @@ All the information related to deploying the application to the AWS instance wil
 - [Bitnami Docs for the AWS Node.js instance](https://docs.bitnami.com/aws/infrastructure/nodejs/)
 - [Apache Virtual Hosts documentation](https://httpd.apache.org/docs/2.4/vhosts/)
 - [pm2(process manager) documentation](https://pm2.keymetrics.io/docs/usage/pm2-doc-single-page/)
+- [connecting to remote server using vs code and putty key](https://code.visualstudio.com/docs/remote/troubleshooting#_reusing-a-key-generated-in-puttygen)
 
 ## Connecting to the server
 Connecting to the server through SSH can be done through any ssh client, but [putty](https://www.putty.org/) is our one of choice. All tutorials for the required information is through putty and it's a good client. In order to connect to the server you will need the URL/IP for the server, username, and the port to connect to. At the current configuration this should be `bitnami@www.vitaprayer.com` at port 22. Not only that, but you will need to download the private key from AWS Lightsail and turn the key into a ppk for putty to use. For more information, check out the [AWS docs for that.](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html)
@@ -32,6 +33,12 @@ Inside the `bitnami-ssl.conf` file is where all the sub domain information is co
 The certificate has been issued by [Cert-bot](https://certbot.eff.org/). If the certificate has expired, there are a couple of things that need to be done:
  - Get the new cert from cert bot by running ```sudo certbot renew```
  - If autorenew is not allowed, please reissue the cert using methods that will allow for autorenewal. It is possible that the cert must be recertified using DNS challenges.
+
+## Server Credentials:
+ - Root pwd: hphwRLl80Lcj
+ - SQL ROOT PWD: SQLRoot333
+ - An old password that might be used somewhere: V3tCSc@pSt0Ne
+ - Refer to the .env on the server to verify any differences with this documentation.
 
 ## Rollback Plan
 What will happen if a bad change gets deployed to the production environment? Will data be rolled back? Will the server version be rolled back? WIP

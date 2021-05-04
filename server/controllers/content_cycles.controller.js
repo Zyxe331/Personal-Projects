@@ -1,3 +1,10 @@
+/**
+ * content_cycles.controller.js
+ * 
+ * The content cycles controller encompasses the JavaScript logic that controls any functionality with content cycles.
+ * 
+ */
+
 const contentCycleServices = require('../services/content_cycles.service.js');
 const chatServices = require('../services/chats.service');
 const journalServices = require('../services/journals.service');
@@ -5,21 +12,24 @@ const prayerServices = require('../services/prayer_requests.service');
 const tagServices = require('../services/tags.service');
 const utils = require('../utils/general_utils');
 
+//Assigns variables to a series of queries that flows through the process of subcribing to a plan.
 const subscribeToPlan = async (request, response) => {
+    //Assigns the variable plan to the plan that is being subcribed to.
     const plan = request.body.plan;
     console.log(plan);
+    //Assigns the variable userid to the current user
     const userid = request.body.userId;
 
     try {
-
+        //Assigns firstSection to a query that retrieves the first section of the plan the user subscribed to.
         let firstSection = await contentCycleServices.getFirstSectionOfPlan(plan.Id);
         console.log(firstSection);
-
+        //Assigns userHasPlan to a query that creates the plan the user is subcribing to.
         let userHasPlan = await contentCycleServices.createUserHasPlan(userid, plan.Id, firstSection.Id);
         console.log(userHasPlan)
-
+        //Assigns groupId to a query that creates a creates a group according to the Title and Id of the user's plan
         let groupId = await chatServices.createGroup(plan.Title, plan.Id);
-
+        //Assigns userHasGroupId to a query that inserts a record into the User_Has_Group table according to the userID, groupID and userHasPlanID.
         let userHasGroupId = await chatServices.createUserHasGroup(userid, groupId, userHasPlan.Id, 1);
 
         return response.status(200).send(userHasPlan);
@@ -29,6 +39,7 @@ const subscribeToPlan = async (request, response) => {
     }
 }
 
+//Queries all of the available plans that a user can subcribe to.
 const getAllPlans = async (request, response) => {
 
     try {
@@ -43,6 +54,7 @@ const getAllPlans = async (request, response) => {
 
 }
 
+//Assigns variables to queries that gathers the information for a user's plan
 const getCurrentUserPlanInformation = async (request, response) => {
 
     try {
@@ -119,7 +131,7 @@ const getCurrentUserPlanInformation = async (request, response) => {
 
 const updateUserHasPlanController = async (request, response) => {
     try {
-
+        //Request information for the plan the user is in and utilize a query that updates information for the plan.
         let userPlanId = request.params.userPlanId;
         let sectionId = request.body.sectionId;
         let timesCompleted = request.body.timesCompleted;
