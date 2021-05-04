@@ -30,7 +30,7 @@ The 'Filter' function in especially helpful for looking through large tables lik
 
 To export a table, click 'Export'. 
 
-To import data to a table, click 'Import'.
+To import data to a table, click 'Import'. *** Feature does not currently work ***
 
 ## Coding AdminBro
 
@@ -49,4 +49,35 @@ The authentication process uses the same usernames and passwords as the app. How
 
 
 ### Creating Features or New Actions
-WIP
+The documentation on how to create features and actions is lacking in comparison to how much AdminBro advertises this benefit... This is what I have found so far. 
+
+Helpful links: 
+
+* [Customize Actions](https://adminbro.com/tutorial-actions.html)
+* [Writing Your Own Components](https://adminbro.com/tutorial-writing-react-components.html)
+
+The Export functionality is a good example of adding a new action. Customizing the AdminBro dashboard is done in [server/index.js](server/index.js) 
+
+```
+{ resource: db.Role, options: { 
+			parent: sidebarGroups.developer,
+			actions: {
+				export: {
+					actionType: 'resource',
+					icon: 'Export',
+					isVisible: true,
+					handler: async (request, response, data) => {exportToCSV(response, data)},
+					component: false
+				}
+			},
+		}},		
+```
+About the code:
+
+* db.Role: The table being referenced
+* export: The name of the new action
+* actionType: Will the action effect the resource, record, or entire database? Here, the export action will only apply to the resource
+* icon: Find icons [here](https://www.carbondesignsystem.com/guidelines/icons/library/)
+* handler: Passes the response and data to the exportToCSV function found in the index.js file
+* component: Set to false because using the exportToCSV function instead of 
+		
