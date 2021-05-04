@@ -4,6 +4,7 @@ This directory contains all information to be passed down to capstone teams main
 - [Client Documentation](client/README.md)
 - [Server Documentation](server/README.md)
 - [Deployment Documentation](deployment/README.md)
+- [AdminBro Documentation](adminbro/README.md)
 
 ## Stack Overview:
 - Client: Ionic app built in JS/TS
