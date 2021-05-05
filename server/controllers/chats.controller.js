@@ -22,43 +22,52 @@ const getCurrentUserGroupInformation = async (request, response) => {
     try {
 
         let userid = request.params.userid;
-
+        let groupId = request.params.groupId
         let responseBody = {
             currentUserHasGroup: null,
+            currentUserHasPlan: null,
             currentGroup: null,
             userHasPlans: [],
             groupUsers: []
         }
 
         let userHasGroup = await chatServices.getCurrentUserHasGroup(userid);
-        console.log(userHasGroup);
         responseBody.currentUserHasGroup = userHasGroup;
-        console.log(responseBody);
 
-        let group = await chatServices.getCurrentGroup(userHasGroup.Group_Id);
+        let group = await chatServices.getCurrentGroup(groupId);
         responseBody.currentGroup = group;
 
-        let userHasGroups = await chatServices.getUserGroups(group.Id, userid);
-        
+        let userHasGroups = await chatServices.getUserHasGroupForGivenGroup(groupId);
         if (userHasGroups.length == 0 ) {
             return response.status(200).send(responseBody);
         }
         
         // Organize information for user and user has plans queries
-        let userIds = userHasGroups.map(userHasGroup => userHasGroup.User_Id);
+        // let userIds = userHasGroups.map(userHasGroup => userHasGroup.User_Id);
         let userHasPlanIds = userHasGroups.map(userHasGroup => userHasGroup.User_has_Plan_Id);
 
-        let groupUsers = await chatServices.getUsers(userIds);
-        responseBody.groupUsers = groupUsers;
+        let groupUsers = await chatServices.getUsersOfGroup(groupId);
+        responseBody.groupUsers = groupUsers.filter(user => user.Id != userid); //remove current user from list of members
 
         let userHasPlans = await chatServices.getUserPlans(userHasPlanIds);
         responseBody.userHasPlans = userHasPlans;
+        responseBody.currentUserHasPlan = userHasPlans.find(hasPlan => hasPlan.User_Id == userid)
 
         // Send success message
         return response.status(200).send(responseBody);
     } catch (error) {
         console.log(error);
         return response.status(500).send('Something went wrong internally');
+    }
+}
+
+const getCurrentUsersGroupsController = async (req, res) => {
+    try {
+        let groups = await chatServices.getUsersGroups(req.params.userid)
+        res.status(200).send(groups)
+    }
+    catch (err) {
+        res.status(500).send(`Something went wrong getting a user's plans: ${err.message}`)
     }
 }
 
@@ -193,6 +202,22 @@ const updateGroupController = async (request, response) => {
     }
 }
 
+const getGroupController = async (request, response) => {
+    try {
+        let userId = request.params.userId;
+        let name = request.body.name;
+        let groups = await chatServices.getUserGroups(userId);
+
+        if (groups) {
+            // Send success message
+            return response.status(200).send(groups);
+
+        }
+    } catch (error) {
+        return response.status(500).send('Something went wrong internally')
+    }
+}
+
 //Gathers and utilizes information that creates a notification to tell a user that they were removed from a specific group.
 const removeUserController = async (request, response) => {
     try {
@@ -234,12 +259,14 @@ const readNotificationsController = async (request, response) => {
 
 module.exports = {
     getCurrentUserGroupInformation: getCurrentUserGroupInformation,
+    getCurrentUsersGroupsController: getCurrentUsersGroupsController,
     requestJoinGroupController: requestJoinGroupController,
     getCurrentUserNotifications: getCurrentUserNotifications,
     officiallyJoinGroup: officiallyJoinGroup,
     updateNotificationController: updateNotificationController,
     nudgeUserController: nudgeUserController,
     updateGroupController: updateGroupController,
+    getGroupController: getGroupController,
     removeUserController: removeUserController,
     readNotificationsController: readNotificationsController
 }

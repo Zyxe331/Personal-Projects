@@ -63,6 +63,17 @@ const getCurrentUserHasPlan = async (userid) => {
     return userHasPlan[0];
 }
 
+const getUsersPlans = async (userid) => {
+    const db = new Database();
+    let userHasPlans = await db.query(`SELECT * FROM User_has_Plan WHERE User_Id = ${userid} AND Active = 1`).catch(error => {
+        console.error(error);
+        throw error;
+    });
+    db.close();
+
+    return userHasPlans;
+}
+
 const getCurrentPlan = async (planid) => {
     const db = new Database();
     let plan = await db.query(`SELECT * FROM Plan WHERE Id = ${planid}`).catch(error => {
@@ -102,6 +113,7 @@ module.exports = {
     getFirstSectionOfPlan: getFirstSectionOfPlan,
     createUserHasPlan: createUserHasPlan,
     getCurrentUserHasPlan: getCurrentUserHasPlan,
+    getUsersPlans: getUsersPlans,
     getCurrentPlan: getCurrentPlan,
     getPlansSections: getPlansSections,
     updateUserHasPlan: updateUserHasPlan

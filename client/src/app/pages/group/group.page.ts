@@ -10,6 +10,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalProviderService } from 'src/app/services/global-provider.service';
 import { ChangeCyclePopoverComponent } from '../content-cycle/change-cycle-popover/change-cycle-popover.component';
 import { Router } from '@angular/router';
+import { Plan } from 'src/app/interfaces/plan';
+import { GroupInformation } from 'src/app/interfaces/group-information';
 
 @Component({
   selector: 'app-group',
@@ -20,9 +22,11 @@ export class GroupPage implements OnInit {
 
   planBuffer: number = .025;
   currentGroup: Group;
+  currentPlan: Plan;
   groupMembers: User[];
   completionObject: object = {};
   currentUserGroup: UserGroup;
+  currentGroupInfo: GroupInformation
   editMode: boolean = false;
   currentUserPlanProgress: number;
   updateGroupForm: FormGroup;
@@ -49,17 +53,27 @@ export class GroupPage implements OnInit {
   }
 
   ngOnInit() {
-    this.groupServices.getCurrentGroupInformationAsObservable().subscribe(res => {
-      this.currentGroup = res.currentGroup;
-      this.groupMembers = res.groupUsers;
-      this.currentUserGroup = res.currentUserHasGroup;
-      this.currentUserPlanProgress = (this.cycleServices.currentSectionIndex / this.cycleServices.orderedSections.length) + this.cycleServices.userPlan.Times_Completed;
-      this.groupMembers.forEach(member => member.StopNudge = false);
-      this.createGroupMembers();
-      this.updateGroupForm = this.formBuilder.group({
-      name: [this.currentGroup.Name, Validators.compose([Validators.required])]
+    if (this.router.getCurrentNavigation().extras.state) {
+      let groupId = this.router.getCurrentNavigation().extras.state.group.Id
+      this.groupServices.getCurrentGroupInformationAsObservable(groupId).subscribe(res => {
+        this.currentGroupInfo = res
+        this.cycleServices.getUsersPlans().subscribe(plans => {
+          this.currentGroup = res.currentGroup;
+          this.currentPlan = plans.find(plan => plan.Id == res.currentUserHasPlan.Id)
+          this.groupMembers = res.groupUsers;
+          this.currentUserGroup = res.currentUserHasGroup;
+          this.groupMembers.forEach(member => member.StopNudge = false);
+          this.createGroupMembers();
+          this.updateGroupForm = this.formBuilder.group({
+            name: [this.currentGroup.Name, Validators.compose([Validators.required])]
+          });
+          this.currentUserPlanProgress = ([].concat(...this.currentPlan.sections).findIndex(section => section.Id == res.currentUserHasPlan.Current_Section_Id) / ([].concat(...this.currentPlan.sections).length+1)) + res.currentUserHasPlan.Times_Completed;
+        })
       });
-    });
+    }
+    else {
+      this.router.navigate(['/groups'])
+    }
   }
 
   /**
@@ -77,7 +91,7 @@ export class GroupPage implements OnInit {
    * @param {*} thisPage Acts as "this" normally would but since we call it from the global class it has to use a variable
    * @memberof GroupPage
    */
-  async getAndOrganizeData(thisPage) { 
+  async getAndOrganizeData(thisPage) {
     // await thisPage.groupServices.getCurrentGroupInformation();
     // thisPage.currentGroup = thisPage.groupServices.currentGroup;
     // thisPage.groupMembers = thisPage.groupServices.groupUsers;
@@ -153,11 +167,12 @@ export class GroupPage implements OnInit {
     let highRange = this.currentUserPlanProgress + this.planBuffer;
     let lowRange = this.currentUserPlanProgress - this.planBuffer;
     let dangerLowRange = this.currentUserPlanProgress - (this.planBuffer * 2);
-    let numberOfSectionsInPlan = this.cycleServices.orderedSections.length;
+    let numberOfSectionsInPlan = [].concat(...this.currentPlan.sections).length;
 
     let _this = this;
-    this.groupServices.userHasPlans.forEach(uhp => {
-      let currentSectionIndex = _this.cycleServices.orderedSections.findIndex(item => item.Id == uhp.Current_Section_Id);
+    this.currentGroupInfo.userHasPlans.forEach(uhp => {
+      let flattenedSections = [].concat(...this.currentPlan.sections)
+      let currentSectionIndex = flattenedSections.findIndex(item => item.Id == uhp.Current_Section_Id);
       let planProgress = currentSectionIndex / numberOfSectionsInPlan;
       let realPlanProgress = planProgress + uhp.Times_Completed;
 
@@ -217,7 +232,7 @@ export class GroupPage implements OnInit {
       componentProps: {
         groupId: grpId
       },
-      showBackdrop:true,
+      showBackdrop: true,
       cssClass: 'change-cycle-popup',
       event: ev,
       translucent: false

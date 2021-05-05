@@ -13,7 +13,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content #sectionContent>
   
   <ion-grid *ngIf="showSpinner" class="height100">
     <ion-row class="align-items-center height100">
@@ -30,17 +30,17 @@
           <ion-row>
             <ion-col size="2">
               <ion-button class="navArrow" fill="clear" (click)="goToPreviousSection()">
-                <ion-icon slot="icon-only" color="dark" name="md-arrow-dropleft"></ion-icon>
+                <ion-icon name="chevron-back-outline" color="dark"></ion-icon>
               </ion-button>
             </ion-col>
             <ion-col size="8" class="ion-align-self-center">
               <div class="ion-text-center">
-                <ion-card-subtitle class="sectionCard">{{contentCycleName}}</ion-card-subtitle>
+                <ion-card-subtitle class="sectionCard">{{plan.Title}}</ion-card-subtitle>
               </div>
             </ion-col>
             <ion-col size="2">
               <ion-button class="navArrow" fill="clear" (click)="goToNextSection()">
-                <ion-icon slot="icon-only" color="dark" name="md-arrow-dropright"></ion-icon>
+                <ion-icon name="chevron-forward-outline" color="dark"></ion-icon>
               </ion-button>
             </ion-col>
           </ion-row>
@@ -61,14 +61,14 @@
       </ion-card-content>
     </ion-card>
 
-    <ion-card>
+    <ion-card id="journalsCard">
       <ion-card-header>
         <ion-card-title>Journals</ion-card-title>
       </ion-card-header>
 
       <ion-card-content class="ion-text-center">
         <ion-list>
-          <ion-item lines="full" detail *ngFor="let journal of journals" (click)="goToJournal(journal)">
+          <ion-item lines="full" detail *ngFor="let journal of filteredJournals" (click)="goToJournal(journal)">
             <ion-text style="width: 15%;" color="medium" slot="start">{{journal.ShortFormattedDate}}</ion-text>
             <ion-label>{{journal.Title}}</ion-label>
           </ion-item>

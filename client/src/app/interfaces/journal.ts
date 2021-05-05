@@ -6,4 +6,5 @@ export class Journal {
     ShortFormattedDate: string
     LongFormattedDate: string
     User_Id: number
+    Section_Id: number
 }

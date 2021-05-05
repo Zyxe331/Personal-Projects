@@ -4,12 +4,15 @@ import { SERVER_URL } from '../../environments/environment';
 import { UserProviderService } from '../services/user-provider.service';
 import { GlobalProviderService } from '../services/global-provider.service';
 import { Journal } from '../interfaces/journal';
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
+import { Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class JournalProviderService {
+  private userJournals$: Subject<Journal[]> = new ReplaySubject<Journal[]>(1)
 
   constructor(
     private http: HttpClient, 
@@ -123,6 +126,18 @@ export class JournalProviderService {
         reject(error.error);
       }
     })
+  }
+
+  getThisUsersJournalsAsObservable(): Observable<void> {  // Triggers prayer list to be updated and sent to the journal subject.
+    // Call this function when a new journal is added to the list.
+    let userId = this.userServices.currentUser.Id
+    return this.http.get<Journal[]>(SERVER_URL + 'journals/' + userId, {}).pipe(map((res: Journal[]) => {
+      this.userJournals$.next(res)
+    }))
+  }
+
+  fetchUsersJournals(): Observable<Journal[]> {
+    return this.userJournals$.asObservable()
   }
 
   // getThisUsersJournalsAsObservable(userId: number) :Observable<Journal[]> {
