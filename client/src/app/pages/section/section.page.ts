@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+/**
+ * section.page.ts
+ * The section page displays the specific information created for the designated section number.
+ * 
+ * The information for the section number is determined by retrieving the current plan information and then retrieving the section index number.
+ * 
+ * 
+ */
+
+ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NavController, ModalController, PopoverController, Gesture, GestureController, AnimationController } from '@ionic/angular'
 import { ActivatedRoute, Router, NavigationExtras, NavigationEnd } from '@angular/router';
 import { ContentCycleProviderService } from '../../services/content-cycle-provider.service';
@@ -133,6 +142,7 @@ export class SectionPage implements OnInit, AfterViewInit {
     gesture.enable(true)
   }
 
+  //If a user has journals written in a section, pass the journals into the section and use the journal provider service to set their dates in the list.
   setJournals(passedInJournals) {
     if (passedInJournals) {
       passedInJournals = this.journalService.setJournalsDates(passedInJournals);
@@ -239,7 +249,7 @@ export class SectionPage implements OnInit, AfterViewInit {
     })
     return await popover.present();
   }
-
+//Takes you back to the content cycle using the back arrow.
   goToContentCycle() {
     this.navCtrl.navigateBack(['/content-cycle/']);
   }

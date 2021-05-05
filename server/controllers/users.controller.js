@@ -41,7 +41,6 @@ const loginController = async (request, response) => {
 
     // Create access token and send user with auth token to front end
     const accessToken = jwt.sign({ id: user.id }, process.env.SECRET_KEY, { expiresIn: process.env.ACCESS_TOKEN_EXPIRATION });
-    console.log(process.env.ACCESS_TOKEN_EXPIRATION);
     response.status(200).send({ "user": user, "access_token": accessToken, "expires_in": process.env.ACCESS_TOKEN_EXPIRATION });
 
 }
@@ -109,6 +108,7 @@ const verifyAuthController = (request, response) => {
 
 }
 
+//Request information from a user when they edit their profile that utilizes a query to update whatever information they changed or added.
 const updateUserController = async (request, response) => {
     try {
 

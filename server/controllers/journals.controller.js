@@ -1,8 +1,16 @@
+/**
+ * journals.controller.js
+ * 
+ * The journals controller encompasses the JavaScript logic that controls the journals page.
+ * 
+ */
+
 const journalServices = require('../services/journals.service.js');
 
 const createJournalController = async (request, response) => {
 
     try {
+        //Request information for a journal and use said information for a query that inserts information into a new journal.
         const title = request.body.title;
         const body = request.body.body;
         const userid = request.body.userId;

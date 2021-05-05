@@ -34,5 +34,11 @@ The certificate has been issued by [Cert-bot](https://certbot.eff.org/). If the 
  - Get the new cert from cert bot by running ```sudo certbot renew```
  - If autorenew is not allowed, please reissue the cert using methods that will allow for autorenewal. It is possible that the cert must be recertified using DNS challenges.
 
+## Server Credentials:
+ - Root pwd: hphwRLl80Lcj
+ - SQL ROOT PWD: SQLRoot333
+ - An old password that might be used somewhere: V3tCSc@pSt0Ne
+ - Refer to the .env on the server to verify any differences with this documentation.
+
 ## Rollback Plan
 What will happen if a bad change gets deployed to the production environment? Will data be rolled back? Will the server version be rolled back? WIP
