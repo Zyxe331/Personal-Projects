@@ -5,6 +5,6 @@ export class Plan {
     GroupId: number
     Title: string
     CreatedDate: Date
-    sections: Section[]
+    sections: Section[][]
     
 }

@@ -62,12 +62,12 @@ export class GroupPage implements OnInit {
           this.currentPlan = plans.find(plan => plan.Id == res.currentUserHasPlan.Id)
           this.groupMembers = res.groupUsers;
           this.currentUserGroup = res.currentUserHasGroup;
-          this.currentUserPlanProgress = (res.currentUserHasPlan.Current_Section_Id / this.currentPlan.sections.length) + res.currentUserHasPlan.Times_Completed;
           this.groupMembers.forEach(member => member.StopNudge = false);
           this.createGroupMembers();
           this.updateGroupForm = this.formBuilder.group({
             name: [this.currentGroup.Name, Validators.compose([Validators.required])]
           });
+          this.currentUserPlanProgress = ([].concat(...this.currentPlan.sections).findIndex(section => section.Id == res.currentUserHasPlan.Current_Section_Id) / ([].concat(...this.currentPlan.sections).length+1)) + res.currentUserHasPlan.Times_Completed;
         })
       });
     }
@@ -167,11 +167,12 @@ export class GroupPage implements OnInit {
     let highRange = this.currentUserPlanProgress + this.planBuffer;
     let lowRange = this.currentUserPlanProgress - this.planBuffer;
     let dangerLowRange = this.currentUserPlanProgress - (this.planBuffer * 2);
-    let numberOfSectionsInPlan = this.currentPlan.sections.length;
+    let numberOfSectionsInPlan = [].concat(...this.currentPlan.sections).length;
 
     let _this = this;
     this.currentGroupInfo.userHasPlans.forEach(uhp => {
-      let currentSectionIndex = this.currentPlan.sections.findIndex(item => item.Id == uhp.Current_Section_Id);
+      let flattenedSections = [].concat(...this.currentPlan.sections)
+      let currentSectionIndex = flattenedSections.findIndex(item => item.Id == uhp.Current_Section_Id);
       let planProgress = currentSectionIndex / numberOfSectionsInPlan;
       let realPlanProgress = planProgress + uhp.Times_Completed;
 

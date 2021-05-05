@@ -62,7 +62,29 @@ const getUsersPlansController = async (req, res) => {
     try {
         for (let plan of userHasPlans) {
             let foundPlan = await contentCycleServices.getCurrentPlan(plan.Plan_Id)
-            let planSections = await contentCycleServices.getPlansSections(plan.Plan_Id)
+            let planSections = (await contentCycleServices.getPlansSections(plan.Plan_Id)).sort((a, b) => a.ContentCycle_Id - b.ContentCycle_Id)
+            let planSectionsByCycle = []
+            for (let section of planSections) {
+                let pushed = false
+                if(planSectionsByCycle.length == 0) {
+                    planSectionsByCycle.push([section])
+                    pushed = true
+                }
+                else {
+                    for(let i = 0; i < planSectionsByCycle.length; i++) {
+                        if (section.ContentCycle_Number == planSectionsByCycle[i][0].ContentCycle_Number) {
+                            pushed = true
+                            planSectionsByCycle[i].push(section)
+                        }
+                    }
+                    if(!pushed) {
+                        planSectionsByCycle.push([section])
+                    }
+                }
+            }
+            for(let cycle of planSectionsByCycle) {
+                cycle.sort((a, b) => a.Order - b.Order)
+            }
             let groupId = userHasGroups.find(hasGroup => hasGroup.User_has_Plan_Id == plan.Id).Id
             console.log(`groupID: ${groupId}`)
             plans.push({
@@ -70,7 +92,7 @@ const getUsersPlansController = async (req, res) => {
                 GroupId: groupId,
                 Title: foundPlan.Title,
                 CreatedDate: foundPlan.CreatedDate,
-                sections: planSections
+                sections: planSectionsByCycle
             })
         }
         res.status(200).send(plans)

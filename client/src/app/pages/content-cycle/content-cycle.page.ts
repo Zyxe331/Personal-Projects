@@ -30,8 +30,6 @@ export class ContentCyclePage implements OnInit {
   userHasPlans: UserPlan[];
   groups: Group[];
   groupInfos: GroupInformation[] = [];
-  planProgress;
-  cycleProgress;
 
   get showSpinner() {
     return this.globalService.showSpinner;
@@ -81,20 +79,6 @@ export class ContentCyclePage implements OnInit {
    * @memberof ContentCyclePage
    */
   async getAndOrganizeData(thisPage) {
-    // removed since data should be retrived in angular lifecycle
-    // thisPage.currentPlan = await thisPage.contentCycleService.getUsersPlanInformation();
-    // thisPage.userHasPlan = thisPage.contentCycleService.userPlan;
-    // if (!thisPage.currentPlan) {
-    //   return;
-    // }
-
-    // let currentGroupInformation = await thisPage.chatService.getCurrentGroupInformation();
-    // thisPage.currentGroup = currentGroupInformation.currentGroup;
-    // thisPage.currentGroupMembers = currentGroupInformation.groupUsers;
-
-    // thisPage.planProgress = thisPage.contentCycleService.currentSectionIndex / thisPage.contentCycleService.orderedSections.length;
-    // let currentSection = thisPage.contentCycleService.orderedSections[thisPage.contentCycleService.currentSectionIndex];
-    // thisPage.cycleProgress = (currentSection.Order - 1) / (thisPage.contentCycleService.sectionsByCycleId[currentSection.ContentCycle_Id].length - 1);
   }
 
   UserHasPlanById(id): UserPlan {
@@ -112,16 +96,21 @@ export class ContentCyclePage implements OnInit {
   calcPlanProgress(planId) {
     let userHasPlan = this.userHasPlans.find(plan => plan.Plan_Id == planId)
     let plan = this.plans.find(plan => plan.Id == planId)
-    let progress = (userHasPlan.Current_Section_Id - plan.sections[0].Id) / (plan.sections.length - 1);
+    let flattenedSections = [].concat(...plan.sections)
+    let progress = (flattenedSections.findIndex(section => section.Id == userHasPlan.Current_Section_Id)) / (flattenedSections.length - 1);
     return progress
   }
 
   calcCycleProgress(planId) {
     let userHasPlan = this.userHasPlans.find(plan => plan.Plan_Id == planId)
     let plan = this.plans.find(plan => plan.Id == planId)
-    let currentSection = plan.sections.find(section => section.Id = userHasPlan.Current_Section_Id)
-    // return (currentSection.Order - 1) / (this.contentCycleService.sectionsByCycleId[currentSection.ContentCycle_Id].length - 1);
-    return .3 //WIP
+    let progress
+    for(let cycle of plan.sections) {
+      if(cycle.find(section => section.Id == userHasPlan.Current_Section_Id)) {
+        return  (cycle.findIndex(section => section.Id == userHasPlan.Current_Section_Id)) / (cycle.length - 1)
+      }
+    }
+    return progress
 
   }
 

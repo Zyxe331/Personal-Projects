@@ -82,7 +82,7 @@ export class SectionPage implements OnInit, AfterViewInit {
         this.plan = this.router.getCurrentNavigation().extras.state.plan;
         this.userHasPlan = this.router.getCurrentNavigation().extras.state.userHasPlan;
         this.sectionIndex = +this.route.snapshot.paramMap.get('sectionNumber')
-        this.section = this.plan.sections.find(section => section.Id == this.sectionIndex)
+        this.section = [].concat(...this.plan.sections).find(section => section.Id == this.sectionIndex)
         this.contentCycleName = this.section.Title
         this.prayerService.getThisUsersPrayersAsObservable().subscribe()
         this.allPrayers$.subscribe(prayers => {
@@ -92,7 +92,6 @@ export class SectionPage implements OnInit, AfterViewInit {
         this.allJournals$.subscribe(journals => {
           this.filteredJournals = this.setJournals(journals.filter(journal => journal.Section_Id === this.section.Id))
         })
-        this.contentCycleService.updateUserHasPlan(this.userHasPlan.Id, this.section.Id, this.userHasPlan.Times_Completed).subscribe()
       }
       else {
         this.router.navigate(['/content-cycle'])
@@ -144,20 +143,24 @@ export class SectionPage implements OnInit, AfterViewInit {
     return passedInJournals
   }
 
-  goToNextSection() {
-    let nextIndex;
-    if (this.sectionIndex !== this.plan.sections[this.plan.sections.length - 1].Id) {
-      nextIndex = this.sectionIndex + 1;
-    } else {
-      nextIndex = 0;
-    }
+  goToNextSection() { // This function takes into account that the next section may be the next one in the order in the same cycle, or it may be the first section in the next cycle.
 
-    let nextSection = this.plan.sections.find(section => section.Id == nextIndex);
-    if (nextSection.Order === 1 && nextSection.ContentCycle_Number === 1) {
-      this.globalServices.sendSuccessToast(`Wow you did it! You finished the plan! Feel free to start over and continue!`);
-      this.userHasPlan.Times_Completed++;
-    } else if (nextSection.Order === 1) {
-      this.globalServices.sendSuccessToast(`Nice job! You just finished a cycle! Make sure to stay diligent so you can finish the plan. `);
+    let nextSection
+    for(let i = 0; i < this.plan.sections.length; i++) {
+      let currentCycle = this.plan.sections[i]
+      let sectionIndex = currentCycle.findIndex(section => section.Id == this.section.Id)
+      if(sectionIndex != -1 && sectionIndex != currentCycle.length - 1) {
+        nextSection = currentCycle[sectionIndex + 1]
+      }
+      else if(sectionIndex != -1 && i != this.plan.sections.length - 1) {
+        this.globalServices.sendSuccessToast(`Nice job! You just finished a cycle! Make sure to stay diligent so you can finish the plan. `);
+        nextSection = this.plan.sections[i+1][0]
+      }
+      else if(sectionIndex != -1) {
+        nextSection = this.plan.sections[0][0]
+        this.userHasPlan.Times_Completed++
+        this.globalServices.sendSuccessToast(`Wow you did it! You finished the plan! Feel free to start over and continue!`)
+      }
     }
     let navigationExtras: NavigationExtras = {
       state: {
@@ -165,7 +168,8 @@ export class SectionPage implements OnInit, AfterViewInit {
         userHasPlan: this.userHasPlan
       }
     }
-    this.navCtrl.navigateForward(['/section/' + nextIndex], navigationExtras);
+    this.contentCycleService.updateUserHasPlan(this.userHasPlan.Id, nextSection.Id, this.userHasPlan.Times_Completed).subscribe()
+    this.navCtrl.navigateForward(['/section/' + nextSection.Id], navigationExtras)
   }
   goToPreviousSection() {
     let navigationExtras: NavigationExtras = {
@@ -174,8 +178,9 @@ export class SectionPage implements OnInit, AfterViewInit {
         userHasPlan: this.userHasPlan
       }
     }
-    if (this.sectionIndex !== this.plan.sections[0].Id) {
+    if (this.sectionIndex !== this.plan.sections[0][0].Id) {
       let previousIndex = this.sectionIndex - 1;
+      this.contentCycleService.updateUserHasPlan(this.userHasPlan.Id, this.section.Id, this.userHasPlan.Times_Completed).subscribe()
       this.navCtrl.navigateBack(['/section/' + previousIndex], navigationExtras); //was navigateBack but it broke
     }
   }
