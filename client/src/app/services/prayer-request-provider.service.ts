@@ -249,4 +249,30 @@ export class PrayerRequestProviderService {
     return prayer;
   }
 
+  async getPrayerRequestNotifications() { // Function that is run to create all necessary desktop notifications for prayer requests
+    let _this = this;
+    return new Promise(async function (resolve, reject) {
+
+      try {
+
+        let currentUserId = _this.userServices.currentUser.Id
+        let request = {
+          currentUserId: currentUserId
+        }
+
+        // 
+        let response = await _this.http.post<boolean>(SERVER_URL + 'prayer-requests/prayerrequestnotifications/' + currentUserId, request).toPromise();
+
+        // As long as something returned then resolved it
+        if (response) {
+
+          resolve(response);
+
+        }
+      } catch (error) {
+        reject(error.error);
+      }
+    })
+  }
+
 }

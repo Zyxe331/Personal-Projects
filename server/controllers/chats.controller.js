@@ -14,7 +14,8 @@ const notificationTypeIds = {
     'AcceptToGroup': 2,
     'DeclineToGroup': 3,
     'Nudge': 4,
-    'RemoveFromGroup': 5
+    'RemoveFromGroup': 5,
+    'Prayer': 6
 }
 
 //Assigns variables to queries that gathers the information for a user's group
