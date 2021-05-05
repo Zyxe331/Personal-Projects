@@ -59,3 +59,9 @@ The compiling process will take a good 5 minutes if successful.
 In your first run you are likely to have a few libraries missing. Googling the error should identify what is missing. 
 
 You could use ANT or even the Android workbench as different pathways to compile but the those will have to require your own research. 
+
+## Plans, Cycles, and Sections
+2019 team: This topic alone brought on the most confusion and misunderstandings out of our whole capstone experience. Hopefully this description can help keep you guys from the pain that we had to go through.
+ - Plan: Overarching name of a devotion that someone can begin. Has very little metadata about itself besides a name and a related group.
+ - Content Cycle: This is the confusing one. Content Cycles are basically just metadata. There are many Content Cycles inside of a plan. Each Content Cycle is “meant” to have the same topics within it so that the user can go through the same information multiple times but is not restricted to this. This is easier explained through an example, but if you want an easier way to think of it, think of a Content Cycle as a milestone in the Plan. 
+ - Section: These are the actual devotions. These are what the user is clicking through and is able to read and add prayers and journals to. There are many Sections inside of a single Content Cycle. 
