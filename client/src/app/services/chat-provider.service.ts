@@ -8,10 +8,9 @@ import { UserGroup } from '../interfaces/user-group';
 import { User } from '../interfaces/user';
 import { Notification } from '../interfaces/notification';
 import { GlobalProviderService } from './global-provider.service';
-import { not } from '@angular/compiler/src/output/output_ast';
 import { UserPlan } from '../interfaces/user-plan';
 import { GroupedObservable, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -72,15 +71,28 @@ export class ChatProviderService {
    * @returns {Observable<GroupInformation>}
    * @memberof ChatProviderService
    */
-   getCurrentGroupInformationAsObservable(): Observable<GroupInformation> {
-        // Ask the server to try and get all prayer schedule possibilities
-        return this.http.get<GroupInformation>(SERVER_URL + 'chats/' + this.userServices.getUserFromStorage().Id).pipe(map((res: GroupInformation) => {
-          this.userGroup = res.currentUserHasGroup;
-          this.currentGroup = res.currentGroup;
-          this.groupUsers = res.groupUsers;
-          this.userHasPlans = res.userHasPlans;
-          return res
-        }));
+  getCurrentGroupInformationAsObservable(groupId: number): Observable<GroupInformation> {
+    // Ask the server to try and get all prayer schedule possibilities
+    return this.userServices.getUserFromStorage().pipe(switchMap(user => {
+      return this.http.get<GroupInformation>(SERVER_URL + 'chats/usersgroupInfo/' + user.Id + '/' + groupId).pipe(map((res: GroupInformation) => {
+        this.userGroup = res.currentUserHasGroup;
+        this.currentGroup = res.currentGroup;
+        this.groupUsers = res.groupUsers;
+        this.userHasPlans = res.userHasPlans;
+        return res
+      }));
+    }))
+  }
+  /**
+   * Querys all groups a user is a part of as an obervable
+   *
+   * @returns {Observable<Group[]>}
+   * @memberof ChatProviderService
+   */
+  getUsersGroups(): Observable<Group[]> {
+    return this.userServices.getUserFromStorage().pipe(switchMap(user => {
+      return this.http.get<Group[]>(SERVER_URL + 'chats/userGroups/' + user.Id)
+    }))
   }
 
   /**

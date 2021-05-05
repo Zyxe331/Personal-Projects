@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ChangeCyclePopoverComponent } from './change-cycle-popover.component';
 
@@ -7,7 +7,7 @@ describe('ChangeCyclePopoverComponent', () => {
   let component: ChangeCyclePopoverComponent;
   let fixture: ComponentFixture<ChangeCyclePopoverComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ChangeCyclePopoverComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],

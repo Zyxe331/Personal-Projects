@@ -1,8 +1,16 @@
+/**
+ * prayer_requests.controller.js
+ * 
+ * The prayer requests controller encompasses the JavaScript logic that controls any functionality with prayer requests.
+ * 
+ */
+
 const prayerRequestServices = require('../services/prayer_requests.service.js');
 const utils = require('../utils/general_utils');
 const tagServices = require('../services/tags.service');
 const chatServices = require('../services/chats.service.js');
 
+//Assigns schedules to a query that grabs all prayer schedules if there are any.
 const getAllPrayerSchedules = async (request, response) => {
     try {
 
@@ -23,6 +31,7 @@ const getAllPrayerSchedules = async (request, response) => {
 const createPrayerController = async (request, response) => {
 
     try {
+        //Request information for a prayer request and uses said information for a query that inserts information into a new prayer request.
         const title = request.body.title;
         const body = request.body.body;
         const isprivate = request.body.isprivate;
