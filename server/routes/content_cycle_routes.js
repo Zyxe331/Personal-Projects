@@ -9,10 +9,9 @@ router.get('/', utils.simpleAuthCheck, contentCycleController.getAllPlans);
 
 // Handles subcribing the user to a new content cyles
 router.post('/subscribe', utils.simpleAuthCheck, contentCycleController.subscribeToPlan)
-
 // Handles getting all of the content cycle information for the current user
-router.get('/:userid', utils.simpleAuthCheck, contentCycleController.getCurrentUserPlanInformation);
-
+router.get('/:userid', utils.simpleAuthCheck, contentCycleController.getUsersPlansController);
+router.get('/info/:userid', utils.simpleAuthCheck, contentCycleController.getUsersPlansInfoController);
 // Handles updating a content cyle for the current user
 router.patch('/user-has-plan/:userPlanId', utils.simpleAuthCheck, contentCycleController.updateUserHasPlanController);
 

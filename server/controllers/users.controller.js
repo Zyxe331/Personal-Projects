@@ -41,7 +41,6 @@ const loginController = async (request, response) => {
 
     // Create access token and send user with auth token to front end
     const accessToken = jwt.sign({ id: user.id }, process.env.SECRET_KEY, { expiresIn: process.env.ACCESS_TOKEN_EXPIRATION });
-    console.log(process.env.ACCESS_TOKEN_EXPIRATION);
     response.status(200).send({ "user": user, "access_token": accessToken, "expires_in": process.env.ACCESS_TOKEN_EXPIRATION });
 
 }
@@ -109,6 +108,7 @@ const verifyAuthController = (request, response) => {
 
 }
 
+//Request information from a user when they edit their profile that utilizes a query to update whatever information they changed or added.
 const updateUserController = async (request, response) => {
     try {
 
@@ -132,9 +132,31 @@ const updateUserController = async (request, response) => {
     }
 }
 
+const getuserGroups = async (request, response) => {
+    try{
+    let currentuserid = request.params.currentuserid;
+    
+    let userGroups = await userServices.getGroups(currentuserid);
+
+        if (!userGroups || userGroups === undefined){
+            return response.status(201).send('You are not with any groups!');
+            
+        }
+        else{
+            // Success message
+            return response.status(200).send(userGroups);
+        
+        }
+    }catch (error) {
+        response.status(500).send('Something went wrong internally');
+    }
+
+}
+
 module.exports = {
     loginController: loginController,
     verifyAuthController: verifyAuthController,
     registerController: registerController,
-    updateUserController: updateUserController
+    updateUserController: updateUserController,
+    getuserGroups: getuserGroups
 }

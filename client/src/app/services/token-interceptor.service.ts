@@ -13,7 +13,7 @@ import {
   Router
 } from '@angular/router';
 import { ToastController } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
+import { Storage } from '@ionic/storage-angular';
 import { UserProviderService } from '../services/user-provider.service';
 
 @Injectable({

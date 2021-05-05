@@ -47,10 +47,11 @@
               <ion-grid>
                 <ion-row>
                   <ion-text>
-                    <span *ngIf="completionObject[member.Id].timesCompleted > 0">
+                    <!-- please fix -->
+                    <!-- <span *ngIf="completionObject[member.Id].timesCompleted > 0">
                       {{completionObject[member.Id].timesCompleted}}
                       <ion-icon color="warning" name="star"></ion-icon>
-                    </span>
+                    </span> -->
                     {{member.FirstName}} {{member.LastName}}
                   </ion-text>
                   <ion-progress-bar style="margin-top:4px;" color="{{completionObject[member.Id].color}}"

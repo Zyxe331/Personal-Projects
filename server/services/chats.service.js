@@ -57,6 +57,7 @@ const getCurrentUserHasGroup = async (userid) => {
 const getCurrentGroup = async (groupid) => {
     const db = new Database();
     let group = await db.query(`SELECT * FROM \`Group\` WHERE Id = ${groupid}`).catch(error => {
+    //let group = await db.query(`SELECT User_has_Plan_Id, User_has_Plan.User_Id FROM User_has_Group INNER JOIN User_has_Plan ON User_has_Group.User_has_Plan_Id = User_has_Plan.Id WHERE User_has_Plan.User_Id = ${currentUserId} AND User_has_Group.Active = 1`).catch(error => {   
         console.error(error);
         throw error;
     });
@@ -65,15 +66,18 @@ const getCurrentGroup = async (groupid) => {
     return group[0];
 }
 
-const getUserGroups = async (groupid, currentuserid) => {
+const getUsersGroups = async (currentuserid) => {
     const db = new Database();
-    let userHasGroups = await db.query(`SELECT User_has_Plan_Id, User_has_Plan.User_Id FROM User_has_Group INNER JOIN User_has_Plan ON User_has_Group.User_has_Plan_Id = User_has_Plan.Id WHERE User_has_Plan.User_Id != ${currentuserid} AND User_has_Group.Group_Id = ${groupid} AND User_has_Group.Active = 1`).catch(error => {
+    let groups = await db.query(`SELECT group.Id, group.Name, group.CreatedDate as Created_Date, group.Active, User_has_Plan_Id, User_has_Plan.User_Id FROM User_has_Group 
+                                INNER JOIN User_has_Plan ON User_has_Group.User_has_Plan_Id = User_has_Plan.Id
+                                INNER JOIN \`Group\` ON User_has_Group.Group_Id = Group.Id
+                                WHERE User_has_Plan.User_Id = ${currentuserid} AND User_has_Group.Active = 1`).catch(error => {
         console.error(error);
         throw error;
     });
     db.close();
 
-    return userHasGroups;
+    return groups;
 }
 
 const getUsers = async (userIds) => {
@@ -199,7 +203,41 @@ const updateNotificationTriggerDate = async (notificationId, triggeredDate) => {
     } catch (error) {
         console.error(error);
     }
+}
 
+const getUserGroups = async(userId) => {
+    let result;
+    try {
+        const db = new Database();
+        result = await db.query(`SELECT \`Group\`.* FROM \`Group\`, User_has_Plan, User_has_Group WHERE User_has_Plan.User_Id = '${userId}' AND User_has_Plan.Id = User_has_Group.User_has_Plan_Id AND  User_has_Group.Active = 1 AND \`Group\`.Id = User_has_Group.Group_Id;`);
+        db.close();
+    } catch (error) {
+        console.error(error);
+    }
+
+    return result;
+}
+
+const getUserHasGroupForGivenGroup = async (groupId) => {
+    const db = new Database();
+    let userHasGroups = await db.query(`SELECT User_has_Group.* FROM User_has_Group INNER JOIN User_has_Plan ON User_has_Group.User_has_Plan_Id=User_has_Plan.Id WHERE User_has_Group.Group_Id = ${groupId} AND User_has_Group.Active=1`).catch(error => {
+        console.error(error);
+        throw error;
+    });
+    db.close();
+
+    return userHasGroups;
+}
+
+const getUsersOfGroup = async (groupId) => {
+    const db = new Database();
+    let userHasGroups = await db.query(`SELECT user.Id as Id, user.FirstName as FirstName, user.LastName as LastName, user.Username as username, user.email as email FROM user INNER JOIN user_has_plan ON user.Id = user_has_plan.User_Id INNER JOIN user_has_group on user_has_plan.Id = user_has_group.User_has_Plan_Id WHERE User_has_Group.Group_Id = ${groupId} AND User_has_Group.Active=1`).catch(error => {
+        console.error(error);
+        throw error;
+    });
+    db.close();
+
+    return userHasGroups;
 }
 
 module.exports = {
@@ -208,7 +246,10 @@ module.exports = {
     createUserHasGroup: createUserHasGroup,
     getCurrentUserHasGroup: getCurrentUserHasGroup,
     getCurrentGroup: getCurrentGroup,
+    getUsersGroups: getUsersGroups,
     getUserGroups: getUserGroups,
+    getUserHasGroupForGivenGroup: getUserHasGroupForGivenGroup,
+    getUsersOfGroup: getUsersOfGroup,
     createNotification: createNotification,
     queryUserNotifications: queryUserNotifications,
     updateNotification: updateNotification,

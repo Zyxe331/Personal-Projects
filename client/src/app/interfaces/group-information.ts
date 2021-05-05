@@ -3,9 +3,10 @@ import { Group } from './group';
 import { User } from './user';
 import { UserPlan } from './user-plan';
 
-export interface GroupInformation {
-    currentUserHasGroup: UserGroup,
-    currentGroup: Group,
-    groupUsers: User[],
+export class GroupInformation {
+    currentUserHasGroup: UserGroup
+    currentUserHasPlan: UserPlan
+    currentGroup: Group
+    groupUsers: User[]
     userHasPlans: UserPlan[]
 }

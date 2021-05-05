@@ -1,3 +1,10 @@
+/**
+ * chats.controller.js
+ * 
+ * The chats controller encompasses the JavaScript logic that controls any functionality with chats.
+ * 
+ */
+
 const chatServices = require('../services/chats.service.js');
 const contentCycleServices = require('../services/content_cycles.service')
 const userServices = require('../services/users.service');
@@ -11,41 +18,41 @@ const notificationTypeIds = {
     'Prayer': 6
 }
 
+//Assigns variables to queries that gathers the information for a user's group
 const getCurrentUserGroupInformation = async (request, response) => {
     try {
 
         let userid = request.params.userid;
-
+        let groupId = request.params.groupId
         let responseBody = {
             currentUserHasGroup: null,
+            currentUserHasPlan: null,
             currentGroup: null,
             userHasPlans: [],
             groupUsers: []
         }
 
         let userHasGroup = await chatServices.getCurrentUserHasGroup(userid);
-        console.log(userHasGroup);
         responseBody.currentUserHasGroup = userHasGroup;
-        console.log(responseBody);
 
-        let group = await chatServices.getCurrentGroup(userHasGroup.Group_Id);
+        let group = await chatServices.getCurrentGroup(groupId);
         responseBody.currentGroup = group;
 
-        let userHasGroups = await chatServices.getUserGroups(group.Id, userid);
-        
+        let userHasGroups = await chatServices.getUserHasGroupForGivenGroup(groupId);
         if (userHasGroups.length == 0 ) {
             return response.status(200).send(responseBody);
         }
         
         // Organize information for user and user has plans queries
-        let userIds = userHasGroups.map(userHasGroup => userHasGroup.User_Id);
+        // let userIds = userHasGroups.map(userHasGroup => userHasGroup.User_Id);
         let userHasPlanIds = userHasGroups.map(userHasGroup => userHasGroup.User_has_Plan_Id);
 
-        let groupUsers = await chatServices.getUsers(userIds);
-        responseBody.groupUsers = groupUsers;
+        let groupUsers = await chatServices.getUsersOfGroup(groupId);
+        responseBody.groupUsers = groupUsers.filter(user => user.Id != userid); //remove current user from list of members
 
         let userHasPlans = await chatServices.getUserPlans(userHasPlanIds);
         responseBody.userHasPlans = userHasPlans;
+        responseBody.currentUserHasPlan = userHasPlans.find(hasPlan => hasPlan.User_Id == userid)
 
         // Send success message
         return response.status(200).send(responseBody);
@@ -55,6 +62,17 @@ const getCurrentUserGroupInformation = async (request, response) => {
     }
 }
 
+const getCurrentUsersGroupsController = async (req, res) => {
+    try {
+        let groups = await chatServices.getUsersGroups(req.params.userid)
+        res.status(200).send(groups)
+    }
+    catch (err) {
+        res.status(500).send(`Something went wrong getting a user's plans: ${err.message}`)
+    }
+}
+
+//Gathers information for the user that is utilized for queries that logically handles a user requesting a group admin to join said group.
 const requestJoinGroupController = async (request, response) => {
     try {
 
@@ -80,6 +98,7 @@ const requestJoinGroupController = async (request, response) => {
     }
 }
 
+//Gathers information for the user that is utilized for queries that logically handles a user joining a group.
 const officiallyJoinGroup = async (request, response) => {
     try {
 
@@ -119,6 +138,7 @@ const officiallyJoinGroup = async (request, response) => {
     }
 }
 
+//Queries any notifications assigned to the user
 const getCurrentUserNotifications = async (request, response) => {
     try {
         let userid = request.params.userid;
@@ -131,6 +151,7 @@ const getCurrentUserNotifications = async (request, response) => {
     }
 }
 
+//Queries any notifications that have been read by the user
 const updateNotificationController = async (request, response) => {
     try {
         let notificationId = request.params.notificationId;
@@ -145,6 +166,7 @@ const updateNotificationController = async (request, response) => {
     }
 }
 
+//Gathers information necessary for to create a notification for a user that states someone else nudged them.
 const nudgeUserController = async (request, response) => {
     try {
         let receivingUserId = request.params.userToNudgeId;
@@ -162,6 +184,7 @@ const nudgeUserController = async (request, response) => {
     }
 }
 
+//Controller that utilizes a query to change the name of a given group.
 const updateGroupController = async (request, response) => {
     try {
         let groupId = request.params.groupId;
@@ -180,6 +203,23 @@ const updateGroupController = async (request, response) => {
     }
 }
 
+const getGroupController = async (request, response) => {
+    try {
+        let userId = request.params.userId;
+        let name = request.body.name;
+        let groups = await chatServices.getUserGroups(userId);
+
+        if (groups) {
+            // Send success message
+            return response.status(200).send(groups);
+
+        }
+    } catch (error) {
+        return response.status(500).send('Something went wrong internally')
+    }
+}
+
+//Gathers and utilizes information that creates a notification to tell a user that they were removed from a specific group.
 const removeUserController = async (request, response) => {
     try {
         let removedUserId = request.params.userId;
@@ -203,6 +243,7 @@ const removeUserController = async (request, response) => {
 
 }
 
+//Queries any notifications that have been read by the user
 const readNotificationsController = async (request, response) => {
     try {
         let notificationIds = request.body.notificationIds;
@@ -219,12 +260,14 @@ const readNotificationsController = async (request, response) => {
 
 module.exports = {
     getCurrentUserGroupInformation: getCurrentUserGroupInformation,
+    getCurrentUsersGroupsController: getCurrentUsersGroupsController,
     requestJoinGroupController: requestJoinGroupController,
     getCurrentUserNotifications: getCurrentUserNotifications,
     officiallyJoinGroup: officiallyJoinGroup,
     updateNotificationController: updateNotificationController,
     nudgeUserController: nudgeUserController,
     updateGroupController: updateGroupController,
+    getGroupController: getGroupController,
     removeUserController: removeUserController,
     readNotificationsController: readNotificationsController
 }

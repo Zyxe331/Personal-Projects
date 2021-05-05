@@ -15,4 +15,6 @@ router.post('/verifyAuth', userController.verifyAuthController);
 // Handles checking if an access token is valid
 router.patch('/:userid', userController.updateUserController);
 
+router.get('/:userid/groups', userController.getuserGroups)
+
 module.exports = router;
