@@ -197,6 +197,47 @@ CREATE TABLE `Section_has_Tag` (
 LOCK TABLES `Section_has_Tag` WRITE;
 UNLOCK TABLES;
 
+DROP TABLE IF EXISTS `Notification_Type`;
+CREATE TABLE `Notification_Type` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(45) DEFAULT NULL,
+  `Ion_Icon` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `Id_UNIQUE` (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `Notification_Type` WRITE;
+INSERT INTO `Notification_Type` VALUES (1,'Join Group Request','help'),(2,'Accepted to Group','checkmark'),(3,'Rejected from Group','close'),(4,'Nudge','alert'),(5,'Removed from Group','close');
+UNLOCK TABLES;
+
+CREATE TABLE `Notification` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Title` tinytext,
+  `Body` text,
+  `Completed` tinyint(4) DEFAULT '0',
+  `Read` tinyint(4) DEFAULT '0',
+  `CreatedDate` datetime DEFAULT NULL,
+  `LastTriggered` varchar(40) DEFAULT NULL,
+  `To_User_Id` int(11) NOT NULL,
+  `From_User_Id` int(11) NOT NULL,
+  `Notification_Type_Id` int(11) NOT NULL,
+  `Group_Id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `Id_UNIQUE` (`Id`),
+  KEY `fk_Notification_User1_idx` (`To_User_Id`),
+  KEY `fk_Notification_Group1_idx` (`Group_Id`),
+  KEY `fk_Notification_Notification_Type1_idx` (`Notification_Type_Id`),
+  KEY `fk_Notification_User2_idx` (`From_User_Id`),
+  CONSTRAINT `fk_Notification_Group1` FOREIGN KEY (`Group_Id`) REFERENCES `Group` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Notification_Notification_Type1` FOREIGN KEY (`Notification_Type_Id`) REFERENCES `Notification_Type` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Notification_User1` FOREIGN KEY (`To_User_Id`) REFERENCES `User` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Notification_User2` FOREIGN KEY (`From_User_Id`) REFERENCES `User` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
+
+/*LOCK TABLES `Notification` WRITE;
+INSERT INTO `Notification` VALUES (1,'John Maddox is requesting to join your group!','Please notify John if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',0,1,'2020-04-20 18:07:41',4,3,1,10),(2,'John Maddox is requesting to join your group!','Please notify John if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-04-20 18:08:07',4,3,1,10),(3,'You have been accepted to My Group!','You have been added to My Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-04-20 18:11:50',3,4,2,10),(4,'Jon nudged you!','Jon nudged you! Make sure you are keeping up with your plan.',0,1,'2020-04-20 18:14:47',3,4,4,NULL),(5,'Collin Test is requesting to join your group!','Please notify Collin if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-04-20 19:44:19',5,6,1,11),(6,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-04-20 19:44:52',6,5,2,11),(7,'Emily nudged you!','Emily nudged you! Make sure you are keeping up with your plan.',0,1,'2020-04-20 19:45:04',6,5,4,NULL),(8,'Emily Vogt is requesting to join your group!','Please notify Emily if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-09-18 20:56:46',15,15,1,20),(9,'You were rejected from group with code: 20','The administrator of the group you requested to join has declined your request.',0,1,'2020-09-23 19:37:32',15,15,3,20),(10,'David  Wilhelm is requesting to join your group!','Please notify David  if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-09-23 19:50:59',14,14,1,33),(11,'David  Wilhelm is requesting to join your group!','Please notify David  if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-09-23 19:51:36',12,14,1,19),(12,'Test Testerson is requesting to join your group!','Please notify Test if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-09-23 19:52:25',13,13,1,18),(13,'Emily Vogt is requesting to join your group!','Please notify Emily if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-09-23 19:54:27',12,15,1,19),(14,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-09-23 19:54:39',14,12,2,19),(15,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-09-23 19:54:41',15,12,2,19),(16,'Test Testerson is requesting to join your group!','Please notify Test if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-09-23 19:54:45',12,13,1,19),(17,'David  Wilhelm is requesting to join your group!','Please notify David  if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-09-23 19:54:47',12,14,1,19),(18,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-09-23 19:54:51',13,12,2,19),(19,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-09-23 19:55:09',13,13,2,18),(20,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-09-23 19:55:12',13,13,2,18),(21,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-09-23 19:55:12',14,12,2,19),(22,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-09-23 19:55:15',14,12,2,19),(23,'Jacob nudged you!','Jacob nudged you! Make sure you are keeping up with your plan.',0,1,'2020-09-23 19:55:24',14,12,4,NULL),(24,'Jacob nudged you!','Jacob nudged you! Make sure you are keeping up with your plan.',0,1,'2020-09-23 19:55:26',15,12,4,NULL),(25,'David  nudged you!','David  nudged you! Make sure you are keeping up with your plan.',0,1,'2020-09-23 19:55:41',12,14,4,NULL),(26,'David  nudged you!','David  nudged you! Make sure you are keeping up with your plan.',0,1,'2020-09-23 19:55:49',15,14,4,NULL),(27,'Test Testerson is requesting to join your group!','Please notify Test if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-09-23 19:56:07',12,13,1,19),(28,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,0,'2020-09-23 19:56:16',13,12,2,19),(29,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-09-23 19:56:19',14,14,2,33),(30,'Test nudged you!','Test nudged you! Make sure you are keeping up with your plan.',0,1,'2020-09-23 19:56:37',12,13,4,NULL),(31,'Emily Vogt is requesting to join your group!','Please notify Emily if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-09-23 19:56:40',12,15,1,19),(32,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-09-23 19:56:49',15,12,2,19),(33,'David  Wilhelm is requesting to join your group!','Please notify David  if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-09-23 19:56:59',12,14,1,19),(34,'Test nudged you!','Test nudged you! Make sure you are keeping up with your plan.',0,1,'2020-09-23 19:57:06',15,13,4,NULL),(35,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-09-23 19:57:08',14,12,2,19),(36,'Jacob nudged you!','Jacob nudged you! Make sure you are keeping up with your plan.',0,0,'2020-09-23 19:57:46',13,12,4,NULL),(37,'Jacob nudged you!','Jacob nudged you! Make sure you are keeping up with your plan.',0,1,'2020-09-23 19:57:47',15,12,4,NULL),(38,'Jacob nudged you!','Jacob nudged you! Make sure you are keeping up with your plan.',0,1,'2020-09-23 19:57:49',14,12,4,NULL),(39,'You have been removed from Test group 8 week fun with friends','You have been removed from your group Test group 8 week fun with friends. Please contact the administor of this group to find out why.',0,1,'2020-09-23 20:18:08',14,12,5,19),(40,'Jacob nudged you!','Jacob nudged you! Make sure you are keeping up with your plan.',0,0,'2020-09-23 20:19:44',15,12,4,NULL);
+UNLOCK TABLES;*/
+
 CREATE TABLE `PrayerRequest` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Title` varchar(45) DEFAULT NULL,
@@ -209,11 +250,14 @@ CREATE TABLE `PrayerRequest` (
   `NotificationDate` varchar(40) DEFAULT NULL,
   `NotificationTime` varchar(40) DEFAULT NULL,
   `Section_Id` int(11) DEFAULT NULL,
+  `Notification_Id` int(11) DEFAULT NULL,
   PRIMARY KEY (`Id`),
   KEY `fk_PrayerRequest_User1_idx` (`User_Id`),
   KEY `fk_PrayerRequest_Section1_idx` (`Section_Id`),
+  KEY `fk_PrayerRequest_Notification1_idx` (`Notification_Id`),
   CONSTRAINT `fk_PrayerRequest_Section1` FOREIGN KEY (`Section_Id`) REFERENCES `Section` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_PrayerRequest_User1` FOREIGN KEY (`User_Id`) REFERENCES `User` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_PrayerRequest_Notification1` FOREIGN KEY (`Notification_Id`) REFERENCES `Notification` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 
 /*LOCK TABLES `PrayerRequest` WRITE;
@@ -235,46 +279,6 @@ CREATE TABLE `Prayer_has_Tag` (
 /*LOCK TABLES `Prayer_has_Tag` WRITE;
 INSERT INTO `Prayer_has_Tag` VALUES (1,1,6),(2,2,6),(3,3,7),(4,1,8),(5,1,9),(6,2,10),(7,3,11),(8,1,12),(9,3,12),(11,2,23),(12,2,25),(13,3,30);
 UNLOCK TABLES;*/
-
-DROP TABLE IF EXISTS `Notification_Type`;
-CREATE TABLE `Notification_Type` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(45) DEFAULT NULL,
-  `Ion_Icon` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`Id`),
-  UNIQUE KEY `Id_UNIQUE` (`Id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-LOCK TABLES `Notification_Type` WRITE;
-INSERT INTO `Notification_Type` VALUES (1,'Join Group Request','help'),(2,'Accepted to Group','checkmark'),(3,'Rejected from Group','close'),(4,'Nudge','alert'),(5,'Removed from Group','close');
-UNLOCK TABLES;
-
-CREATE TABLE `Notification` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Title` tinytext,
-  `Body` text,
-  `Completed` tinyint(4) DEFAULT '0',
-  `Read` tinyint(4) DEFAULT '0',
-  `CreatedDate` datetime DEFAULT NULL,
-  `To_User_Id` int(11) NOT NULL,
-  `From_User_Id` int(11) NOT NULL,
-  `Notification_Type_Id` int(11) NOT NULL,
-  `Group_Id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`Id`),
-  UNIQUE KEY `Id_UNIQUE` (`Id`),
-  KEY `fk_Notification_User1_idx` (`To_User_Id`),
-  KEY `fk_Notification_Group1_idx` (`Group_Id`),
-  KEY `fk_Notification_Notification_Type1_idx` (`Notification_Type_Id`),
-  KEY `fk_Notification_User2_idx` (`From_User_Id`),
-  CONSTRAINT `fk_Notification_Group1` FOREIGN KEY (`Group_Id`) REFERENCES `Group` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Notification_Notification_Type1` FOREIGN KEY (`Notification_Type_Id`) REFERENCES `Notification_Type` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Notification_User1` FOREIGN KEY (`To_User_Id`) REFERENCES `User` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Notification_User2` FOREIGN KEY (`From_User_Id`) REFERENCES `User` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
-
-LOCK TABLES `Notification` WRITE;
-INSERT INTO `Notification` VALUES (1,'John Maddox is requesting to join your group!','Please notify John if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',0,1,'2020-04-20 18:07:41',4,3,1,10),(2,'John Maddox is requesting to join your group!','Please notify John if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-04-20 18:08:07',4,3,1,10),(3,'You have been accepted to My Group!','You have been added to My Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-04-20 18:11:50',3,4,2,10),(4,'Jon nudged you!','Jon nudged you! Make sure you are keeping up with your plan.',0,1,'2020-04-20 18:14:47',3,4,4,NULL),(5,'Collin Test is requesting to join your group!','Please notify Collin if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-04-20 19:44:19',5,6,1,11),(6,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-04-20 19:44:52',6,5,2,11),(7,'Emily nudged you!','Emily nudged you! Make sure you are keeping up with your plan.',0,1,'2020-04-20 19:45:04',6,5,4,NULL),(8,'Emily Vogt is requesting to join your group!','Please notify Emily if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-09-18 20:56:46',15,15,1,20),(9,'You were rejected from group with code: 20','The administrator of the group you requested to join has declined your request.',0,1,'2020-09-23 19:37:32',15,15,3,20),(10,'David  Wilhelm is requesting to join your group!','Please notify David  if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-09-23 19:50:59',14,14,1,33),(11,'David  Wilhelm is requesting to join your group!','Please notify David  if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-09-23 19:51:36',12,14,1,19),(12,'Test Testerson is requesting to join your group!','Please notify Test if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-09-23 19:52:25',13,13,1,18),(13,'Emily Vogt is requesting to join your group!','Please notify Emily if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-09-23 19:54:27',12,15,1,19),(14,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-09-23 19:54:39',14,12,2,19),(15,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-09-23 19:54:41',15,12,2,19),(16,'Test Testerson is requesting to join your group!','Please notify Test if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-09-23 19:54:45',12,13,1,19),(17,'David  Wilhelm is requesting to join your group!','Please notify David  if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-09-23 19:54:47',12,14,1,19),(18,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-09-23 19:54:51',13,12,2,19),(19,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-09-23 19:55:09',13,13,2,18),(20,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-09-23 19:55:12',13,13,2,18),(21,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-09-23 19:55:12',14,12,2,19),(22,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-09-23 19:55:15',14,12,2,19),(23,'Jacob nudged you!','Jacob nudged you! Make sure you are keeping up with your plan.',0,1,'2020-09-23 19:55:24',14,12,4,NULL),(24,'Jacob nudged you!','Jacob nudged you! Make sure you are keeping up with your plan.',0,1,'2020-09-23 19:55:26',15,12,4,NULL),(25,'David  nudged you!','David  nudged you! Make sure you are keeping up with your plan.',0,1,'2020-09-23 19:55:41',12,14,4,NULL),(26,'David  nudged you!','David  nudged you! Make sure you are keeping up with your plan.',0,1,'2020-09-23 19:55:49',15,14,4,NULL),(27,'Test Testerson is requesting to join your group!','Please notify Test if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-09-23 19:56:07',12,13,1,19),(28,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,0,'2020-09-23 19:56:16',13,12,2,19),(29,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-09-23 19:56:19',14,14,2,33),(30,'Test nudged you!','Test nudged you! Make sure you are keeping up with your plan.',0,1,'2020-09-23 19:56:37',12,13,4,NULL),(31,'Emily Vogt is requesting to join your group!','Please notify Emily if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-09-23 19:56:40',12,15,1,19),(32,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-09-23 19:56:49',15,12,2,19),(33,'David  Wilhelm is requesting to join your group!','Please notify David  if you would like to add them to your group. If you don\'t know who this is or do not want them in your group reject them.',1,1,'2020-09-23 19:56:59',12,14,1,19),(34,'Test nudged you!','Test nudged you! Make sure you are keeping up with your plan.',0,1,'2020-09-23 19:57:06',15,13,4,NULL),(35,'You have been accepted to 8 week Group!','You have been added to 8 week Group. Have fun with your knew group and make sure to keep each other accountable!',0,1,'2020-09-23 19:57:08',14,12,2,19),(36,'Jacob nudged you!','Jacob nudged you! Make sure you are keeping up with your plan.',0,0,'2020-09-23 19:57:46',13,12,4,NULL),(37,'Jacob nudged you!','Jacob nudged you! Make sure you are keeping up with your plan.',0,1,'2020-09-23 19:57:47',15,12,4,NULL),(38,'Jacob nudged you!','Jacob nudged you! Make sure you are keeping up with your plan.',0,1,'2020-09-23 19:57:49',14,12,4,NULL),(39,'You have been removed from Test group 8 week fun with friends','You have been removed from your group Test group 8 week fun with friends. Please contact the administor of this group to find out why.',0,1,'2020-09-23 20:18:08',14,12,5,19),(40,'Jacob nudged you!','Jacob nudged you! Make sure you are keeping up with your plan.',0,0,'2020-09-23 20:19:44',15,12,4,NULL);
-UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `Message`;
 CREATE TABLE `Message` (
