@@ -30,8 +30,8 @@
     font-family: 'High Tower Text';
     font-style: italic;
     font-size: 40px;
-    padding:0px;
-    text-align:center;
+    padding: 0px;
+    text-align: center;
     color: #707070;
     text-shadow: 0px 5px 6px #A7A7A7;
 }
@@ -63,4 +63,23 @@ ion-toolbar {
 
 ion-spinner {
     transform: scale(3);
+}
+
+
+/* In Angular, the CSS of a specific page is scoped only to elements of that page. 
+Even though the Popover can be presented from within a page, the ion-popover element is appended outside of the current page. 
+This means that any custom styles need to go in a global stylesheet file. */
+.md .change-cycle-popup {
+    margin-left: -45px;
+    margin-right: auto;
+}
+
+.generic-popup .popover-content {
+    width: 90%;
+    max-height: 90%;
+}
+
+.ios .generic-popup .popover-content {
+    width: 90%;
+    max-height: 90%;
 }

@@ -27,3 +27,18 @@
 .progressbar {
     height: 20px;
 }
+
+ion-card.noGroupCard ion-button{
+    align-self: stretch;
+}
+
+.nextSectionBtn {
+    height: 50px;
+    width: 100%; 
+    font-weight: bold;
+}
+
+.changeCycleBtn {
+    color: gray;
+    padding-top: 5px;
+}

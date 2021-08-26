@@ -16,4 +16,7 @@ router.post('/', utils.simpleAuthCheck, prayerRequestController.createPrayerCont
 // Handles updating a prayer request
 router.patch('/:prayerid', utils.simpleAuthCheck, prayerRequestController.updatePrayerController)
 
+// Handles creating notifications for prayer requests
+router.post('/prayerrequestnotifications/:userid', utils.simpleAuthCheck, prayerRequestController.prayerRequestNotificationController);
+
 module.exports = router;

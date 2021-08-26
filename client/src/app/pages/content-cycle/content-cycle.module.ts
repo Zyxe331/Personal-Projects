@@ -6,6 +6,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { ContentCyclePage } from './content-cycle.page';
+import { ChangeCyclePopoverComponent } from './change-cycle-popover/change-cycle-popover.component'
+import { SharedModule } from 'src/app/shared/shared.module';
 
 const routes: Routes = [
   {
@@ -19,8 +21,10 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    SharedModule
   ],
-  declarations: [ContentCyclePage]
+  declarations: [ContentCyclePage, ChangeCyclePopoverComponent],
+  entryComponents: [ChangeCyclePopoverComponent]
 })
 export class ContentCyclePageModule {}

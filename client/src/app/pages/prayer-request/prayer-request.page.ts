@@ -1,13 +1,22 @@
+/**
+ * prayer-request.page.ts - 
+ * This page is for displaying information specific to an individual prayer. Information is passed to this component from a route telling the component
+ * what prayer to load. If the component is navigated to without route data, then a redirect will automatically happen.
+ * 
+ * A prayer can be edited on this page using the EditPrayerCardComponent, and should update the information dynamically using rxjs standards.
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PrayerRequestProviderService } from '../../services/prayer-request-provider.service';
 import { PrayerRequest } from '../../interfaces/prayer-request';
 import { PrayerSchedule } from '../../interfaces/prayer-schedule';
-import { GlobalProviderService } from 'src/app/services/global-provider.service';
 import { Tag } from 'src/app/interfaces/tag';
 import { PrayerTag } from 'src/app/interfaces/prayer-tag';
-import { TagProviderService } from 'src/app/services/tag-provider.service';
+import { PopoverController } from '@ionic/angular';
+import { EditPrayerCardComponent } from 'src/app/components/edit-prayer-card/edit-prayer-card.component';
+import { PrayerRequestProviderService } from 'src/app/services/prayer-request-provider.service';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 @Component({
   selector: 'app-prayer-request',
@@ -16,106 +25,74 @@ import { TagProviderService } from 'src/app/services/tag-provider.service';
 })
 export class PrayerRequestPage implements OnInit {
 
-  request: PrayerRequest;
-  editRequestForm: FormGroup;
-  editMode: boolean = false;
+  request: PrayerRequest = new PrayerRequest();
   prayerSchedules: PrayerSchedule[];
-  tags: Tag[];
-  tagIds: string[];
   prayerTags: PrayerTag[];
   tagList: Tag[];
   showErrors: boolean = false;
   serverErrors: boolean = false;
   serverError: string;
+  notifDate: any;
+  notifTime: any;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     public formBuilder: FormBuilder,
     private prayerServices: PrayerRequestProviderService,
-    private globalServices: GlobalProviderService,
-    private tagService: TagProviderService
-  ) {
+    public popoverController: PopoverController,
+  ) { }
+
+  public prayerstate: boolean = true;
+
+  //Added functionality inside of ngOnInit() that redirects the user back to the 
+  //prayer-requests page when the user tries to refresh while inside of an existing prayer
+  ngOnInit() {    
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
         this.request = this.router.getCurrentNavigation().extras.state.request;
         console.log(this.router.getCurrentNavigation().extras.state)
-
-        // Creates the edit prayer form with validators
-        this.editRequestForm = formBuilder.group({
-          title: [this.request.Title, Validators.compose([Validators.required])],
-          body: [this.request.Body, Validators.compose([Validators.required])],
-          tags: [[1]],
-          frequency: [this.request.Frequency, Validators.compose([Validators.required])],
-          private: [this.request.IsPrivate]
-        });
+        this.prayerServices.getThisPrayersTagsAsObservable(this.router.getCurrentNavigation().extras.state.request.Id).subscribe(tags => {
+          this.prayerTags = tags
+        })
+      }
+      else {
+        this.router.navigate(['/prayer-requests'])
       }
     })
-
+    this.setNotificationDate();
+    this.setNotificationTime();
   }
 
-  public prayerstate: boolean = true;
-  resolvedstate() {
-
-  }
-
-  async ngOnInit() {
-    //this.prayerSchedules = await this.prayerServices.getPrayerScheduleList();
-    //console.log(this.prayerSchedules);
-    this.tags = await this.tagService.getAllTags();
-    this.prayerTags = await this.prayerServices.getThisPrayersTags(this.request.Id);    
-  }
-
-  startEdit() {
-    this.tagIds = [];
-    let _this = this;
-    this.prayerTags.forEach(tag => {
-      _this.tagIds.push(tag.Tag_Id.toString(10));
+  //Trigger prayer edit popup
+  async startEdit(ev: any) {
+    const popover = await this.popoverController.create({
+      component: EditPrayerCardComponent,
+      componentProps: {
+        request: this.request
+      },
+      showBackdrop:true,
+      cssClass: 'generic-popup',
+      //event: ev,
+      translucent: false
     });
-
-    this.editRequestForm.controls['tags'].setValue(this.tagIds);
-    this.editMode = true;
-  }
-
-  cancel() {
-    this.editMode = false;
-  }
-
-  async save() {
-
-    this.serverError = '';
-    this.serverErrors = false;
-
-    // Check if there are title or body errors
-    if (!this.editRequestForm.controls.title.valid || !this.editRequestForm.controls.body.valid || !this.editRequestForm.controls.frequency.valid) {
-      this.showErrors = true;
-      return
-    }
-
-    try {
-
-      // Send prayer form values to the server to insert journal
-      let formValues = this.editRequestForm.value;
-      
-      console.log(formValues);
-      let prayer = await this.prayerServices.updatePrayer(this.request.Id, formValues.title, formValues.body, formValues.private, formValues.frequency, formValues.tags);
-      this.globalServices.sendSuccessToast(`You successfully updated your prayer request "${prayer.Title}"`)
-      if (prayer) {
-        this.request = prayer;
-        this.editMode = false;
+    popover.onDidDismiss().then(data => { // Update prayer when edting finishes
+      if (data.data != undefined) {
+        this.request = data.data.request
+        this.prayerTags = data.data.tags
       }
-
-    } catch (error) {
-
-      console.log(error);
-      this.globalServices.sendErrorToast(`Sorry, something went wrong when attempting to update your prayer request.`);
-
-      // Display the server errors
-      this.serverErrors = true;
-      this.serverError = error;
-
-    }
-
+    })
+    return await popover.present();
   }
 
+  setNotificationDate() {
+    console.log('Getting date');
+    console.log(this.request.NotificationDate);
+    this.notifDate = new Date(this.request.NotificationDate).toLocaleDateString("en-US", { month: 'long', day: 'numeric', year: 'numeric' })
+  }
+
+  setNotificationTime() {
+    this.notifTime = new Date(this.request.NotificationTime).toLocaleTimeString("en-US")
+  }
+  
 }

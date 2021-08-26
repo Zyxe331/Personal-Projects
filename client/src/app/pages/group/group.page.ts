@@ -1,13 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ComponentFactoryResolver, OnInit } from '@angular/core';
 import { Group } from 'src/app/interfaces/group';
 import { User } from 'src/app/interfaces/user';
 import { ChatProviderService } from 'src/app/services/chat-provider.service';
 import { UserProviderService } from 'src/app/services/user-provider.service';
-import { ToastController, AlertController } from '@ionic/angular';
+import { ToastController, AlertController, PopoverController } from '@ionic/angular';
 import { UserGroup } from 'src/app/interfaces/user-group';
 import { ContentCycleProviderService } from 'src/app/services/content-cycle-provider.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalProviderService } from 'src/app/services/global-provider.service';
+import { ChangeCyclePopoverComponent } from '../content-cycle/change-cycle-popover/change-cycle-popover.component';
+import { Router } from '@angular/router';
+import { Plan } from 'src/app/interfaces/plan';
+import { GroupInformation } from 'src/app/interfaces/group-information';
 
 @Component({
   selector: 'app-group',
@@ -18,9 +22,11 @@ export class GroupPage implements OnInit {
 
   planBuffer: number = .025;
   currentGroup: Group;
+  currentPlan: Plan;
   groupMembers: User[];
   completionObject: object = {};
   currentUserGroup: UserGroup;
+  currentGroupInfo: GroupInformation
   editMode: boolean = false;
   currentUserPlanProgress: number;
   updateGroupForm: FormGroup;
@@ -39,13 +45,35 @@ export class GroupPage implements OnInit {
     private toastController: ToastController,
     public formBuilder: FormBuilder,
     private globalServices: GlobalProviderService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private popoverController: PopoverController,
+    private router: Router
   ) {
 
   }
 
   ngOnInit() {
-    
+    if (this.router.getCurrentNavigation().extras.state) {
+      let groupId = this.router.getCurrentNavigation().extras.state.group.Id
+      this.groupServices.getCurrentGroupInformationAsObservable(groupId).subscribe(res => {
+        this.currentGroupInfo = res
+        this.cycleServices.getUsersPlans().subscribe(plans => {
+          this.currentGroup = res.currentGroup;
+          this.currentPlan = plans.find(plan => plan.Id == res.currentUserHasPlan.Id)
+          this.groupMembers = res.groupUsers;
+          this.currentUserGroup = res.currentUserHasGroup;
+          this.groupMembers.forEach(member => member.StopNudge = false);
+          this.createGroupMembers();
+          this.updateGroupForm = this.formBuilder.group({
+            name: [this.currentGroup.Name, Validators.compose([Validators.required])]
+          });
+          this.currentUserPlanProgress = ([].concat(...this.currentPlan.sections).findIndex(section => section.Id == res.currentUserHasPlan.Current_Section_Id) / ([].concat(...this.currentPlan.sections).length+1)) + res.currentUserHasPlan.Times_Completed;
+        })
+      });
+    }
+    else {
+      this.router.navigate(['/groups'])
+    }
   }
 
   /**
@@ -63,18 +91,18 @@ export class GroupPage implements OnInit {
    * @param {*} thisPage Acts as "this" normally would but since we call it from the global class it has to use a variable
    * @memberof GroupPage
    */
-  async getAndOrganizeData(thisPage) { 
-    await thisPage.groupServices.getCurrentGroupInformation();
-    thisPage.currentGroup = thisPage.groupServices.currentGroup;
-    thisPage.groupMembers = thisPage.groupServices.groupUsers;
-    thisPage.currentUserGroup = thisPage.groupServices.userGroup;
-    thisPage.currentUserPlanProgress = (thisPage.cycleServices.currentSectionIndex / thisPage.cycleServices.orderedSections.length) + thisPage.cycleServices.userPlan.Times_Completed;
+  async getAndOrganizeData(thisPage) {
+    // await thisPage.groupServices.getCurrentGroupInformation();
+    // thisPage.currentGroup = thisPage.groupServices.currentGroup;
+    // thisPage.groupMembers = thisPage.groupServices.groupUsers;
+    // thisPage.currentUserGroup = thisPage.groupServices.userGroup;
+    // thisPage.currentUserPlanProgress = (thisPage.cycleServices.currentSectionIndex / thisPage.cycleServices.orderedSections.length) + thisPage.cycleServices.userPlan.Times_Completed;
 
-    thisPage.groupMembers.forEach(member => member.StopNudge = false);
-    thisPage.createGroupMembers();
-    thisPage.updateGroupForm = thisPage.formBuilder.group({
-      name: [thisPage.currentGroup.Name, Validators.compose([Validators.required])]
-    });
+    // thisPage.groupMembers.forEach(member => member.StopNudge = false);
+    // thisPage.createGroupMembers();
+    // thisPage.updateGroupForm = thisPage.formBuilder.group({
+    //   name: [thisPage.currentGroup.Name, Validators.compose([Validators.required])]
+    // });
   }
 
   async nudgeUser(nudgedUser) {
@@ -139,11 +167,12 @@ export class GroupPage implements OnInit {
     let highRange = this.currentUserPlanProgress + this.planBuffer;
     let lowRange = this.currentUserPlanProgress - this.planBuffer;
     let dangerLowRange = this.currentUserPlanProgress - (this.planBuffer * 2);
-    let numberOfSectionsInPlan = this.cycleServices.orderedSections.length;
+    let numberOfSectionsInPlan = [].concat(...this.currentPlan.sections).length;
 
     let _this = this;
-    this.groupServices.userHasPlans.forEach(uhp => {
-      let currentSectionIndex = _this.cycleServices.orderedSections.findIndex(item => item.Id == uhp.Current_Section_Id);
+    this.currentGroupInfo.userHasPlans.forEach(uhp => {
+      let flattenedSections = [].concat(...this.currentPlan.sections)
+      let currentSectionIndex = flattenedSections.findIndex(item => item.Id == uhp.Current_Section_Id);
       let planProgress = currentSectionIndex / numberOfSectionsInPlan;
       let realPlanProgress = planProgress + uhp.Times_Completed;
 
@@ -194,5 +223,24 @@ export class GroupPage implements OnInit {
     } catch (e) {
       console.log(e);
     }
+  }
+
+  //Trigger confirmation popup
+  async presentPopover(ev: any, grpId) {
+    const popover = await this.popoverController.create({
+      component: ChangeCyclePopoverComponent,
+      componentProps: {
+        groupId: grpId
+      },
+      showBackdrop: true,
+      cssClass: 'change-cycle-popup',
+      event: ev,
+      translucent: false
+    });
+    return await popover.present();
+  }
+
+  joinNewGroup() {
+    this.router.navigate(['/change-content-cycle'])
   }
 }

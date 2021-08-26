@@ -1,6 +1,7 @@
 const Database = require('../utils/database');
 const utils = require('../utils/general_utils.js');
 
+//Function that holds a query that grabs all of the current plans made in the database and returns them
 const queryAllPlans = async () => {
 
     const db = new Database();
@@ -14,9 +15,9 @@ const queryAllPlans = async () => {
 
 }
 
-const deactivateActiveUserHasPlans = async (userid) => {
+const deactivateActiveUserHasPlan = async (userid, groupId) => {
     const db = new Database();
-    await db.query(`UPDATE User_has_Plan SET Active = 0 WHERE Active = 1 AND User_Id = ${userid}`).catch(error => {
+    await db.query(`UPDATE User_has_Plan INNER JOIN User_has_Group ON User_has_Group.User_has_Plan_Id=User_has_Plan.Id SET User_has_Plan.Active = 0 WHERE User_has_Plan.Active = 1 AND User_has_Plan.User_Id = ${userid} AND User_has_Group.Group_Id=${groupId}`).catch(error => {
         console.error(error);
         throw error;
     });
@@ -62,6 +63,17 @@ const getCurrentUserHasPlan = async (userid) => {
     return userHasPlan[0];
 }
 
+const getUsersPlans = async (userid) => {
+    const db = new Database();
+    let userHasPlans = await db.query(`SELECT * FROM User_has_Plan WHERE User_Id = ${userid} AND Active = 1`).catch(error => {
+        console.error(error);
+        throw error;
+    });
+    db.close();
+
+    return userHasPlans;
+}
+
 const getCurrentPlan = async (planid) => {
     const db = new Database();
     let plan = await db.query(`SELECT * FROM Plan WHERE Id = ${planid}`).catch(error => {
@@ -97,10 +109,11 @@ const updateUserHasPlan = async (userplanid, sectionid, timesCompleted) => {
 
 module.exports = {
     queryAllPlans: queryAllPlans,
-    deactivateActiveUserHasPlans: deactivateActiveUserHasPlans,
+    deactivateActiveUserHasPlan: deactivateActiveUserHasPlan,
     getFirstSectionOfPlan: getFirstSectionOfPlan,
     createUserHasPlan: createUserHasPlan,
     getCurrentUserHasPlan: getCurrentUserHasPlan,
+    getUsersPlans: getUsersPlans,
     getCurrentPlan: getCurrentPlan,
     getPlansSections: getPlansSections,
     updateUserHasPlan: updateUserHasPlan

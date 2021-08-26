@@ -9,20 +9,20 @@
 
 <ion-content>
   <ion-grid *ngIf="showSpinner" class="height100">
-    <ion-row class="align-items-center height100"> 
+    <ion-row class="align-items-center height100">
       <ion-col class="ion-align-self-center ion-text-center" size="12">
         <ion-spinner name="dots" color="tertiary"></ion-spinner>
       </ion-col>
     </ion-row>
   </ion-grid>
-  
-  <ion-grid *ngIf="!showSpinner">
-    <ion-card *ngIf="currentPlan != null">
 
-      <ion-card-header style="padding-bottom: 0" class="ion-padding-top">
+  <ion-grid *ngIf="!showSpinner">
+    <ion-card *ngFor="let plan of plans;">
+
+      <ion-card-header class="ion-padding-top">
         <ion-card-title class="ion-text-center">
           <ion-text class="ion-text-center">
-            {{currentPlan.Title}}
+            {{plan.Title}}
           </ion-text>
         </ion-card-title>
       </ion-card-header>
@@ -31,15 +31,15 @@
         <ion-item>
           <ion-grid style="padding-top: 0;" class="ion-padding-bottom">
             <ion-row class="ion-padding-horizontal ion-padding-bottom">
-              <ion-col size="9" align-self-center>
-                <p class="smallitalic" color="medium">working through with</p>
-                <p class="subheader" color="dark">{{currentGroup.Name}}</p>
-                <ion-text *ngFor="let member of currentGroupMembers; last as isLast">
-                  <span *ngIf="!isLast">{{member.FirstName}}, </span>
-                  <span *ngIf="isLast">{{member.FirstName}}</span>
-                </ion-text>
+              <ion-col size="9" class="ion-align-self-center ion-text-center">
+                <p class="subheader" color="dark">{{groupById(plan.GroupId).Name}}</p>
+                <p class="smallitalic" color="medium" *ngIf="groupInfoById(plan.GroupId).groupUsers.length != 0">working through with</p>
+                <ion-text *ngFor="let member of groupInfoById(plan.GroupId).groupUsers; last as isLast">
+                    <span *ngIf="!isLast">{{member.FirstName}}, </span>
+                    <span *ngIf="isLast">{{member.FirstName}}</span>
+                  </ion-text>
               </ion-col>
-              <ion-col size="3" align-self-center>
+              <ion-col size="3" class="ion-align-self-center ion-text-center">
                 <ion-avatar>
                   <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
                 </ion-avatar>
@@ -49,34 +49,37 @@
               <ion-col size="12">
                 <ion-label>
                   Full Plan Progress
-                  <span *ngIf="userHasPlan.Times_Completed > 0">
+                  <!--  -->
+                  <span *ngIf="UserHasPlanById(plan.Id).Times_Completed > 0">
                     <ion-icon color="warning" name="star"></ion-icon>
-                    {{userHasPlan.Times_Completed}}
+                    {{UserHasPlanById(plan.Id).Times_Completed}}
                   </span>
                 </ion-label>
-                <ion-progress-bar class="progressbar" color="success" value={{planProgress}}>
+                <ion-progress-bar class="progressbar" color="success" value={{calcPlanProgress(plan.Id)}}>
                 </ion-progress-bar>
               </ion-col>
             </ion-row>
             <ion-row>
               <ion-col size="12">
                 <ion-label>Current Cycle Progress</ion-label>
-                <ion-progress-bar class="progressbar" color="success" value={{cycleProgress}}>
+                <ion-progress-bar class="progressbar" color="success" value={{calcCycleProgress(plan.Id)}}>
                 </ion-progress-bar>
               </ion-col>
             </ion-row>
           </ion-grid>
         </ion-item>
-        <ion-button color="dark" fill="clear" style="width: 100%; font-weight: bold;" (click)="goToNextSection()">
+        <ion-button class="nextSectionBtn" color="success" fill="solid" (click)="goToNextSection(plan)">
           Continue to next section
           <ion-icon name="md-arrow-dropright"></ion-icon>
         </ion-button>
-        <ion-button (click)="goToChangeCycle()">Change Cycle</ion-button>
+        <ion-button fill="clear" color="danger" class="changeCycleBtn" (click)="presentPopover($event, plan.GroupId)">
+          Leave Cycle
+        </ion-button>
       </ion-card-content>
 
     </ion-card>
 
-    <ion-card *ngIf="!currentPlan">
+    <ion-card *ngIf="!plans || plans == ''" class="noGroupCard">
       <ion-card-content>
         <ion-grid>
           <ion-row align-items-center justify-content-center>

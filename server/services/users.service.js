@@ -19,8 +19,46 @@ const findUserByEmail = async (email) => {
     return user;
 }
 
-const checkPassword = async (inputPassword, hasedPassword) => {
-    return await bcrypt.compare(inputPassword, hasedPassword);
+const getPasswordFromEmail = async (email) => {
+
+    let userPassword;
+    try {
+        const db = new Database();
+        let rows = await db.query(`SELECT Password FROM User WHERE Email = '${email}'`);
+        if (rows.length === 1) {
+            userPassword = rows[0].Password;
+        }
+    } catch (error) {
+        console.error(error);
+    }
+
+    return userPassword;      
+}
+
+const getUserRoleId = async (email) => {
+    let userRoleID;
+    try {
+        const db = new Database();
+        let rows = await db.query(`SELECT Role_Id FROM User WHERE Email = '${email}'`);
+        if (rows.length === 1) {
+            userRoleID = rows[0].Role_Id;
+        }
+        console.log(userRoleID);
+    } catch (error) {
+        console.error(error);
+    }
+
+    return userRoleID;      
+}
+
+const checkPassword = async (inputPassword, hashedPassword) => {
+    try {
+        return await bcrypt.compare(inputPassword, hashedPassword);
+    }
+    catch (err) {
+        console.error(`There was a problem verifying the password: ${err.message}`)
+        return false
+    }
 }
 
 const findUserById = async (id) => {
@@ -44,10 +82,11 @@ const findAdminUserForGroup = async (groupNumber) => {
     try {
         const db = new Database();
         let rows = await db.query(
-            `SELECT u.Id Id, u.FirstName FirstName, u.LastName LastName FROM User_has_Group uhg
-            INNER JOIN GroupRole gr ON gr.Id = uhg.GroupRole_Id
-            INNER JOIN User u ON u.Id = uhg.User_Id 
-            WHERE uhg.Group_Id = ${groupNumber} AND gr.Name = 'Admin'`
+            `SELECT User.Id Id, User.FirstName FirstName, User.LastName LastName FROM User_has_Group
+            INNER JOIN GroupRole ON GroupRole.Id = User_has_Group.GroupRole_Id
+            INNER JOIN User_has_Plan on User_has_Plan.Id = User_has_Group.User_has_Plan_Id
+            INNER JOIN User ON User.Id = User_has_Plan.User_Id 
+            WHERE User_has_Group.Group_Id = ${groupNumber} AND GroupRole.Name = 'Admin'`
         );
         if (rows.length === 1) {
             user = rows[0];
@@ -60,7 +99,7 @@ const findAdminUserForGroup = async (groupNumber) => {
 }
 
 const createUser = async (email, password, firstName, lastName, phoneNumber) => {
-
+    let user;
     try {
 
         // Get the current date and hash the password
@@ -109,11 +148,32 @@ const updateUser = async (userid, email, firstname, lastname, phone) => {
     return user;
 }
 
+const getGroups = async (currentuserid) => {
+    // TODO: query DB for user groups
+    let user;
+    try{
+        const db = new Database();
+        let rows = await db.query(`SELECT User_has_Plan_Id, User_has_Plan.User_Id FROM User_has_Group INNER JOIN User_has_Plan ON User_has_Group.User_has_Plan_Id = User_has_Plan.Id WHERE User_has_Plan.User_Id = ${currentuserid} AND User_has_Group.Active = 1`)
+
+        db.close();
+        if (rows.length === 1) {
+            user = rows[0];
+        }
+        console.log(user)
+    } catch (error) {
+        console.error(error);
+    }
+    return user;
+}
+
 module.exports = {
+    getGroups: getGroups,
     findUserByEmail: findUserByEmail,
     findUserById: findUserById,
     createUser: createUser,
     checkPassword: checkPassword,
     updateUser: updateUser,
-    findAdminUserForGroup: findAdminUserForGroup
+    findAdminUserForGroup: findAdminUserForGroup,
+    getPasswordFromEmail: getPasswordFromEmail,
+    getUserRoleId: getUserRoleId
 }

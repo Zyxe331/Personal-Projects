@@ -14,7 +14,7 @@ import { GlobalProviderService } from 'src/app/services/global-provider.service'
 })
 export class ProfilePage implements OnInit {
   currentUser: User;
-  currentPlan: Plan;
+  plans: Plan[] = [];
   editMode: boolean = false;
   editProfileForm: FormGroup;
   showErrors: boolean = false;
@@ -33,7 +33,6 @@ export class ProfilePage implements OnInit {
   ) { 
 
     this.currentUser = this.userService.currentUser;
-    this.currentPlan = this.contentCycleServce.currentPlan;
 
     // Create the register form with validations
     this.editProfileForm = formBuilder.group({
@@ -60,11 +59,21 @@ export class ProfilePage implements OnInit {
    * @memberof ProfilePage
    */
   async getAndOrganizeData(thisPage) {
-    thisPage.currentPlan = thisPage.contentCycleServce.currentPlan;
   }
 
   ngOnInit() {
-    
+    this.contentCycleServce.getUsersPlans().subscribe(plans => {
+      this.plans = plans
+      console.log('plans: ')
+      console.log(this.plans)
+      if (this.plans.length == 0){
+        this.plans.push(new Plan())
+        this.plans[0].Id = 0
+        this.plans[0].Title = "No Enrolled Plan"
+        this.plans[0].CreatedDate = null
+      }
+      console.log(this.plans)
+    })
   }
 
   toggleEdit(){

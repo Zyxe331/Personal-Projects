@@ -1,7 +1,7 @@
 <ion-header>
 <ion-toolbar>
     <ion-buttons slot="start">
-        <ion-button [routerLink]="'/add-journal'">
+        <ion-button [routerLink]="'/change-content-cycle'">
             <ion-icon slot="icon-only" name="add"></ion-icon>
         </ion-button>
     </ion-buttons>
@@ -13,52 +13,28 @@
 </ion-header>
 
 <ion-content>
-    <ion-searchbar animated placeholder="Search Groups"></ion-searchbar>
-    <ion-list>
 
-        <ion-item>
-            <ion-avatar slot="start">
-                <img src="https://png.pngtree.com/svg/20150918/icon_group_avatar_183029.png">
-            </ion-avatar>
-            <ion-label>
-                <h2><b>Group1</b></h2>
-                <h3>MEMBER1, MEMBER2, MEMBER3</h3>
-                <p>Last post mentioned in the conversation here...</p>
-            </ion-label>
-        </ion-item>
+   <ion-grid *ngIf="showSpinner" class="height100">
+        <ion-row class="align-items-center height100">
+          <ion-col class="ion-align-self-center ion-text-center" size="12">
+            <ion-spinner name="dots" color="tertiary"></ion-spinner>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    
+      <div *ngIf="!showSpinner">
+        <ion-list>
+          <ion-item lines="full" detail *ngFor="let Group of filteredGroups" (click)="goToPage(Group)">
+            <ion-text style="width: 15%;" color="medium" slot="start">{{Group.ShortFormattedDate}}</ion-text>
+            <ion-label>{{Group.Name}}</ion-label>
+          </ion-item>
+        </ion-list>
+      </div> 
 
-        <ion-item>
-            <ion-avatar slot="start">
-                <img src="https://png.pngtree.com/svg/20150918/icon_group_avatar_183029.png">
-            </ion-avatar>
-            <ion-label>
-                <h2><b>Group2</b></h2>
-                <h3>MEMBER6, MEMBER2, MEMBER4</h3>
-                <p>Last post mentioned in the conversation here...</p>
-            </ion-label>
-        </ion-item>
-
-        <ion-item>
-            <ion-avatar slot="start">
-                <img src="https://png.pngtree.com/svg/20150918/icon_group_avatar_183029.png">
-            </ion-avatar>
-            <ion-label>
-                <h2><b>Group3</b></h2>
-                <h3>MEMBER1, MEMBER3, MEMBER8</h3>
-                <p>Last post mentioned in the conversation here...</p>
-            </ion-label>
-        </ion-item>
-
-        <ion-item>
-            <ion-avatar slot="start">
-                <img src="https://png.pngtree.com/svg/20150918/icon_group_avatar_183029.png">
-            </ion-avatar>
-            <ion-label>
-                <h2><b>Group4</b></h2>
-                <h3>MEMBER2, MEMBER6, MEMBER2</h3>
-                <p>Last post mentioned in the conversation here...</p>
-            </ion-label>
-        </ion-item>
-    </ion-list>
+      <div class="ion-text-center joinGroup" *ngIf="filteredGroups == ''">
+        <ion-button fill="solid" color="primary" class="changeCycleBtn" (click)="joinNewGroup()">
+          <ion-icon slot="start" name="add"></ion-icon>
+          Join New Group</ion-button>
+      </div>
 
 </ion-content>

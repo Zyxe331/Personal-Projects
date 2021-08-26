@@ -1,13 +1,5 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title id="logo">VitaPrayer</ion-title>
-  </ion-toolbar>
+  <app-header></app-header>
 </ion-header>
 
 <ion-content>
@@ -23,7 +15,7 @@
   <div *ngIf="!showSpinner">
     <form [formGroup]="joinGroupForm" (ngSubmit)="joinGroup()">
       <ion-item id="title" lines="none">
-        <ion-input id="title" type="number" placeholder="Enter Group Join Number" formControlName="groupNumber">
+        <ion-input id="title" type="number" placeholder="Enter Group Join Number" formControlName="groupNumber" maxlength="45">
         </ion-input>
         <ion-text class="error" color="light"
           *ngIf="joinGroupForm.controls.groupNumber.hasError('required') && showErrors">

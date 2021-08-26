@@ -7,11 +7,14 @@ import { PrayerSchedule } from '../interfaces/prayer-schedule';
 import { Tag } from 'src/app/interfaces/tag';
 import { GlobalProviderService } from '../services/global-provider.service';
 import { PrayerTag } from '../interfaces/prayer-tag';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PrayerRequestProviderService {
+  private userPrayers$: Subject<PrayerRequest[]> = new ReplaySubject<PrayerRequest[]>(1)
 
   constructor(
     private globalServices: GlobalProviderService,
@@ -48,6 +51,25 @@ export class PrayerRequestProviderService {
     })
   }
 
+  /**
+   * Returns all prayer requests for the current user as an observable
+   *
+   * @returns {Observable<PrayerRequest[]>}
+   * @memberof PrayerRequestProviderService
+   */
+  getThisUsersPrayersAsObservable(): Observable<void> { // Triggers prayer list to be updated and sent to the prayer subject.
+    // Call this function when a new prayer is added to the list.
+    let userId = this.userServices.currentUser.Id;
+    // Ask the server to get all prayers
+    return this.http.get<PrayerRequest[]>(SERVER_URL + 'prayer-requests/' + userId, {}).pipe(map((res: PrayerRequest[]) => {
+      this.userPrayers$.next(res)
+    }))
+  }
+
+  fetchUsersPrayers(): Observable<PrayerRequest[]> {
+    return this.userPrayers$.asObservable()
+  }
+
   async getThisPrayersTags(prayerId: number): Promise<PrayerTag[]> {
 
     let _this = this;
@@ -69,6 +91,11 @@ export class PrayerRequestProviderService {
     })
   }
 
+  getThisPrayersTagsAsObservable(prayerId: number): Observable<PrayerTag[]> {
+    // Ask the server to get all tags for the prayer
+    return this.http.get<PrayerTag[]>(SERVER_URL + 'tags/' + prayerId)
+  }
+
   /**
    * Sends information to the database in order to create a 
    * prayer request with the provided data
@@ -81,16 +108,18 @@ export class PrayerRequestProviderService {
    * @returns {Promise<PrayerRequest>}
    * @memberof PrayerRequestProviderService
    */
-  async addPrayer(title: string, body: string, isprivate: boolean, frequency: number, tagIds: number[], sectionId: number): Promise<PrayerRequest> {
+  async addPrayer(title: string, body: string, isprivate: boolean, tagIds: number[], sectionId: number, frequency?: number, NotificationDate?: string, NotificationTime?: string ): Promise<PrayerRequest> {
 
     let requestBody = {
       title: title,
       body: body,
       isprivate: isprivate,
       userId: this.userServices.currentUser.Id,
-      frequency: frequency,
       tagIds: tagIds,
-      sectionId: sectionId
+      sectionId: sectionId,
+      frequency: frequency,
+      NotificationDate: NotificationDate,
+      NotificationTime: NotificationTime
     }
 
     console.log(sectionId);
@@ -115,6 +144,23 @@ export class PrayerRequestProviderService {
     })
   }
 
+  addPrayerAsObservable(title: string, body: string, isprivate: boolean, tagIds: number[], sectionId: number, NotificationDate?: string, NotificationTime?: string, frequency?: number): Observable<PrayerRequest> {
+    let requestBody = {
+      title: title,
+      body: body,
+      isprivate: isprivate,
+      userId: this.userServices.currentUser.Id,
+      tagIds: tagIds,
+      NotificationDate: NotificationDate,
+      NotificationTime: NotificationTime,
+      frequency: frequency,
+      sectionId: sectionId
+    }
+
+    console.log(sectionId);
+    return this.http.post<PrayerRequest>(SERVER_URL + 'prayer-requests/', requestBody)
+  }
+
   /**
    * Sends prayer info to the database to update the prayer with 
    * the provided data
@@ -124,17 +170,21 @@ export class PrayerRequestProviderService {
    * @param {string} body
    * @param {boolean} isprivate
    * @param {number} frequency
+   * @param {string} NotificationDate
+   * @param {string} NotificationTime
    * @returns {Promise<PrayerRequest>}
    * @memberof PrayerRequestProviderService
    */
-  async updatePrayer(prayerid: number, title: string, body: string, isprivate: boolean, frequency: number, tagIds: number[]): Promise<PrayerRequest> {
+  async updatePrayer(prayerid: number, title: string, body: string, isprivate: boolean, tagIds: number[], frequency?: number, NotificationDate?: string, NotificationTime?: string): Promise<PrayerRequest> {
 
     let requestBody = {
       title: title,
       body: body,
       isprivate: isprivate,
-      frequency: frequency,
-      tagIds: tagIds
+      tagIds: tagIds,
+      NotificationDate: NotificationDate,
+      NotificationTime: NotificationTime,
+      frequency: frequency
     }
 
     let _this = this;
@@ -155,6 +205,19 @@ export class PrayerRequestProviderService {
         reject(error.error);
       }
     })
+  }
+
+  updatePrayerAsObservable(prayerid: number, title: string, body: string, isprivate: boolean, tagIds: number[], frequency?: number, NotificationDate?: string, NotificationTime?: string): Observable<PrayerRequest> {
+    let requestBody = {
+      title: title,
+      body: body,
+      isprivate: isprivate,
+      NotificationDate: NotificationDate,
+      NotificationTime: NotificationTime,
+      frequency: frequency,
+      tagIds: tagIds
+    }
+    return this.http.patch<PrayerRequest>(SERVER_URL + 'prayer-requests/' + prayerid, requestBody)
   }
 
   /**
@@ -184,6 +247,32 @@ export class PrayerRequestProviderService {
     prayer.LongFormattedDate = this.globalServices.createLongFormattedDate(new Date(prayer.CreatedDate));
 
     return prayer;
+  }
+
+  async getPrayerRequestNotifications() { // Function that is run to create all necessary desktop notifications for prayer requests
+    let _this = this;
+    return new Promise(async function (resolve, reject) {
+
+      try {
+
+        let currentUserId = _this.userServices.currentUser.Id
+        let request = {
+          currentUserId: currentUserId
+        }
+
+        // 
+        let response = await _this.http.post<boolean>(SERVER_URL + 'prayer-requests/prayerrequestnotifications/' + currentUserId, request).toPromise();
+
+        // As long as something returned then resolved it
+        if (response) {
+
+          resolve(response);
+
+        }
+      } catch (error) {
+        reject(error.error);
+      }
+    })
   }
 
 }
